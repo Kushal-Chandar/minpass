@@ -1,0 +1,11 @@
+{
+  "name": "minpass",
+  "version-string": "0.0.1",
+  "dependencies": ["fmt", "cpp-httplib", "nlohmann-json"],
+  "features": {
+    "tests": {
+      "description": "Build the tests of the package's tests",
+      "dependencies": ["gtest"]
+    }
+  }
+}
