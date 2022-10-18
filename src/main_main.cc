@@ -7,7 +7,7 @@
 #include <span>
 #include <string_view>
 
-#include "minpass/minpass.h"
+#include "database_lib.h"
 
 static auto callback(void *greet, int argc, char **argv, char **azColName)
     -> int {

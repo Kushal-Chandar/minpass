@@ -1,7 +1,14 @@
 {
   "name": "minpass",
   "version-string": "0.0.1",
-  "dependencies": ["fmt", "cpp-httplib", "nlohmann-json"],
+  "dependencies": [
+    "fmt",
+    {
+      "name": "drogon",
+      "default-features": false,
+      "features": ["sqlite3"]
+    }
+  ],
   "features": {
     "tests": {
       "description": "Build the tests of the package's tests",
