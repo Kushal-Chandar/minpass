@@ -26,10 +26,7 @@ auto main() -> int {
   //     .addListener("0.0.0.0", 80)
   //     .setThreadNum(0);
 
-  drogon::app()
-      .createDbClient("sqlite3", "127.0.0.1", 8008, "minpass", "user", "passwd",
-                      1)
-      .run();
+  drogon::app().loadConfigFile("./server_config.json").run();
 
   // auto custom_config = drogon::app().getCustomConfig();
   // fmt::print("{}\n", custom_config.asString());

@@ -1,0 +1,33 @@
+{
+  "listeners": [
+    {
+      "address": "0.0.0.0",
+      "port": 8080,
+      "cert": "./https/cert.pem",
+      "key": "./https/key.pem",
+      "https": true
+    }
+  ],
+  "db_clients": [
+    {
+      "name": "minpass",
+      "rdbms": "sqlite3",
+      "host": "127.0.0.1",
+      "port": 8008,
+      "dbname": "minpass",
+      "user": "",
+      "passwd": "",
+      "is_fast": false,
+      "connection_number": 1
+    }
+  ],
+  "app": {
+    "upload_path": "./minpass_cache/requests"
+  },
+  "log": {
+    "log_path": "./",
+    "logfile_base_name": "minpass",
+    "log_size_limit": 100000000,
+    "log_level": "TRACE"
+  }
+}
