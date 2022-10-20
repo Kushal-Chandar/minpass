@@ -2,6 +2,8 @@
 
 #include <drogon/drogon.h>
 
+#include "minpass_types.h"
+
 minpass::SQLite3Client::SQLite3Client() {
   auto client = drogon::app().getDbClient();
   client->execSqlAsync(
@@ -28,8 +30,8 @@ minpass::SQLite3Client::SQLite3Client() {
 auto minpass::SQLite3Client::SetPassword(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string &&website, const std::string &email, std::string &&username,
-    const std::string &password) -> void {
+    Website website, Email email, std::string username, Password password)
+    -> void {
   auto db_client = drogon::app().getDbClient();
 
   db_client->execSqlAsync("INSERT INTO table_name
@@ -59,4 +61,4 @@ clientPtr->execSqlAsync("select * from users where org_name=$1",
 auto minpass::SQLite3Client::GetPassword(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    std::string website) const -> void {}
+    Website website) const -> void {}

@@ -3,12 +3,14 @@
 
 #include <drogon/drogon.h>
 
+#include "minpass_types.h"
+
 namespace minpass {
 class SQLite3Queries {
-  auto CreateTable(std::string_view) -> void;
-  auto InsertPassword(std::string_view, std::string_view, std::string_view,
-                      std::string_view) -> void;
-  auto RetrievePassword(std::string_view) -> void;
+  auto CreateTable(std::string_view name) -> void;
+  auto InsertPassword(Website& website, Email& email, Username&, Password&)
+      -> void;
+  auto RetrievePassword(Website& website) -> void;
 };
 }  // namespace minpass
 
