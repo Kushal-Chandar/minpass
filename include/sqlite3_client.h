@@ -3,6 +3,8 @@
 
 #include <drogon/drogon.h>
 
+#include "minpass_types.h"
+
 namespace minpass {
 class SQLite3Client : public drogon::HttpController<SQLite3Client> {
  public:
@@ -17,13 +19,13 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
   static auto SetPassword(
       const drogon::HttpRequestPtr &req,
       std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-      std::string &&website, const std::string &email, std::string &&username,
-      const std::string &password) -> void;
+      Website website, Email email, std::string username, Password password)
+      -> void;
   ;
   static auto GetPassword(
       const drogon::HttpRequestPtr &req,
       std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-      std::string website) -> void;
+      Website website) -> void;
 };
 }  // namespace minpass
 
