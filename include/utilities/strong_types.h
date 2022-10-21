@@ -7,7 +7,9 @@ template <typename Type, typename Meaning>
 class StrongType {
  public:
   explicit StrongType(Type const& value) : value_(value) {}
-  auto get() -> Type { return value_; }
+  explicit StrongType(Type&& value) : value_(value) {}
+  StrongType() : value_(Type({})){};
+  auto get() -> Type& { return value_; }
 
  private:
   Type value_;
