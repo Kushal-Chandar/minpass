@@ -3,6 +3,7 @@
 
 #include <drogon/drogon.h>
 
+#include "database_abstraction.h"
 #include "minpass_types.h"
 
 namespace minpass {
@@ -16,16 +17,18 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
 
   SQLite3Client();
 
-  static auto SetPassword(
+  auto SetPassword(
       const drogon::HttpRequestPtr &req,
       std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-      Website website, Email email, std::string username, Password password)
+      Website website, Email email, Username username, Password password)
       -> void;
-  ;
-  static auto GetPassword(
+  auto GetPassword(
       const drogon::HttpRequestPtr &req,
       std::function<void(const drogon::HttpResponsePtr &)> &&callback,
       Website website) -> void;
+
+ private:
+  DatabaseAbstraction db_abs;
 };
 }  // namespace minpass
 
