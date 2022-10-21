@@ -17,12 +17,12 @@ DatabaseAbstraction::DatabaseAbstraction(std::string_view table_name)
 auto DatabaseAbstraction::CreateTable() -> void {
   auto client = drogon::app().getDbClient("minpass");
   auto sql_query = fmt::format(
-      "CREATE TABLE IF NOT EXISTS {} ("
-      "  Website varchar(100) NOT NULL PRIMARY KEY,"
-      "  Email varchar(50),"
-      "  UserName varchar(100),"
-      "  Password varchar(50) NOT NULL"
-      ");",
+      "CREATE TABLE IF NOT EXISTS {} (\n"
+      "  Website varchar(100) NOT NULL PRIMARY KEY,\n"
+      "  Email varchar(50),\n"
+      "  UserName varchar(100),\n"
+      "  Password varchar(50) NOT NULL\n"
+      ");\n",
       table_name_);
   auto call_back = [](bool isNull) {
     if (!isNull) {
@@ -42,9 +42,10 @@ auto DatabaseAbstraction::InsertPassword(Website& website, Email& email,
     -> void {
   auto client = drogon::app().getDbClient("minpass");
   auto sql_query = fmt::format(
-      "INSERT INTO {}"
-      "VALUES('{}', '{}', '{}', {});",
+      "INSERT INTO {}\n"
+      "VALUES ('{}', '{}', '{}', '{}');\n",
       table_name_, website.get(), email.get(), username.get(), password.get());
+  fmt::print("{} {}\n", website.get(), email.get());
   auto call_back = [](bool isNull) {
     if (!isNull) {
       fmt::print("{}\n", isNull);
@@ -62,8 +63,8 @@ auto DatabaseAbstraction::RetrievePassword(Website& website) -> Json::Value {
   auto client = drogon::app().getDbClient("minpass");
   Json::Value response;
   auto sql_query = fmt::format(
-      "SELECT * FROM {}"
-      "WHERE Website = '{}'",
+      "SELECT * FROM {}\n"
+      "WHERE Website = '{}'\n",
       table_name_, website.get());
 
   auto async_counter = std::make_unique<int>(0);
@@ -78,7 +79,7 @@ auto DatabaseAbstraction::RetrievePassword(Website& website) -> Json::Value {
       response["password"] = password.get();
 
     } else {
-      fmt::print("{}\n", *async_counter);
+      fmt::print("{}\n", (*async_counter));
     }
   };
   *client << sql_query >> call_back >>
