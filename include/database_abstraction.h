@@ -1,12 +1,12 @@
-#if !defined(SQLITE3_QUERIES)
-#define SQLITE3_QUERIES
+#if !defined(DATABASE_ABSTRACTION)
+#define DATABASE_ABSTRACTION
 
 #include <drogon/drogon.h>
 
 #include "minpass_types.h"
 
 namespace minpass {
-class SQLite3Queries {
+class DatabaseAbstraction {
   auto CreateTable(std::string_view name) -> void;
   auto InsertPassword(Website& website, Email& email, Username&, Password&)
       -> void;
@@ -14,4 +14,4 @@ class SQLite3Queries {
 };
 }  // namespace minpass
 
-#endif  // SQLITE3_QUERIES
+#endif  // DATABASE_ABSTRACTION

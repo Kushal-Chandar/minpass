@@ -1,7 +1,6 @@
 # minpass
 
-a cmake project with ci, code coverage, clang tidy, cpp check, graphviz, iwyu, etc,
-dependency management msys2 and vcpkg
+A minimal password manager written in C++ and reactjs.
 
 ## Todo
 

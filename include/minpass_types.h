@@ -1,5 +1,5 @@
-#if !defined(TYPES)
-#define TYPES
+#if !defined(MINPASS_TYPES)
+#define MINPASS_TYPES
 
 #include <string>
 
@@ -11,4 +11,4 @@ using Username = utilities::StrongType<std::string, struct UsernameParam>;
 using Password = utilities::StrongType<std::string, struct PasswordParam>;
 }  // namespace minpass
 
-#endif  // TYPES
+#endif  // MINPASS_TYPES
