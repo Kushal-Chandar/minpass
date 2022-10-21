@@ -2,10 +2,7 @@
   "listeners": [
     {
       "address": "0.0.0.0",
-      "port": 8080,
-      "cert": "./https/cert.pem",
-      "key": "./https/key.pem",
-      "https": true
+      "port": 8080
     }
   ],
   "db_clients": [
@@ -18,7 +15,8 @@
       "user": "",
       "passwd": "",
       "is_fast": false,
-      "connection_number": 1
+      "connection_number": 1,
+      "filename": "minpass.sqlite"
     }
   ],
   "app": {

@@ -9,6 +9,7 @@ include(cmake/init.cmake)
 ###########################################
 find_package(Drogon CONFIG REQUIRED)
 find_package(OpenSSL REQUIRED)
+find_package(fmt CONFIG REQUIRED)
 
 ###########################################
 ### Utilities
@@ -39,6 +40,7 @@ target_link_libraries(database_abstraction PRIVATE project_compile_options)
 target_include_directories(database_abstraction PUBLIC include)
 target_link_libraries(database_abstraction PRIVATE Drogon::Drogon)
 target_link_libraries(database_abstraction PRIVATE minpass_types)
+target_link_libraries(database_abstraction PRIVATE fmt::fmt)
 
 ###########################################
 ### SQLite3_Client
@@ -51,6 +53,7 @@ target_include_directories(sqlite3_client PUBLIC include)
 target_link_libraries(sqlite3_client PRIVATE database_abstraction)
 target_link_libraries(sqlite3_client PRIVATE Drogon::Drogon)
 target_link_libraries(sqlite3_client PRIVATE minpass_types)
+target_link_libraries(sqlite3_client PRIVATE fmt::fmt)
 
 ###########################################
 ### Minpass

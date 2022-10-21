@@ -1,18 +1,21 @@
 #include "sqlite3_client.h"
 
 #include <drogon/drogon.h>
+#include <fmt/core.h>
 
 #include "database_abstraction.h"
 #include "minpass_types.h"
 
-minpass::SQLite3Client::SQLite3Client() : db_abs("minpass") {}
+namespace minpass {
 
-auto minpass::SQLite3Client::SetPassword(
+SQLite3Client::SQLite3Client() : db_abs("minpass") {}
+
+auto SQLite3Client::SetPassword(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
     Website website, Email email, Username username, Password password)
     -> void {
-  std::cout << req << '\n';
+  fmt::print("{}", req->body());
   db_abs.InsertPassword(website, email, username, password);
   Json::Value response{};
   response["result"] = "ok";
@@ -21,14 +24,16 @@ auto minpass::SQLite3Client::SetPassword(
   callback(resp);
 }
 
-auto minpass::SQLite3Client::GetPassword(
+auto SQLite3Client::GetPassword(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
     Website website) -> void {
-  std::cout << req << '\n';
+  fmt::print("{}", req->body());
   // callback()
   Json::Value response = db_abs.RetrievePassword(website);
   response["result"] = "ok";
   auto resp = drogon::HttpResponse::newHttpJsonResponse(response);
   callback(resp);
 }
+
+}  // namespace minpass
