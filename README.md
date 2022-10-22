@@ -1,6 +1,6 @@
-# minpass
+# Minpass backend
 
-A minimal password manager written in C++ and reactjs.
+A minimal password manager written in C++ as a REST api. You can use it with any client
 
 ## Todo
 

@@ -8,15 +8,22 @@
 namespace minpass {
 class DatabaseAbstraction {
  public:
-  DatabaseAbstraction(std::string_view table_name = "minpass");
+  DatabaseAbstraction(std::string_view database_name = "minpass",
+                      std::string_view table_name = "minpass");
   auto InsertPassword(Website& website, Email& email, Username&, Password&)
-      -> void;
-  auto RetrievePassword(Website& website) -> Json::Value;
-  auto DeletePassword(Website& website) -> void;
+      -> std::shared_ptr<Json::Value>;
+  auto RetrievePassword(Website& website) -> std::shared_ptr<Json::Value>;
+  auto DeletePassword(Website& website) -> std::shared_ptr<Json::Value>;
 
  private:
   auto CreateTable() -> void;
+  auto CreateTableQuery() -> std::string;
+  auto InsertPasswordQuery(Website& website, Email& email, Username& username,
+                           Password& password) -> std::string;
+  auto RetrievePasswordQuery(Website& website) -> std::string;
+  auto DeletePasswordQuery(Website& website) -> std::string;
   std::string_view table_name_;
+  drogon::orm::DbClientPtr client_;
 };
 }  // namespace minpass
 

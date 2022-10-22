@@ -11,14 +11,26 @@ namespace minpass {
 SQLite3Client::SQLite3Client() : db_abs("minpass") {}
 
 auto SQLite3Client::SetPassword(
-    const drogon::HttpRequestPtr &req,
+    [[maybe_unused]] const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
     Website website /* , Email email, Username username, Password password */)
     -> void {
-  fmt::print("{}", req->body());
-  Email email;
-  Username username;
-  Password password;
+  auto json = req->getJsonObject();
+
+  if (!json) {
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setBody("missing 'value' in body");
+    resp->setStatusCode(drogon::k400BadRequest);
+    callback(resp);
+    return;
+  }
+
+  Email email((*json)["email"].asString());
+  Username username((*json)["username"].asString());
+  Password password((*json)["password"].asString());
+
+  fmt::print("{}-{}-{}-{}\n", website.get(), email.get(), username.get(),
+             password.get());
 
   db_abs.InsertPassword(website, email, username, password);
   Json::Value response{};
@@ -29,25 +41,21 @@ auto SQLite3Client::SetPassword(
 }
 
 auto SQLite3Client::GetPassword(
-    const drogon::HttpRequestPtr &req,
+    [[maybe_unused]] const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
     Website website) -> void {
-  fmt::print("{}", req->body());
-  // callback()
-  Json::Value response = db_abs.RetrievePassword(website);
+  Json::Value response = *db_abs.RetrievePassword(website);
   response["result"] = "ok";
   auto resp = drogon::HttpResponse::newHttpJsonResponse(response);
   callback(resp);
 }
 
 auto SQLite3Client::RemovePassword(
-    const drogon::HttpRequestPtr &req,
+    [[maybe_unused]] const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
     Website website) -> void {
-  fmt::print("{}", req->body());
-  // callback()
   db_abs.DeletePassword(website);
-  Json::Value response;
+  Json::Value response{};
   response["result"] = "ok";
   auto resp = drogon::HttpResponse::newHttpJsonResponse(response);
   callback(resp);

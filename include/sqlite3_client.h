@@ -18,16 +18,16 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
   SQLite3Client();
 
   auto SetPassword(
-      const drogon::HttpRequestPtr &req,
+      [[maybe_unused]] const drogon::HttpRequestPtr &req,
       std::function<void(const drogon::HttpResponsePtr &)> &&callback,
       Website website /* , Email email, Username username, Password password */)
       -> void;
   auto GetPassword(
-      const drogon::HttpRequestPtr &req,
+      [[maybe_unused]] const drogon::HttpRequestPtr &req,
       std::function<void(const drogon::HttpResponsePtr &)> &&callback,
       Website website) -> void;
   auto RemovePassword(
-      const drogon::HttpRequestPtr &req,
+      [[maybe_unused]] const drogon::HttpRequestPtr &req,
       std::function<void(const drogon::HttpResponsePtr &)> &&callback,
       Website website) -> void;
 
