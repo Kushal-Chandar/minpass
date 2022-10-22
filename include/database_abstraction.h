@@ -12,6 +12,7 @@ class DatabaseAbstraction {
   auto InsertPassword(Website& website, Email& email, Username&, Password&)
       -> void;
   auto RetrievePassword(Website& website) -> Json::Value;
+  auto DeletePassword(Website& website) -> void;
 
  private:
   auto CreateTable() -> void;

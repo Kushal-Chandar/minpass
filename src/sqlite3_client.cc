@@ -13,9 +13,13 @@ SQLite3Client::SQLite3Client() : db_abs("minpass") {}
 auto SQLite3Client::SetPassword(
     const drogon::HttpRequestPtr &req,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-    Website website, Email email, Username username, Password password)
+    Website website /* , Email email, Username username, Password password */)
     -> void {
   fmt::print("{}", req->body());
+  Email email;
+  Username username;
+  Password password;
+
   db_abs.InsertPassword(website, email, username, password);
   Json::Value response{};
   response["result"] = "ok";
@@ -31,6 +35,19 @@ auto SQLite3Client::GetPassword(
   fmt::print("{}", req->body());
   // callback()
   Json::Value response = db_abs.RetrievePassword(website);
+  response["result"] = "ok";
+  auto resp = drogon::HttpResponse::newHttpJsonResponse(response);
+  callback(resp);
+}
+
+auto SQLite3Client::RemovePassword(
+    const drogon::HttpRequestPtr &req,
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+    Website website) -> void {
+  fmt::print("{}", req->body());
+  // callback()
+  db_abs.DeletePassword(website);
+  Json::Value response;
   response["result"] = "ok";
   auto resp = drogon::HttpResponse::newHttpJsonResponse(response);
   callback(resp);
