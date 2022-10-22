@@ -8,8 +8,8 @@
 namespace minpass {
 class DatabaseAbstraction {
  public:
-  DatabaseAbstraction(DatabaseName database_name = "minpass",
-                      TableName table_name = "minpass");
+  DatabaseAbstraction(std::string database_name = "minpass",
+                      std::string_view table_name = "minpass");
   auto InsertPassword(Website& website, Email& email, Username&, Password&)
       -> std::shared_ptr<Json::Value>;
   auto RetrievePassword(Website& website) -> std::shared_ptr<Json::Value>;
