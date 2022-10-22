@@ -9,10 +9,10 @@
 
 namespace minpass {
 
-DatabaseAbstraction::DatabaseAbstraction(std::string_view database_name,
-                                         std::string_view table_name)
-    : table_name_(table_name) {
-  client_ = drogon::app().getDbClient(database_name.data());
+DatabaseAbstraction::DatabaseAbstraction(DatabaseName database_name,
+                                         TableName table_name)
+    : table_name_(table_name.get()) {
+  client_ = drogon::app().getDbClient(database_name.get());
   CreateTable();
 }
 
