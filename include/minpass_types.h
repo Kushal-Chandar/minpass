@@ -16,7 +16,9 @@ template <typename Type, typename Tag>
 auto operator>>(std::stringstream& string_stream,
                 minpass::utilities::StrongType<Type, Tag>& minpass_type)
     -> std::stringstream& {
-  string_stream >> minpass_type.get();
+  std::string value;
+  string_stream >> value;
+  minpass_type.set(std::move(value));
   return string_stream;
 }
 

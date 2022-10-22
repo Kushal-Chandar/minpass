@@ -15,8 +15,6 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
   METHOD_ADD(SQLite3Client::RemovePassword, "/website={}", drogon::Delete);
   METHOD_LIST_END
 
-  SQLite3Client();
-
   auto SetPassword(
       [[maybe_unused]] const drogon::HttpRequestPtr &req,
       std::function<void(const drogon::HttpResponsePtr &)> &&callback,
@@ -32,7 +30,7 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
       Website website) -> void;
 
  private:
-  DatabaseAbstraction db_abs;
+  DatabaseAbstraction db_abs_;
 };
 }  // namespace minpass
 
