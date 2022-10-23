@@ -15,25 +15,28 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
   METHOD_ADD(SQLite3Client::RemovePassword, "/website={}", drogon::Delete);
   METHOD_LIST_END
 
-  SQLite3Client();
+  SQLite3Client(const std::string &database_name = "minpass");
 
   auto SetPassword(
-      const drogon::HttpRequestPtr &req,
-      std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-      Website website /* , Email email, Username username, Password password */)
-      -> void;
+      [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
+      std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
+      Website website) -> void;
   auto GetPassword(
-      const drogon::HttpRequestPtr &req,
-      std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+      [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
+      std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
       Website website) -> void;
   auto RemovePassword(
-      const drogon::HttpRequestPtr &req,
-      std::function<void(const drogon::HttpResponsePtr &)> &&callback,
+      [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
+      std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
       Website website) -> void;
 
  private:
-  DatabaseAbstraction db_abs;
+  DatabaseAbstraction db_abs_;
+  drogon::orm::DbClientPtr client_;
+  auto CreateTable() -> void;
+  static auto MakeSuccessResponse() -> drogon::HttpResponsePtr;
 };
+
 }  // namespace minpass
 
 #endif  // MINPASS

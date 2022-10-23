@@ -46,8 +46,12 @@ target_link_libraries(database_abstraction PRIVATE fmt::fmt)
 ### SQLite3_Client
 ###########################################
 add_library(sqlite3_client STATIC)
-target_sources(sqlite3_client PRIVATE src/sqlite3_client.cc
-                                      include/sqlite3_client.h)
+target_sources(
+  sqlite3_client
+  PRIVATE src/sqlite3_client.cc
+          include/sqlite3_client.h
+          src/sqlite3_client/helpers.cc
+          include/sqlite3_client/helpers.h)
 target_link_libraries(sqlite3_client PRIVATE project_compile_options)
 target_include_directories(sqlite3_client PUBLIC include)
 target_link_libraries(sqlite3_client PRIVATE database_abstraction)

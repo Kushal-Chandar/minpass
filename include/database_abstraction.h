@@ -9,15 +9,16 @@ namespace minpass {
 class DatabaseAbstraction {
  public:
   DatabaseAbstraction(std::string_view table_name = "minpass");
-  auto InsertPassword(Website& website, Email& email, Username&, Password&)
-      -> void;
-  auto RetrievePassword(Website& website) -> Json::Value;
-  auto DeletePassword(Website& website) -> void;
+  auto CreateTableQuery() -> std::string;
+  auto InsertPasswordQuery(Website& website, Email& email, Username& username,
+                           Password& password) -> std::string;
+  auto RetrievePasswordQuery(Website& website) -> std::string;
+  auto DeletePasswordQuery(Website& website) -> std::string;
 
  private:
-  auto CreateTable() -> void;
-  std::string_view table_name_;
+  std::string table_name_;
 };
+
 }  // namespace minpass
 
 #endif  // DATABASE_ABSTRACTION

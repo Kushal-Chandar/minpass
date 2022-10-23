@@ -9,11 +9,7 @@
     {
       "name": "minpass",
       "rdbms": "sqlite3",
-      "host": "127.0.0.1",
-      "port": 8008,
       "dbname": "minpass",
-      "user": "",
-      "passwd": "",
       "is_fast": false,
       "connection_number": 1,
       "filename": "minpass.sqlite"
