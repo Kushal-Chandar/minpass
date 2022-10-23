@@ -34,6 +34,7 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
   DatabaseAbstraction db_abs_;
   drogon::orm::DbClientPtr client_;
   auto CreateTable() -> void;
+  static auto MakeSuccessResponse() -> drogon::HttpResponsePtr;
 };
 
 }  // namespace minpass
