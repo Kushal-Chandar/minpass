@@ -8,7 +8,6 @@
 namespace minpass::sqlite3_client {
 
 auto exception(const drogon::orm::DrogonDbException &error) -> void;
-auto no_result_callback() -> void;
 
 }  // namespace minpass::sqlite3_client
 
