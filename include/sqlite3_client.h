@@ -3,35 +3,40 @@
 
 #include <drogon/drogon.h>
 
-#include "database_abstraction.h"
 #include "minpass_types.h"
+#include "sqlite3_queries.h"
 
 namespace minpass {
 class SQLite3Client : public drogon::HttpController<SQLite3Client> {
  public:
   METHOD_LIST_BEGIN
-  METHOD_ADD(SQLite3Client::SetPassword, "/website={}", drogon::Post);
-  METHOD_ADD(SQLite3Client::GetPassword, "/website={}", drogon::Get);
-  METHOD_ADD(SQLite3Client::RemovePassword, "/website={}", drogon::Delete);
+  METHOD_ADD(SQLite3Client::SetPasswordData, "/website={}", drogon::Post);
+  METHOD_ADD(SQLite3Client::GetPasswordData, "/website={}", drogon::Get);
+  METHOD_ADD(SQLite3Client::RemovePasswordData, "/website={}", drogon::Delete);
+  METHOD_ADD(SQLite3Client::ModifyPasswordData, "/website={}", drogon::Patch);
   METHOD_LIST_END
 
-  SQLite3Client(const std::string &database_name = "minpass");
+  explicit SQLite3Client(const std::string &database_name = "minpass");
 
-  auto SetPassword(
+  auto SetPasswordData(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
       Website website) -> void;
-  auto GetPassword(
+  auto GetPasswordData(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
       Website website) -> void;
-  auto RemovePassword(
+  auto RemovePasswordData(
+      [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
+      std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
+      Website website) -> void;
+  auto ModifyPasswordData(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
       Website website) -> void;
 
  private:
-  DatabaseAbstraction db_abs_;
+  SQLite3Queries query_factory_;
   drogon::orm::DbClientPtr client_;
   auto CreateTable() -> void;
   static auto MakeSuccessResponse() -> drogon::HttpResponsePtr;
