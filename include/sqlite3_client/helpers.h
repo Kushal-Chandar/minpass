@@ -5,6 +5,8 @@
 #include <fmt/color.h>
 #include <fmt/core.h>
 
+#include "minpass_types.h"
+
 namespace minpass::sqlite3_client {
 
 class Helpers {
@@ -19,7 +21,10 @@ class Helpers {
   static auto ValidateRequest(
       const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-      Json::Value &response_object) -> std::shared_ptr<Json::Value>;
+      Json::Value &response_object_out) -> std::shared_ptr<Json::Value>;
+  static auto ParseJsonRequest(std::shared_ptr<Json::Value> &validated_json,
+                               Email &email_out, Username &username_out,
+                               Password &password_out) -> void;
 };
 
 }  // namespace minpass::sqlite3_client

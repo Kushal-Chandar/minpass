@@ -25,13 +25,23 @@ auto Helpers::MakeResponse(Json::Value &response_object,
 auto Helpers::ValidateRequest(
     const drogon::HttpRequestPtr &http_request,
     std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-    Json::Value &response_object) -> std::shared_ptr<Json::Value> {
+    Json::Value &response_object_out) -> std::shared_ptr<Json::Value> {
   auto json = http_request->getJsonObject();
   if (!json) {
-    response_object["message"] = "could not parse request";
-    http_callback(MakeResponse(response_object, drogon::k400BadRequest));
+    response_object_out["message"] = "could not parse request";
+    http_callback(MakeResponse(response_object_out, drogon::k400BadRequest));
   }
   return json;
+}
+
+auto Helpers::ParseJsonRequest(std::shared_ptr<Json::Value> &validated_json,
+                               Email &email_out, Username &username_out,
+                               Password &password_out) -> void {
+  if (validated_json) {
+    email_out = Email((*validated_json)["email"].asString());
+    username_out = Username((*validated_json)["username"].asString());
+    password_out = Password((*validated_json)["password"].asString());
+  }
 }
 
 }  // namespace minpass::sqlite3_client

@@ -20,13 +20,15 @@ auto SQLite3Client::SetPasswordData(
     Website website) -> void {
   Json::Value response_object;
 
-  auto json = sqlite3_client::Helpers::ValidateRequest(
+  auto request_json_ptr = sqlite3_client::Helpers::ValidateRequest(
       http_request, std::forward<decltype(http_callback)>(http_callback),
       response_object);
 
-  auto email = Email((*json)["email"].asString());
-  auto username = Username((*json)["username"].asString());
-  auto password = Password((*json)["password"].asString());
+  Email email;
+  Username username;
+  Password password;
+  sqlite3_client::Helpers::ParseJsonRequest(request_json_ptr, email, username,
+                                            password);
 
   auto sql_query =
       query_factory_.CreatePasswordQuery(website, email, username, password);
@@ -48,7 +50,7 @@ auto SQLite3Client::GetPasswordData(
       [http_callback]([[maybe_unused]] const drogon::orm::Result &result) {
         Json::Value response_object;
         drogon::HttpStatusCode status_code = drogon::k404NotFound;
-        response_object["message"] = "password not found";
+        response_object["message"] = "website not found";
         if (!result.empty()) {
           auto first_row = result[0];
           status_code = drogon::k200OK;
@@ -70,13 +72,15 @@ auto SQLite3Client::ModifyPasswordData(
     Website website) -> void {
   Json::Value response_object;
 
-  auto json = sqlite3_client::Helpers::ValidateRequest(
+  auto request_json_ptr = sqlite3_client::Helpers::ValidateRequest(
       http_request, std::forward<decltype(http_callback)>(http_callback),
       response_object);
 
-  auto email = Email((*json)["email"].asString());
-  auto username = Username((*json)["username"].asString());
-  auto password = Password((*json)["password"].asString());
+  Email email;
+  Username username;
+  Password password;
+  sqlite3_client::Helpers::ParseJsonRequest(request_json_ptr, email, username,
+                                            password);
 
   auto sql_query =
       query_factory_.UpdatePasswordQuery(website, email, username, password);
