@@ -1,8 +1,28 @@
-include(GoogleTest)
+###########################################
+### Required packages
+###########################################
+find_package(Drogon CONFIG REQUIRED)
 
-add_executable(hello_test hello_test.cc)
-
-find_package(GTest CONFIG REQUIRED)
-target_link_libraries(hello_test PRIVATE GTest::gtest_main coverage_options)
-
-gtest_discover_tests(hello_test) #find all tests in target files
+###########################################
+### Minpass tests
+###########################################
+add_executable(
+  minpass_tests
+  main_test.cc
+  minpass_types_test.cc
+  sqlite3_client_test.cc
+  sqlite3_queries_test.cc
+  utilities/strong_types_test.cc
+  sqlite3_client/helpers_test.cc)
+target_link_libraries(minpass_tests PRIVATE sqlite3_client)
+target_link_libraries(minpass_tests PRIVATE sqlite3_queries)
+target_link_libraries(minpass_tests PRIVATE minpass_types)
+target_link_libraries(minpass_tests PRIVATE utilities)
+target_link_libraries(minpass_tests PRIVATE Drogon::Drogon)
+# For drogon compilation to work
+# link winsock, winsock2, iphlpapi (Googled for undefined references and link those libraries where they are found)
+if(WIN32)
+  target_link_libraries(minpass_tests PRIVATE wsock32 ws2_32 iphlpapi)
+endif()
+target_link_libraries(minpass_tests PRIVATE OpenSSL::SSL OpenSSL::Crypto)
+parseandadddrogontests(minpass_tests)

@@ -8,11 +8,5 @@
       "default-features": false,
       "features": ["sqlite3"]
     }
-  ],
-  "features": {
-    "tests": {
-      "description": "Build the tests of the package's tests",
-      "dependencies": ["gtest"]
-    }
-  }
+  ]
 }
