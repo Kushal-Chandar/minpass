@@ -67,11 +67,9 @@ target_sources(minpass PRIVATE src/main.cc)
 target_link_libraries(minpass PRIVATE project_compile_options)
 target_link_libraries(minpass PRIVATE sqlite3_client)
 target_link_libraries(minpass PRIVATE Drogon::Drogon)
-
 # For drogon compilation to work
 # link winsock, winsock2, iphlpapi (Googled for undefined references and link those libraries where they are found)
 if(WIN32)
   target_link_libraries(minpass PRIVATE wsock32 ws2_32 iphlpapi)
 endif()
-
 target_link_libraries(minpass PRIVATE OpenSSL::SSL OpenSSL::Crypto)
