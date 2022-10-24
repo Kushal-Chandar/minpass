@@ -9,7 +9,7 @@ namespace minpass::sqlite3_client {
 
 class Helpers {
  public:
-  static auto CommonException(const drogon::orm::DrogonDbException &error)
+  static auto CommonExceptionCatch(const drogon::orm::DrogonDbException &error)
       -> void;
   static auto CreatePasswordTable(drogon::orm::DbClientPtr &client,
                                   const std::string &sql_query) -> void;

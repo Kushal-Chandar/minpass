@@ -2,11 +2,16 @@
 
 #include <drogon/drogon_test.h>
 
-namespace minpass::sqlite3_client {
-
-DROGON_TEST(HelpersTests_CommonException) {
+DROGON_TEST(HelpersTests_CommonExceptionCatch) {
+  // Testing
+  // 1. CommonExceptionCatch function should not throw
   const drogon::orm::DrogonDbException error;
-  CHECK_NOTHROW(Helpers::CommonException(error));
+  CHECK_NOTHROW(minpass::sqlite3_client::Helpers::CommonExceptionCatch(error));
 }
 
-}  // namespace minpass::sqlite3_client
+DROGON_TEST(HelpersTests_MakeResponse) {
+  // Testing
+  // 1. CommonExceptionCatch function should not throw
+  Json::Value json;
+  CHECK_NOTHROW(minpass::sqlite3_client::Helpers::MakeResponse(json));
+}

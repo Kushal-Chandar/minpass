@@ -23,7 +23,6 @@ auto SQLite3Client::SetPasswordData(
   auto json = sqlite3_client::Helpers::ValidateRequest(
       http_request, std::forward<decltype(http_callback)>(http_callback),
       response_object);
-  http_request->getJsonObject();
 
   auto email = Email((*json)["email"].asString());
   auto username = Username((*json)["username"].asString());
@@ -33,7 +32,7 @@ auto SQLite3Client::SetPasswordData(
       query_factory_.CreatePasswordQuery(website, email, username, password);
   auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
   client_->execSqlAsync(sql_query, call_back,
-                        sqlite3_client::Helpers::CommonException);
+                        sqlite3_client::Helpers::CommonExceptionCatch);
 
   response_object["message"] = "ok";
   http_callback(sqlite3_client::Helpers::MakeResponse(response_object));
@@ -62,7 +61,7 @@ auto SQLite3Client::GetPasswordData(
         http_callback(sqlite3_client::Helpers::MakeResponse(response_object,
                                                             status_code));
       },
-      sqlite3_client::Helpers::CommonException);
+      sqlite3_client::Helpers::CommonExceptionCatch);
 }
 
 auto SQLite3Client::ModifyPasswordData(
@@ -71,13 +70,9 @@ auto SQLite3Client::ModifyPasswordData(
     Website website) -> void {
   Json::Value response_object;
 
-  auto json = http_request->getJsonObject();
-  if (!json) {
-    response_object["message"] = "could not parse json";
-    http_callback(sqlite3_client::Helpers::MakeResponse(
-        response_object, drogon::k400BadRequest));
-    return;
-  }
+  auto json = sqlite3_client::Helpers::ValidateRequest(
+      http_request, std::forward<decltype(http_callback)>(http_callback),
+      response_object);
 
   auto email = Email((*json)["email"].asString());
   auto username = Username((*json)["username"].asString());
@@ -87,7 +82,7 @@ auto SQLite3Client::ModifyPasswordData(
       query_factory_.UpdatePasswordQuery(website, email, username, password);
   auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
   client_->execSqlAsync(sql_query, call_back,
-                        sqlite3_client::Helpers::CommonException);
+                        sqlite3_client::Helpers::CommonExceptionCatch);
 
   response_object["message"] = "ok";
   http_callback(
@@ -102,7 +97,7 @@ auto SQLite3Client::RemovePasswordData(
   auto sql_query = query_factory_.DeletePasswordQuery(website);
   auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
   client_->execSqlAsync(sql_query, call_back,
-                        sqlite3_client::Helpers::CommonException);
+                        sqlite3_client::Helpers::CommonExceptionCatch);
   response_object["message"] = "ok";
   http_callback(
       sqlite3_client::Helpers::MakeResponse(response_object, drogon::k200OK));
