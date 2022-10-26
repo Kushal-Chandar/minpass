@@ -4,7 +4,7 @@ include_guard()
 #   Uncomment to set options or set options in cmake-gui.
 # ----------------------------------------------------------------------------
 # set(BUILD_SHARED_LIBS ON)
-# set(UPDATE_VCPKG ON)
+set(INSTALL_OR_UPDATE_VCPKG ON)
 # set(WARNINGS_AS_ERRORS ON)
 # set(CODE_COVERAGE ON) # enable in github actions
 set(BUILD_TESTING ON)

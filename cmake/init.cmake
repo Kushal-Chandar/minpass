@@ -1,6 +1,7 @@
 include_guard()
 
-option(UPDATE_VCPKG "Install or update vcpkg in the project root directory" OFF)
+option(INSTALL_OR_UPDATE_VCPKG
+       "Install or update vcpkg in the project root directory" OFF)
 option(MANIFEST_FEATURE_TEST "Get packages required for testing" OFF)
 option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
 option(CODE_COVERAGE "Enable coverage reporting" OFF)
@@ -15,6 +16,13 @@ option(SANITIZE_UNDEFINED "Enable sanitizer for undefined behaviour" OFF)
 #   Get all options set from options.cmake
 # ----------------------------------------------------------------------------
 include(${CMAKE_CURRENT_SOURCE_DIR}/options.cmake)
+
+# ----------------------------------------------------------------------------
+#   Detecting linux
+# ----------------------------------------------------------------------------
+if(UNIX AND NOT APPLE)
+  set(LINUX TRUE)
+endif()
 
 # ----------------------------------------------------------------------------
 #   An interface library containing all compile options
