@@ -1,5 +1,21 @@
 #include "sqlite3_client/helpers.h"
 
+#include <__type_traits/remove_extent.h>  // for remove_extent_t
+#include <drogon/HttpAppFramework.h>
+#include <drogon/orm/Exception.h>  // for DrogonDbException
+#include <fmt/color.h>             // for fg, print, color, color::red
+#include <fmt/core.h>              // for basic_string_view
+#include <fmt/format.h>            // for buffer::append
+#include <json/value.h>            // for Value
+
+#include <exception>  // for exception
+
+namespace drogon {
+namespace orm {
+class Result;
+}  // namespace orm
+}  // namespace drogon
+
 namespace minpass::sqlite3_client {
 
 auto Helpers::CommonExceptionCatch(const drogon::orm::DrogonDbException &error)
