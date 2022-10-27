@@ -19,6 +19,8 @@ target_link_libraries(minpass_tests PRIVATE sqlite3_queries)
 target_link_libraries(minpass_tests PRIVATE minpass_types)
 target_link_libraries(minpass_tests PRIVATE utilities)
 target_link_libraries(minpass_tests PRIVATE Drogon::Drogon)
+target_link_libraries(minpass_tests PRIVATE coverage_options)
+
 # For drogon compilation to work
 # link winsock, winsock2, iphlpapi (Googled for undefined references and link those libraries where they are found)
 if(WIN32)
