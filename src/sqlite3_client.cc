@@ -1,10 +1,18 @@
 #include "sqlite3_client.h"
 
-#include <drogon/drogon.h>
+#include <__memory/shared_ptr.h>          // for shared_ptr
+#include <__type_traits/remove_extent.h>  // for remove_extent_t
+#include <__utility/forward.h>            // for forward
+#include <drogon/HttpAppFramework.h>      // for app, HttpAppFramework
+#include <json/value.h>                   // for Value
 
-#include "minpass_types.h"
-#include "sqlite3_client/helpers.h"
-#include "sqlite3_queries.h"
+#include "minpass_types.h"           // for Website, Email, Password
+#include "sqlite3_client/helpers.h"  // for Helpers
+#include "sqlite3_queries.h"         // for SQLite3Queries
+
+namespace drogon {
+class DrObjectBase;
+}  // namespace drogon
 
 namespace minpass {
 
@@ -105,6 +113,17 @@ auto SQLite3Client::RemovePasswordData(
   response_object["message"] = "ok";
   http_callback(
       sqlite3_client::Helpers::MakeResponse(response_object, drogon::k200OK));
+}
+
+auto SQLite3Client::QuitServer(
+    [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
+    std::function<void(const drogon::HttpResponsePtr &)> &&http_callback)
+    -> void {
+  drogon::app().quit();
+  Json::Value response_object;
+  response_object["message"] = "serveer has been stopped";
+  http_callback(sqlite3_client::Helpers::MakeResponse(response_object,
+                                                      drogon::k202Accepted));
 }
 
 }  // namespace minpass

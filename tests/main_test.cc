@@ -1,6 +1,9 @@
 #define DROGON_TEST_MAIN
-#include <drogon/drogon.h>
-#include <drogon/drogon_test.h>
+#include <drogon/HttpAppFramework.h>  // for app, HttpAppFramework
+#include <drogon/drogon_test.h>       // for test
+
+#include <future>  // for promise, future
+#include <thread>  // for thread
 
 auto main(int argc, char *argv[]) -> int {
   std::promise<void> promise;

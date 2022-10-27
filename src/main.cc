@@ -1,4 +1,5 @@
-#include <drogon/drogon.h>
+#include <drogon/HttpAppFramework.h>  // for app, HttpAppFramework
+#include <stdlib.h>                   // for EXIT_SUCCESS
 
 #include "sqlite3_client.h"
 

@@ -1,8 +1,14 @@
 #include "sqlite3_client/helpers.h"
 
-#include <drogon/drogon_test.h>
+#include <drogon/drogon_test.h>    // for Case (ptr only), DROGON_TEST, CHEC...
+#include <drogon/orm/Exception.h>  // for DrogonDbException
+#include <json/value.h>            // for Value
 
-#include "minpass_types.h"
+#include "minpass_types.h"  // for Email, Password, Username
+
+namespace drogon {
+class DrObjectBase;
+}  // namespace drogon
 
 DROGON_TEST(HelpersTests_CommonExceptionCatch) {
   // Testing

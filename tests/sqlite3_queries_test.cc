@@ -1,6 +1,13 @@
 #include "sqlite3_queries.h"
 
-#include <drogon/drogon_test.h>
+#include <__functional/function.h>  // for __base
+#include <drogon/drogon_test.h>     // for Case (ptr only), DROGON_TEST, REQ...
+
+#include <string>  // for basic_string, char_traits, allocator
+
+namespace drogon {
+class DrObjectBase;
+}  // namespace drogon
 
 #define TABLE_NAME "minpass"  // change this if default table name is changed
 

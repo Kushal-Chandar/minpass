@@ -1,11 +1,10 @@
 #include "sqlite3_queries.h"
 
-#include <drogon/drogon.h>
-#include <fmt/color.h>
-#include <fmt/core.h>
-#include <fmt/printf.h>
+#include <fmt/color.h>   // for fg, print, color, color::green
+#include <fmt/core.h>    // for basic_string_view, format
+#include <fmt/format.h>  // for buffer::append
 
-#include "minpass_types.h"
+#include "minpass_types.h"  // for Website, Email, Password, Username
 
 namespace minpass {
 
