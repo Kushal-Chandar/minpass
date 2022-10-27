@@ -1,35 +1,40 @@
 FROM drogonframework/drogon:latest
 
+RUN apt update -y \
+  && apt install -y \
+  ccache \
+  curl \
+  tar \
+  jq \
+  ninja-build \
+  libsqlite3-dev \
+  clang \
+  libfmt-dev \
+  && apt upgrade -y
+
 WORKDIR /minpass
 
 COPY . .
 
-RUN apt update -y \
-  && apt install -y \
-  git \
-  ccache \
-  curl \
-  zip \
-  jq \
-  unzip \
-  tar \
-  python3 \
-  ninja-build \
-  clang \
-  pkg-config \
-  doxygen \
-  libfmt-dev \
-  && apt upgrade -y
-
 RUN ./scripts/get_cmake_ubuntu_docker.sh
 
-WORKDIR /minpass/build
-RUN cmake -S .. -B . -G Ninja && ninja
+WORKDIR /build
+
+RUN cmake -DCMAKE_BUILD_TYPE:STRING=Release -DDOCKER_BUILD:BOOL=ON -S /minpass -B . -G Ninja \
+  && ninja \
+  && cp /minpass/server_config.json /build/ \
+  && rm -rf /minpass/
 
 ENV PORT=8080
 
 EXPOSE 8080
 
-RUN ./tests/minpass_tests.cc -s
+RUN apt remove -y \
+  jq \
+  ninja-build \
+  libsqlite3-dev \
+  clang \
+  libfmt-dev \
+  && apt auto-remove -y
 
-CMD [ "minpass.exe" ]
+CMD [ "./minpass" ]

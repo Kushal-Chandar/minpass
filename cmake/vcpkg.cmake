@@ -44,12 +44,12 @@ endfunction()
 install_or_update_vcpkg()
 
 # ----------------------------------------------------------------------------
-#   Get packages required for testing
+#   Get required packages for testing
 # ----------------------------------------------------------------------------
 # if(BUILD_TESTING)
 #   list(APPEND VCPKG_MANIFEST_FEATURES "tests")
 # endif()
-# Not requried as drogon tests are a part of drogon package and cannot be seperated
+# not required drogon has an amazing testing framework
 
 # ----------------------------------------------------------------------------
 #   VCPKG configuration

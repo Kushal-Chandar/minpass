@@ -3,7 +3,7 @@ include_guard()
 # ----------------------------------------------------------------------------
 #   Uncomment to set options or set options in cmake-gui.
 # ----------------------------------------------------------------------------
-set(DOCKER_BUILD ON)
+# set(DOCKER_BUILD ON)
 # set(BUILD_SHARED_LIBS ON)
 set(INSTALL_OR_UPDATE_VCPKG ON) # turn this off for docker
 # set(WARNINGS_AS_ERRORS ON)
@@ -21,7 +21,10 @@ set(ENABLE_CCACHE ON)
 # set(SANITIZE_UNDEFINED ON)
 
 if(DOCKER_BUILD)
-  set(ENABLE_DOXYGEN OFF) # turn this off for docker
+  set(ENABLE_DOXYGEN OFF)
+  # turn this off for docker we are not building docks for prod
   set(INSTALL_OR_UPDATE_VCPKG OFF)
-  # turn this off for docker unless needed for a testing framework that you cannot find on ubuntu
+  # turn this off for docker unless you are testing and your testing framework not available in docker image
+  set(BUILD_TESTING OFF)
+  # turn this off for docker unless your want your tests to run in docker before deployment
 endif()
