@@ -29,12 +29,15 @@ if(PYTHON_EXECUTABLE)
   find_program(CPPCHECK_HTMLREPORT NAMES cppcheck-htmlreport)
   if(CPPCHECK)
     set(CPPCHECK_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/cppcheck)
+    if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+      set(CPPCHECK_COMPILER_OPTION --clang=clang)
+    endif()
     file(MAKE_DIRECTORY ${CPPCHECK_BUILD_DIR})
     add_custom_target(
       cpp-check
       COMMAND
-        ${CPPCHECK} --enable=all --inline-suppr --language=c++
-        --std=c++${CMAKE_CXX_STANDARD} -j ${NPROC}
+        ${CPPCHECK} --enable=all --inline-suppr ${CPPCHECK_COMPILER_OPTION}
+        --language=c++ --std=c++${CMAKE_CXX_STANDARD} -j ${NPROC}
         --project=${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json
         --report-progress --inconclusive --verbose
         --suppressions-list=${CMAKE_CURRENT_SOURCE_DIR}/cppcheck_suppressions.txt
@@ -45,7 +48,7 @@ if(PYTHON_EXECUTABLE)
       COMMAND
         ${PYTHON_EXECUTABLE} ${CPPCHECK_HTMLREPORT}
         --file=${CPPCHECK_BUILD_DIR}/cpp-check-report.xml
-        --report-dir=${CPPCHECK_BUILD_DIR}/html
+        --title=${PROJECT_NAME} --report-dir=${CPPCHECK_BUILD_DIR}/html
         --source-dir=${CMAKE_CURRENT_SOURCE_DIR}
       COMMENT "Running cpp-check"
       VERBATIM)

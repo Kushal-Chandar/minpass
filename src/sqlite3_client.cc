@@ -27,25 +27,21 @@ auto SQLite3Client::SetPasswordData(
     std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
     const Website &website) -> void {
   Json::Value response_object;
-
-  auto request_json_ptr = sqlite3_client::Helpers::ValidateRequest(
-      http_request, std::forward<decltype(http_callback)>(http_callback),
-      response_object);
-
-  Email email;
-  Username username;
-  Password password;
-  sqlite3_client::Helpers::ParseJsonRequest(request_json_ptr, email, username,
-                                            password);
-
-  auto sql_query =
-      query_factory_.CreatePasswordQuery(website, email, username, password);
-  auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
-  client_->execSqlAsync(sql_query, call_back,
-                        sqlite3_client::Helpers::CommonExceptionCatch);
-
-  response_object["message"] = "ok";
-  http_callback(sqlite3_client::Helpers::MakeResponse(response_object));
+  drogon::HttpResponsePtr http_response;
+  auto [is_valid, email, username, password] =
+      sqlite3_client::Helpers::ValidateRequest(http_request, http_response,
+                                               response_object);
+  if (is_valid) {
+    std::cout << email.get() << '\n';
+    std::cout << username.get() << '\n';
+    std::cout << password.get() << '\n';
+    auto sql_query =
+        query_factory_.CreatePasswordQuery(website, email, username, password);
+    auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
+    client_->execSqlAsync(sql_query, call_back,
+                          sqlite3_client::Helpers::CommonExceptionCatch);
+  }
+  http_callback(http_response);
 }
 
 auto SQLite3Client::GetPasswordData(
@@ -79,26 +75,18 @@ auto SQLite3Client::ModifyPasswordData(
     std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
     const Website &website) -> void {
   Json::Value response_object;
-
-  auto request_json_ptr = sqlite3_client::Helpers::ValidateRequest(
-      http_request, std::forward<decltype(http_callback)>(http_callback),
-      response_object);
-
-  Email email;
-  Username username;
-  Password password;
-  sqlite3_client::Helpers::ParseJsonRequest(request_json_ptr, email, username,
-                                            password);
-
-  auto sql_query =
-      query_factory_.UpdatePasswordQuery(website, email, username, password);
-  auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
-  client_->execSqlAsync(sql_query, call_back,
-                        sqlite3_client::Helpers::CommonExceptionCatch);
-
-  response_object["message"] = "ok";
-  http_callback(
-      sqlite3_client::Helpers::MakeResponse(response_object, drogon::k200OK));
+  drogon::HttpResponsePtr http_response;
+  auto [is_valid, email, username, password] =
+      sqlite3_client::Helpers::ValidateRequest(http_request, http_response,
+                                               response_object);
+  if (is_valid) {
+    auto sql_query =
+        query_factory_.UpdatePasswordQuery(website, email, username, password);
+    auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
+    client_->execSqlAsync(sql_query, call_back,
+                          sqlite3_client::Helpers::CommonExceptionCatch);
+  }
+  http_callback(http_response);
 }
 
 auto SQLite3Client::RemovePasswordData(
@@ -108,22 +96,24 @@ auto SQLite3Client::RemovePasswordData(
   Json::Value response_object;
   auto sql_query = query_factory_.DeletePasswordQuery(website);
   auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
+
   client_->execSqlAsync(sql_query, call_back,
                         sqlite3_client::Helpers::CommonExceptionCatch);
+
   response_object["message"] = "ok";
-  http_callback(
-      sqlite3_client::Helpers::MakeResponse(response_object, drogon::k200OK));
+  http_callback(sqlite3_client::Helpers::MakeResponse(response_object));
 }
 
 auto SQLite3Client::QuitServer(
     [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
     std::function<void(const drogon::HttpResponsePtr &)> &&http_callback)
     -> void {
-  drogon::app().quit();
   Json::Value response_object;
-  response_object["message"] = "serveer has been stopped";
-  http_callback(sqlite3_client::Helpers::MakeResponse(response_object,
-                                                      drogon::k202Accepted));
+  response_object["message"] = "server has been stopped";
+  http_callback(sqlite3_client::Helpers::MakeResponse(
+      response_object, drogon::k503ServiceUnavailable));
+
+  drogon::app().quit();
 }
 
 }  // namespace minpass

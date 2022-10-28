@@ -33,13 +33,10 @@ class Helpers {
   static auto MakeResponse(Json::Value &response_object,
                            drogon::HttpStatusCode status_code = drogon::k200OK)
       -> drogon::HttpResponsePtr;
-  static auto ValidateRequest(
-      const drogon::HttpRequestPtr &http_request,
-      std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-      Json::Value &response_object_out) -> std::shared_ptr<Json::Value>;
-  static auto ParseJsonRequest(
-      const std::shared_ptr<Json::Value> &validated_json, Email &email_out,
-      Username &username_out, Password &password_out) -> void;
+  static auto ValidateRequest(const drogon::HttpRequestPtr &http_request,
+                              drogon::HttpResponsePtr &http_response,
+                              Json::Value &response_object_out)
+      -> std::tuple<bool, Email, Username, Password>;
 };
 
 }  // namespace minpass::sqlite3_client
