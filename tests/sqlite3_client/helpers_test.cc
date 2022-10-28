@@ -27,10 +27,10 @@ DROGON_TEST(HelpersTests_MakeResponse) {
 DROGON_TEST(HelpersTests_ParseJsonRequest) {
   // Testing
   // 1. ParseJsonRequest function should not throw even if json is null
-  std::shared_ptr<Json::Value> json;
-  minpass::Email email;
-  minpass::Username username;
-  minpass::Password password;
-  MANDATE_NOTHROW(minpass::sqlite3_client::Helpers::ParseJsonRequest(
-      json, email, username, password));
+  Json::Value response_object{};
+  const drogon::HttpRequestPtr http_request{};
+  drogon::HttpResponsePtr http_response{};
+
+  MANDATE_NOTHROW(minpass::sqlite3_client::Helpers::ValidateRequest(
+      http_request, http_response, response_object));
 }

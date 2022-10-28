@@ -21,7 +21,7 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
   METHOD_ADD(SQLite3Client::GetPasswordData, "/website={}", drogon::Get);
   METHOD_ADD(SQLite3Client::RemovePasswordData, "/website={}", drogon::Delete);
   METHOD_ADD(SQLite3Client::ModifyPasswordData, "/website={}", drogon::Patch);
-  METHOD_ADD(SQLite3Client::QuitServer, "/stop", drogon::Post);
+  METHOD_ADD(SQLite3Client::QuitServer, "/stop", drogon::Get);
   METHOD_LIST_END
 
   explicit SQLite3Client(const std::string &database_name = "minpass");
@@ -29,19 +29,19 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
   auto SetPasswordData(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-      Website website) -> void;
+      const Website &website) -> void;
   auto GetPasswordData(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-      Website website) -> void;
+      const Website &website) -> void;
   auto RemovePasswordData(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-      Website website) -> void;
+      const Website &website) -> void;
   auto ModifyPasswordData(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-      Website website) -> void;
+      const Website &website) -> void;
   static auto QuitServer(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback)

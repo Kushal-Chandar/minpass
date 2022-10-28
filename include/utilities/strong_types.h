@@ -9,7 +9,7 @@ class StrongType {
   explicit StrongType(Type const& value) : value_(value) {}
   explicit StrongType(Type&& value) : value_(value) {}
   StrongType() : value_(Type({})){};
-  auto get() -> Type { return value_; }
+  auto get() const -> Type { return value_; }
   auto set(Type const& value) -> void { value_ = value; }
 
  private:

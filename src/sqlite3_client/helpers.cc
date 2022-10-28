@@ -10,11 +10,9 @@
 
 #include <exception>  // for exception
 
-namespace drogon {
-namespace orm {
+namespace drogon::orm {
 class Result;
-}  // namespace orm
-}  // namespace drogon
+}  // namespace drogon::orm
 
 namespace minpass::sqlite3_client {
 
@@ -38,26 +36,24 @@ auto Helpers::MakeResponse(Json::Value &response_object,
   return http_response;
 }
 
-auto Helpers::ValidateRequest(
-    const drogon::HttpRequestPtr &http_request,
-    std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-    Json::Value &response_object_out) -> std::shared_ptr<Json::Value> {
+auto Helpers::ValidateRequest(const drogon::HttpRequestPtr &http_request,
+                              drogon::HttpResponsePtr &http_response,
+                              Json::Value &response_object_out)
+    -> std::tuple<bool, Email, Username, Password> {
   auto json = http_request->getJsonObject();
   if (!json) {
     response_object_out["message"] = "could not parse request";
-    http_callback(MakeResponse(response_object_out, drogon::k400BadRequest));
+    http_response = MakeResponse(response_object_out, drogon::k400BadRequest);
+    return {false, Email(), Username(), Password()};
   }
-  return json;
-}
-
-auto Helpers::ParseJsonRequest(std::shared_ptr<Json::Value> &validated_json,
-                               Email &email_out, Username &username_out,
-                               Password &password_out) -> void {
-  if (validated_json) {
-    email_out = Email((*validated_json)["email"].asString());
-    username_out = Username((*validated_json)["username"].asString());
-    password_out = Password((*validated_json)["password"].asString());
-  }
+  response_object_out["message"] = "ok";
+  http_response = MakeResponse(response_object_out, drogon::k202Accepted);
+  return {
+      true,
+      Email((*json)["email"].asString()),
+      Username((*json)["username"].asString()),
+      Password((*json)["password"].asString()),
+  };
 }
 
 }  // namespace minpass::sqlite3_client
