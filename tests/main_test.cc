@@ -19,7 +19,7 @@ auto main(int argc, char *argv[]) -> int {
 
   // The future is only satisfied after the event loop started
   future.get();
-  int status = drogon::test::run(argc, argv);
+  int const status = drogon::test::run(argc, argv);
 
   // Ask the event loop to shutdown and wait
   drogon::app().getLoop()->queueInLoop([]() { drogon::app().quit(); });

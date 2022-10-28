@@ -10,11 +10,9 @@
 
 #include <exception>  // for exception
 
-namespace drogon {
-namespace orm {
+namespace drogon::orm {
 class Result;
-}  // namespace orm
-}  // namespace drogon
+}  // namespace drogon::orm
 
 namespace minpass::sqlite3_client {
 
@@ -50,9 +48,9 @@ auto Helpers::ValidateRequest(
   return json;
 }
 
-auto Helpers::ParseJsonRequest(std::shared_ptr<Json::Value> &validated_json,
-                               Email &email_out, Username &username_out,
-                               Password &password_out) -> void {
+auto Helpers::ParseJsonRequest(
+    const std::shared_ptr<Json::Value> &validated_json, Email &email_out,
+    Username &username_out, Password &password_out) -> void {
   if (validated_json) {
     email_out = Email((*validated_json)["email"].asString());
     username_out = Username((*validated_json)["username"].asString());

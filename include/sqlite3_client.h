@@ -29,19 +29,19 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
   auto SetPasswordData(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-      Website website) -> void;
+      const Website &website) -> void;
   auto GetPasswordData(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-      Website website) -> void;
+      const Website &website) -> void;
   auto RemovePasswordData(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-      Website website) -> void;
+      const Website &website) -> void;
   auto ModifyPasswordData(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-      Website website) -> void;
+      const Website &website) -> void;
   static auto QuitServer(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
       std::function<void(const drogon::HttpResponsePtr &)> &&http_callback)

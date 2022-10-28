@@ -24,8 +24,10 @@ auto SQLite3Queries::CreateTableQuery() -> std::string {
   return sql_query;
 }
 
-auto SQLite3Queries::CreatePasswordQuery(Website& website, Email& email,
-                                         Username& username, Password& password)
+auto SQLite3Queries::CreatePasswordQuery(const Website& website,
+                                         const Email& email,
+                                         const Username& username,
+                                         const Password& password)
     -> std::string {
   auto sql_query = fmt::format(
       "INSERT INTO {}\n"
@@ -35,7 +37,7 @@ auto SQLite3Queries::CreatePasswordQuery(Website& website, Email& email,
   return sql_query;
 }
 
-auto SQLite3Queries::ReadPasswordQuery(Website& website) -> std::string {
+auto SQLite3Queries::ReadPasswordQuery(const Website& website) -> std::string {
   auto sql_query = fmt::format(
       "SELECT * FROM {}\n"
       "WHERE Website = '{}';\n",
@@ -44,8 +46,10 @@ auto SQLite3Queries::ReadPasswordQuery(Website& website) -> std::string {
   return sql_query;
 }
 
-auto SQLite3Queries::UpdatePasswordQuery(Website& website, Email& email,
-                                         Username& username, Password& password)
+auto SQLite3Queries::UpdatePasswordQuery(const Website& website,
+                                         const Email& email,
+                                         const Username& username,
+                                         const Password& password)
     -> std::string {
   auto sql_query = fmt::format(
       "UPDATE {}\n"
@@ -56,7 +60,8 @@ auto SQLite3Queries::UpdatePasswordQuery(Website& website, Email& email,
   return sql_query;
 }
 
-auto SQLite3Queries::DeletePasswordQuery(Website& website) -> std::string {
+auto SQLite3Queries::DeletePasswordQuery(const Website& website)
+    -> std::string {
   auto sql_query = fmt::format(
       "DELETE FROM {}\n"
       "WHERE Website = '{}';\n",

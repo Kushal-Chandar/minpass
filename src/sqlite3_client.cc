@@ -16,8 +16,8 @@ class DrObjectBase;
 
 namespace minpass {
 
-SQLite3Client::SQLite3Client(const std::string &database_name) {
-  client_ = drogon::app().getDbClient(database_name);
+SQLite3Client::SQLite3Client(const std::string &database_name)
+    : client_(drogon::app().getDbClient(database_name)) {
   sqlite3_client::Helpers::CreatePasswordTable(
       client_, query_factory_.CreateTableQuery());
 }
@@ -25,7 +25,7 @@ SQLite3Client::SQLite3Client(const std::string &database_name) {
 auto SQLite3Client::SetPasswordData(
     [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
     std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-    Website website) -> void {
+    const Website &website) -> void {
   Json::Value response_object;
 
   auto request_json_ptr = sqlite3_client::Helpers::ValidateRequest(
@@ -51,7 +51,7 @@ auto SQLite3Client::SetPasswordData(
 auto SQLite3Client::GetPasswordData(
     [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
     std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-    Website website) -> void {
+    const Website &website) -> void {
   auto sql_query = query_factory_.ReadPasswordQuery(website);
   client_->execSqlAsync(
       sql_query,
@@ -77,7 +77,7 @@ auto SQLite3Client::GetPasswordData(
 auto SQLite3Client::ModifyPasswordData(
     [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
     std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-    Website website) -> void {
+    const Website &website) -> void {
   Json::Value response_object;
 
   auto request_json_ptr = sqlite3_client::Helpers::ValidateRequest(
@@ -104,7 +104,7 @@ auto SQLite3Client::ModifyPasswordData(
 auto SQLite3Client::RemovePasswordData(
     [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
     std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
-    Website website) -> void {
+    const Website &website) -> void {
   Json::Value response_object;
   auto sql_query = query_factory_.DeletePasswordQuery(website);
   auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
