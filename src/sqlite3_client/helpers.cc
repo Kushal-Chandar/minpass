@@ -1,15 +1,15 @@
 #include "sqlite3_client/helpers.h"
 
-#include <__type_traits/remove_extent.h>  // for remove_extent_t
-#include <drogon/HttpAppFramework.h>
-#include <drogon/orm/Exception.h>  // for DrogonDbException
-#include <fmt/color.h>             // for fg, print, color, color::red
-#include <fmt/core.h>              // for basic_string_view
-#include <fmt/format.h>            // for buffer::append
-#include <json/value.h>            // for Value
+#include <drogon/HttpRequest.h>           // for HttpRequestPtr
+#include <drogon/HttpResponse.h>          // for HttpResponse
+#include <drogon/orm/Exception.h>         // for DrogonDbException
+#include <drogon/utils/FunctionTraits.h>  // for HttpResponsePtr
+#include <fmt/color.h>                    // for fg, print, color, color::red
+#include <fmt/core.h>                     // for basic_string_view
+#include <fmt/format.h>                   // for buffer::append
+#include <json/value.h>                   // for Value
 
 #include <exception>  // for exception
-
 namespace drogon::orm {
 class Result;
 }  // namespace drogon::orm
@@ -21,11 +21,8 @@ auto Helpers::CommonExceptionCatch(const drogon::orm::DrogonDbException &error)
   fmt::print(fmt::fg(fmt::color::red), "error: {}\n", error.base().what());
 }
 
-auto Helpers::CreatePasswordTable(drogon::orm::DbClientPtr &client,
-                                  const std::string &sql_query) -> void {
-  auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
-  client->execSqlAsync(sql_query, call_back, Helpers::CommonExceptionCatch);
-}
+auto Helpers::EmptyCallback([[maybe_unused]] const drogon::orm::Result &result)
+    -> void {}
 
 auto Helpers::MakeResponse(Json::Value &response_object,
                            drogon::HttpStatusCode status_code)

@@ -1,17 +1,16 @@
 #if !defined(MINPASS)
 #define MINPASS
 
-#include <__functional/function.h>    // for function
 #include <drogon/HttpController.h>    // for METHOD_ADD, HttpController, MET...
 #include <drogon/HttpResponse.h>      // for HttpResponsePtr
-#include <drogon/HttpTypes.h>         // for Post, Delete, Get, Patch
+#include <drogon/HttpTypes.h>         // for Get, Delete, Patch, Post
 #include <drogon/drogon_callbacks.h>  // for HttpRequestPtr
 #include <drogon/orm/DbClient.h>      // for DbClientPtr
 
-#include <iosfwd>  // for string
+#include <functional>  // for function
+#include <iostream>    // for string
 
-#include "minpass_types.h"    // for Website
-#include "sqlite3_queries.h"  // for SQLite3Queries
+#include "minpass_types.h"  // for Website
 
 namespace minpass {
 class SQLite3Client : public drogon::HttpController<SQLite3Client> {
@@ -24,7 +23,8 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
   METHOD_ADD(SQLite3Client::QuitServer, "/stop", drogon::Get);
   METHOD_LIST_END
 
-  explicit SQLite3Client(const std::string &database_name = "minpass");
+  explicit SQLite3Client(const DatabaseName &database_name = DatabaseName("minpass"),
+                         TableName table_name = TableName("minpass"));
 
   auto SetPasswordData(
       [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
@@ -48,8 +48,8 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
       -> void;
 
  private:
-  SQLite3Queries query_factory_;
   drogon::orm::DbClientPtr client_;
+  TableName table_name_;
 };
 
 }  // namespace minpass
