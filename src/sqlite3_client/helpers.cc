@@ -21,11 +21,8 @@ auto Helpers::CommonExceptionCatch(const drogon::orm::DrogonDbException &error)
   fmt::print(fmt::fg(fmt::color::red), "error: {}\n", error.base().what());
 }
 
-auto Helpers::CreatePasswordTable(drogon::orm::DbClientPtr &client,
-                                  const std::string &sql_query) -> void {
-  auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
-  client->execSqlAsync(sql_query, call_back, Helpers::CommonExceptionCatch);
-}
+auto Helpers::EmptyCallback([[maybe_unused]] const drogon::orm::Result &result)
+    -> void {}
 
 auto Helpers::MakeResponse(Json::Value &response_object,
                            drogon::HttpStatusCode status_code)

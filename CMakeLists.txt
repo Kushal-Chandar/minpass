@@ -31,18 +31,6 @@ target_link_libraries(minpass_types PRIVATE utilities)
 target_include_directories(minpass_types PUBLIC include)
 
 ###########################################
-### SQLite3 queries
-###########################################
-add_library(sqlite3_queries STATIC)
-target_sources(sqlite3_queries PRIVATE src/sqlite3_queries.cc
-                                       include/sqlite3_queries.h)
-target_link_libraries(sqlite3_queries PRIVATE project_compile_options)
-target_include_directories(sqlite3_queries PUBLIC include)
-target_link_libraries(sqlite3_queries PRIVATE Drogon::Drogon)
-target_link_libraries(sqlite3_queries PRIVATE minpass_types)
-target_link_libraries(sqlite3_queries PRIVATE fmt::fmt)
-
-###########################################
 ### SQLite3 client
 ###########################################
 add_library(sqlite3_client STATIC)
@@ -54,7 +42,6 @@ target_sources(
           include/sqlite3_client/helpers.h)
 target_link_libraries(sqlite3_client PRIVATE project_compile_options)
 target_include_directories(sqlite3_client PUBLIC include)
-target_link_libraries(sqlite3_client PRIVATE sqlite3_queries)
 target_link_libraries(sqlite3_client PRIVATE Drogon::Drogon)
 target_link_libraries(sqlite3_client PRIVATE minpass_types)
 target_link_libraries(sqlite3_client PRIVATE fmt::fmt)

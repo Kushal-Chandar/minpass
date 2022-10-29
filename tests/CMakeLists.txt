@@ -11,11 +11,9 @@ add_executable(
   main_test.cc
   minpass_types_test.cc
   sqlite3_client_test.cc
-  sqlite3_queries_test.cc
   utilities/strong_types_test.cc
   sqlite3_client/helpers_test.cc)
 target_link_libraries(minpass_tests PRIVATE sqlite3_client)
-target_link_libraries(minpass_tests PRIVATE sqlite3_queries)
 target_link_libraries(minpass_tests PRIVATE minpass_types)
 target_link_libraries(minpass_tests PRIVATE utilities)
 target_link_libraries(minpass_tests PRIVATE Drogon::Drogon)

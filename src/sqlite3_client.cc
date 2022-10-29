@@ -1,22 +1,30 @@
 #include "sqlite3_client.h"
 
-#include <drogon/orm/Field.h>   // for Field
-#include <drogon/orm/Result.h>  // for Result
-#include <drogon/orm/Row.h>     // for Row, Row::Reference
+#include <drogon/HttpAppFramework.h>  // for app, HttpAppFramework
+#include <json/value.h>               // for Value
 
-#include <iostream>  // for char_traits, operator<<
-#include <tuple>     // for tuple_element<>::type
+#include <tuple>  // for tuple_element<>::type
 
+#include "sqlite3_client/helpers.h"  // for Helpers
 namespace drogon {
 class DrObjectBase;
 }  // namespace drogon
 
 namespace minpass {
 
-SQLite3Client::SQLite3Client(const std::string &database_name)
-    : client_(drogon::app().getDbClient(database_name)) {
-  sqlite3_client::Helpers::CreatePasswordTable(
-      client_, query_factory_.CreateTableQuery());
+SQLite3Client::SQLite3Client(const DatabaseName &database_name,
+                             TableName table_name)
+    : client_(drogon::app().getDbClient(database_name.get())),
+      table_name_(std::move(table_name)) {
+  client_->execSqlAsync("CREATE TABLE IF NOT EXISTS " + table_name_.get() +
+                            " (\n"
+                            "  Website varchar(100) NOT NULL PRIMARY KEY,\n"
+                            "  Email varchar(50),\n"
+                            "  Username varchar(100),\n"
+                            "  Password varchar(50) NOT NULL\n"
+                            ");\n",
+                        sqlite3_client::Helpers::EmptyCallback,
+                        sqlite3_client::Helpers::CommonExceptionCatch);
 }
 
 auto SQLite3Client::SetPasswordData(
@@ -29,14 +37,11 @@ auto SQLite3Client::SetPasswordData(
       sqlite3_client::Helpers::ValidateRequest(http_request, http_response,
                                                response_object);
   if (is_valid) {
-    std::cout << email.get() << '\n';
-    std::cout << username.get() << '\n';
-    std::cout << password.get() << '\n';
-    auto sql_query =
-        query_factory_.CreatePasswordQuery(website, email, username, password);
-    auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
-    client_->execSqlAsync(sql_query, call_back,
-                          sqlite3_client::Helpers::CommonExceptionCatch);
+    client_->execSqlAsync(
+        "INSERT INTO " + table_name_.get() + " VALUES ($1, $2, $3, $4);\n",
+        sqlite3_client::Helpers::EmptyCallback,
+        sqlite3_client::Helpers::CommonExceptionCatch, website.get(),
+        email.get(), username.get(), password.get());
   }
   http_callback(http_response);
 }
@@ -45,9 +50,8 @@ auto SQLite3Client::GetPasswordData(
     [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
     std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
     const Website &website) -> void {
-  auto sql_query = query_factory_.ReadPasswordQuery(website);
   client_->execSqlAsync(
-      sql_query,
+      "SELECT * FROM " + table_name_.get() + " WHERE Website = $1;\n",
       [http_callback]([[maybe_unused]] const drogon::orm::Result &result) {
         Json::Value response_object;
         drogon::HttpStatusCode status_code = drogon::k404NotFound;
@@ -64,7 +68,7 @@ auto SQLite3Client::GetPasswordData(
         http_callback(sqlite3_client::Helpers::MakeResponse(response_object,
                                                             status_code));
       },
-      sqlite3_client::Helpers::CommonExceptionCatch);
+      sqlite3_client::Helpers::CommonExceptionCatch, website.get());
 }
 
 auto SQLite3Client::ModifyPasswordData(
@@ -77,12 +81,13 @@ auto SQLite3Client::ModifyPasswordData(
       sqlite3_client::Helpers::ValidateRequest(http_request, http_response,
                                                response_object);
   if (is_valid) {
-    auto sql_query =
-        query_factory_.UpdatePasswordQuery(website, email, username, password);
-    auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
-    client_->execSqlAsync(
-        sql_query, call_back, sqlite3_client::Helpers::CommonExceptionCatch,
-        email.get(), username.get(), password.get(), website.get());
+    client_->execSqlAsync("UPDATE " + table_name_.get() +
+                              " SET Email = $1, Username = $2, Password = $3\n"
+                              "WHERE Website = $4;\n",
+                          sqlite3_client::Helpers::EmptyCallback,
+                          sqlite3_client::Helpers::CommonExceptionCatch,
+                          email.get(), username.get(), password.get(),
+                          website.get());
   }
   http_callback(http_response);
 }
@@ -92,11 +97,10 @@ auto SQLite3Client::RemovePasswordData(
     std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
     const Website &website) -> void {
   Json::Value response_object;
-  auto sql_query = query_factory_.DeletePasswordQuery(website);
-  auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
-
-  client_->execSqlAsync(sql_query, call_back,
-                        sqlite3_client::Helpers::CommonExceptionCatch);
+  client_->execSqlAsync(
+      "DELETE FROM " + table_name_.get() + " WHERE Website = $1;\n",
+      sqlite3_client::Helpers::EmptyCallback,
+      sqlite3_client::Helpers::CommonExceptionCatch, website.get());
 
   response_object["message"] = "ok";
   http_callback(sqlite3_client::Helpers::MakeResponse(response_object));
