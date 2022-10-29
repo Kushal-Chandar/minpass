@@ -1,26 +1,20 @@
 #if !defined(SQLITE3_CLIENT_HELPERS)
 #define SQLITE3_CLIENT_HELPERS
 
-#include <__functional/function.h>    // for function
-#include <__memory/shared_ptr.h>      // for shared_ptr
-#include <drogon/HttpResponse.h>      // for HttpResponsePtr
 #include <drogon/HttpTypes.h>         // for k200OK, HttpStatusCode
-#include <drogon/drogon_callbacks.h>  // for HttpRequestPtr
+#include <drogon/drogon_callbacks.h>  // for HttpResponsePtr, HttpRequestPtr
 #include <drogon/orm/DbClient.h>      // for DbClientPtr
 
 #include <iosfwd>  // for string
+#include <tuple>   // for tuple
 
 #include "minpass_types.h"  // for Email, Password, Username
-
 namespace Json {
 class Value;
 }  // namespace Json
-
-namespace drogon {
-namespace orm {
+namespace drogon::orm {
 class DrogonDbException;
-}  // namespace orm
-}  // namespace drogon
+}  // namespace drogon::orm
 
 namespace minpass::sqlite3_client {
 

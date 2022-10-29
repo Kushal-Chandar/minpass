@@ -1,6 +1,7 @@
 #define DROGON_TEST_MAIN
 #include <drogon/HttpAppFramework.h>  // for app, HttpAppFramework
-#include <drogon/drogon_test.h>       // for test
+#include <drogon/drogon_test.h>       // for run
+#include <trantor/net/EventLoop.h>    // for EventLoop
 
 #include <future>  // for promise, future
 #include <thread>  // for thread

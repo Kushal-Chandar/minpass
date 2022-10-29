@@ -1,8 +1,6 @@
 #if !defined(SQLite3_Queries)
 #define SQLite3_Queries
 
-#include <__fwd/string_view.h>  // for string_view
-
 #include <iosfwd>       // for string
 #include <string_view>  // for basic_string_view
 

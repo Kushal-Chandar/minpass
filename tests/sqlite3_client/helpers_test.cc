@@ -1,11 +1,9 @@
 #include "sqlite3_client/helpers.h"
 
-#include <drogon/drogon_test.h>    // for Case (ptr only), DROGON_TEST, CHEC...
-#include <drogon/orm/Exception.h>  // for DrogonDbException
-#include <json/value.h>            // for Value
-
-#include "minpass_types.h"  // for Email, Password, Username
-
+#include <__functional/function.h>  // for __base
+#include <drogon/drogon_test.h>     // for Case (ptr only), DROGON_TEST, CHE...
+#include <drogon/orm/Exception.h>   // for DrogonDbException
+#include <json/value.h>             // for Value
 namespace drogon {
 class DrObjectBase;
 }  // namespace drogon

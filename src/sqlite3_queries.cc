@@ -53,9 +53,10 @@ auto SQLite3Queries::UpdatePasswordQuery(const Website& website,
     -> std::string {
   auto sql_query = fmt::format(
       "UPDATE {}\n"
-      "SET Email = '{}', Username = '{}', Password = '{}'\n"
-      "WHERE Website = '{}';\n",
-      table_name_, email.get(), username.get(), password.get(), website.get());
+      "SET Email = $1, Username = $2, Password = $3\n"
+      "WHERE Website = $4;\n",
+      table_name_  //,
+      /*email.get(), username.get(), password.get(), website.get() */);
   fmt::print(fmt::fg(fmt::color::green), "{}\n", sql_query);
   return sql_query;
 }

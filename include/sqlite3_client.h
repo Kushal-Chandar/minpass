@@ -1,17 +1,16 @@
 #if !defined(MINPASS)
 #define MINPASS
 
-#include <__functional/function.h>    // for function
-#include <drogon/HttpController.h>    // for METHOD_ADD, HttpController, MET...
-#include <drogon/HttpResponse.h>      // for HttpResponsePtr
-#include <drogon/HttpTypes.h>         // for Post, Delete, Get, Patch
-#include <drogon/drogon_callbacks.h>  // for HttpRequestPtr
-#include <drogon/orm/DbClient.h>      // for DbClientPtr
+#include <drogon/drogon.h>  // for app, HttpAppFramework
+#include <json/value.h>     // for Value
 
-#include <iosfwd>  // for string
+#include <iostream>  // for char_traits, operator<<
+#include <tuple>     // for tuple_element<>::type
 
-#include "minpass_types.h"    // for Website
-#include "sqlite3_queries.h"  // for SQLite3Queries
+#include "minpass_types.h"  // for Website
+#include "sqlite3_client.h"
+#include "sqlite3_client/helpers.h"  // for Helpers
+#include "sqlite3_queries.h"         // for SQLite3Queries
 
 namespace minpass {
 class SQLite3Client : public drogon::HttpController<SQLite3Client> {

@@ -1,14 +1,11 @@
 #include "sqlite3_client.h"
 
-#include <__memory/shared_ptr.h>          // for shared_ptr
-#include <__type_traits/remove_extent.h>  // for remove_extent_t
-#include <__utility/forward.h>            // for forward
-#include <drogon/HttpAppFramework.h>      // for app, HttpAppFramework
-#include <json/value.h>                   // for Value
+#include <drogon/orm/Field.h>   // for Field
+#include <drogon/orm/Result.h>  // for Result
+#include <drogon/orm/Row.h>     // for Row, Row::Reference
 
-#include "minpass_types.h"           // for Website, Email, Password
-#include "sqlite3_client/helpers.h"  // for Helpers
-#include "sqlite3_queries.h"         // for SQLite3Queries
+#include <iostream>  // for char_traits, operator<<
+#include <tuple>     // for tuple_element<>::type
 
 namespace drogon {
 class DrObjectBase;
@@ -83,8 +80,9 @@ auto SQLite3Client::ModifyPasswordData(
     auto sql_query =
         query_factory_.UpdatePasswordQuery(website, email, username, password);
     auto call_back = []([[maybe_unused]] const drogon::orm::Result &result) {};
-    client_->execSqlAsync(sql_query, call_back,
-                          sqlite3_client::Helpers::CommonExceptionCatch);
+    client_->execSqlAsync(
+        sql_query, call_back, sqlite3_client::Helpers::CommonExceptionCatch,
+        email.get(), username.get(), password.get(), website.get());
   }
   http_callback(http_response);
 }
