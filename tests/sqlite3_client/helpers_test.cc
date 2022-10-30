@@ -126,8 +126,7 @@ DROGON_TEST(HelpersTests_ValidateRequest_ReturnValueTest2) {
 
 DROGON_TEST(HelpersTests_ValidateRequest_SQLi) {
   // Testing
-  // 1. ParseJsonRequest must return empty structure bindings when json
-  // was not parsed
+  // 1. ParseJsonRequest must not break again SQL injections
 
   Json::Value sql_injection;
   sql_injection["email"] = "mail@mail.com";
