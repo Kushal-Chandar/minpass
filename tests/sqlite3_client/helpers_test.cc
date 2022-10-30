@@ -76,8 +76,18 @@ DROGON_TEST(HelpersTests_ValidateRequest_ReturnValueTest1) {
   request["email"] = "mail@mail.com";
   request["password"] = "pas22sls";
   request["username"] = "ksdkfsd";
-  auto http_request = drogon::HttpRequest::newHttpJsonRequest(request);
-  auto http_response = drogon::HttpResponse::newHttpJsonResponse(request);
+
+  // build the json into a string
+  Json::StreamWriterBuilder builder;
+  builder["indentation"] = "";  // If you want whitespace-less output
+  const std::string output = Json::writeString(builder, request);
+
+  auto http_request = drogon::HttpRequest::newHttpRequest();
+  http_request->setBody(output);  // feed in that string
+  http_request->setContentTypeCode(
+      drogon::CT_APPLICATION_JSON);  // feed in that string
+
+  auto http_response = drogon::HttpResponse::newHttpResponse();
   Json::Value response_object;
 
   auto [is_valid, email, username, password] =
@@ -96,16 +106,10 @@ DROGON_TEST(HelpersTests_ValidateRequest_ReturnValueTest2) {
   // 1. ParseJsonRequest must return empty structure bindings when json
   // was not parsed
 
-  Json::Value request;
-  Json::String errors;
-  auto illegal_raw_request = std::string("{\"email\": \"emai}");
-
-  const Json::CharReaderBuilder builder;
-  const std::unique_ptr<Json::CharReader> reader(builder.newCharReader());
-  reader->parse(illegal_raw_request.data(),
-                illegal_raw_request.data() + illegal_raw_request.size(),
-                &request, &errors);
-  auto http_request = drogon::HttpRequest::newHttpJsonRequest(request);
+  std::string illegal_request;
+  auto http_request = drogon::HttpRequest::newHttpRequest();
+  http_request->setBody(illegal_request);
+  http_request->setContentTypeCode(drogon::CT_APPLICATION_JSON);
   auto http_response = drogon::HttpResponse::newHttpResponse();
   Json::Value response_object;
 
