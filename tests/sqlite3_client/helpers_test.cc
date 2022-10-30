@@ -96,8 +96,8 @@ DROGON_TEST(HelpersTests_ValidateRequest_ReturnValueTest1) {
 
   CHECK(is_valid == true);
   CHECK(email.get() == request["email"]);
-  CHECK(password.get() == request["password"]);
   CHECK(username.get() == request["username"]);
+  CHECK(password.get() == request["password"]);
   CHECK(http_response->statusCode() == drogon::k202Accepted);
 }
 
@@ -119,7 +119,40 @@ DROGON_TEST(HelpersTests_ValidateRequest_ReturnValueTest2) {
 
   CHECK(is_valid == false);
   CHECK(email.get() == "");
-  CHECK(password.get() == "");
   CHECK(username.get() == "");
+  CHECK(password.get() == "");
   CHECK(http_response->statusCode() == drogon::k400BadRequest);
+}
+
+DROGON_TEST(HelpersTests_ValidateRequest_SQLi) {
+  // Testing
+  // 1. ParseJsonRequest must return empty structure bindings when json
+  // was not parsed
+
+  Json::Value sql_injection;
+  sql_injection["email"] = "mail@mail.com";
+  sql_injection["username"] = "ksdkfsd";
+  sql_injection["password"] = "pas22sls'); AND '1' = '1'";
+
+  // build the json into a string
+  Json::StreamWriterBuilder builder;
+  builder["indentation"] = "";  // If you want whitespace-less output
+  const std::string output = Json::writeString(builder, sql_injection);
+
+  auto http_request = drogon::HttpRequest::newHttpRequest();
+  http_request->setBody(output);  // feed in that string
+  http_request->setContentTypeCode(
+      drogon::CT_APPLICATION_JSON);  // feed in that string
+  auto http_response = drogon::HttpResponse::newHttpResponse();
+  Json::Value response_object;
+
+  auto [is_valid, email, username, password] =
+      minpass::sqlite3_client::Helpers::ValidateRequest(
+          http_request, http_response, response_object);
+
+  CHECK(is_valid == true);
+  CHECK(email.get() == sql_injection["email"]);
+  CHECK(username.get() == sql_injection["username"]);
+  CHECK(password.get() == sql_injection["password"]);
+  CHECK(http_response->statusCode() == drogon::k202Accepted);
 }
