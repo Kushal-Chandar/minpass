@@ -1,10 +1,21 @@
 #include <drogon/HttpAppFramework.h>  // for app, HttpAppFramework
+#include <fmt/core.h>
 
 #include <cstdlib>  // for EXIT_SUCCESS
 
 #include "sqlite3_client.h"
 
 auto main() -> int {
-  drogon::app().loadConfigFile("./server_config.json").run();
-  return EXIT_SUCCESS;
+  int exit_code{};
+  try {
+    drogon::app().loadConfigFile("./server_config.json").run();
+    // exit_code = EXIT_SUCCESS; //code already intialised with 0;
+  } catch (const std::exception& error) {
+    fmt::print(
+        "{}.\nConfiguration cannot be loaded\n. Please grab the file from the "
+        "Github repo.\n",
+        error.what());
+    exit_code = EXIT_FAILURE;
+  }
+  return exit_code;
 }
