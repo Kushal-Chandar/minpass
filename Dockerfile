@@ -29,6 +29,11 @@ ENV PORT=8080
 
 EXPOSE 8080
 
+WORKDIR /app
+
+RUN cp /build/minpass /build/server_config.json .\
+  && rm -rf /build
+
 RUN apt remove -y \
   jq \
   ninja-build \
