@@ -36,7 +36,9 @@ Install docker desktop and have it running. Now we have 2 options.
 
 ### Using the prebuilt docker image
 
-Pull image from docker hub.
+https://user-images.githubusercontent.com/83660514/199285430-63fb6902-8dd6-4510-aeaf-ede86080d07b.mp4
+
+Pull image from [dockerhub](https://hub.docker.com/repository/docker/kushalchandar/minpass).
 
 ```bash
 docker pull kushalchandar/minpass:latest
@@ -78,15 +80,73 @@ docker compose down
 
 4 HTTP methods performing 4 operations.
 
-<!-- Todo: Add video demos -->
-<!-- Show postman -->
+<http://localhost:8080/minpass/SQLite3Client/> is where the app runs.
+<http://localhost:8080/minpass/SQLite3Client/website={}> is what we use to send and receive database requests.
+
+I have provided a video with Thunder Client and powershell code to interact with the app the command.
+
+Post:
+
+https://user-images.githubusercontent.com/83660514/199287006-b5202f23-2643-4b33-a692-96a3e8921a21.mp4
+
+```powershell
+$headers = @{}
+$headers.Add("Accept", "*/*")
+$headers.Add("Content-Type", "application/json")
+$reqUrl = 'http://localhost:8080/minpass/SQLite3Client/website=google.com'
+$body = '{
+  "email": "mail@mail.com",
+  "username": "pass''22",
+  "password": "sk%@8;''sfas0203sd\\d"
+}'
+Invoke-RestMethod -Uri $reqUrl -Method Post -Headers $headers -ContentType 'application/json' -Body $body | ConvertTo-Json
+```
+
+Patch:
+
+https://user-images.githubusercontent.com/83660514/199287086-06c18685-994c-44d3-a391-de3fb6e74c27.mp4
+
+```powershell
+$headers = @{}
+$headers.Add("Accept", "*/*")
+$headers.Add("Content-Type", "application/json")
+$reqUrl = 'http://localhost:8080/minpass/SQLite3Client/website=google.com'
+$body = '{
+  "email": "mail@maiom",
+  "username": "pass''",
+  "password": "sk%@8\\d"
+}'
+Invoke-RestMethod -Uri $reqUrl -Method Patch -Headers $headers -ContentType 'application/json' -Body $body | ConvertTo-Json
+```
+
+Delete:
+
+https://user-images.githubusercontent.com/83660514/199287317-6814fcd6-a3c4-4584-ac5f-d8ffd193fd0f.mp4
+
+```powershell
+$headers = @{}
+$headers.Add("Accept", "*/*")
+$headers.Add("Content-Type", "application/json")
+$reqUrl = 'http://localhost:8080/minpass/SQLite3Client/website=google.com'
+Invoke-RestMethod -Uri $reqUrl -Method Delete -Headers $headers -ContentType 'application/json' -Body $body | ConvertTo-Json
+```
+
+Get:
+
+```powershell
+$headers = @{}
+$headers.Add("Accept", "*/*")
+$headers.Add("Content-Type", "application/json")
+$reqUrl = 'http://localhost:8080/minpass/SQLite3Client/website=google.com'
+Invoke-RestMethod -Uri $reqUrl -Method Get -Headers $headers -ContentType 'application/json' -Body $body | ConvertTo-Json
+```
 <!-- Show corresponding curl and powershell commands -->
 
 ## Frameworks and tools used
 
 - [drogon](https://github.com/drogonframework/drogon)
 - [fmt](https://github.com/fmtlib/fmt)
-- I would like to mention [Thunder Client](https://www.thunderclient.com/) tool, I have used for the demo.
+- I would like to mention [Thunder Client](https://www.thunderclient.com/), I have used it for the demo.
 
 ## Goals
 
