@@ -82,6 +82,12 @@ docker compose down
 <!-- Show postman -->
 <!-- Show corresponding curl and powershell commands -->
 
+## Frameworks and tools used
+
+- [drogon](https://github.com/drogonframework/drogon)
+- [fmt](https://github.com/fmtlib/fmt)
+- I would like to mention [Thunder Client](https://www.thunderclient.com/) tool, I have used for the demo.
+
 ## Goals
 
 - Encryption.
