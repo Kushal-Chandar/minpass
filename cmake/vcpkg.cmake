@@ -41,7 +41,9 @@ endfunction()
 # ----------------------------------------------------------------------------
 #   Update or install vcpkg based on option
 # ----------------------------------------------------------------------------
-install_or_update_vcpkg()
+if(INSTALL_OR_UPDATE_VCPKG)
+  install_or_update_vcpkg()
+endif()
 
 # ----------------------------------------------------------------------------
 #   Get required packages for testing
