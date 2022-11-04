@@ -36,7 +36,7 @@ Install docker desktop and have it running. Now we have 2 options.
 
 ### Using the prebuilt docker image
 
-https://user-images.githubusercontent.com/83660514/199285430-63fb6902-8dd6-4510-aeaf-ede86080d07b.mp4
+<https://user-images.githubusercontent.com/83660514/199285430-63fb6902-8dd6-4510-aeaf-ede86080d07b.mp4>
 
 Pull image from [dockerhub](https://hub.docker.com/repository/docker/kushalchandar/minpass).
 
@@ -87,10 +87,12 @@ I have provided a video with Thunder Client and powershell code to interact with
 
 Post:
 
-https://user-images.githubusercontent.com/83660514/199287006-b5202f23-2643-4b33-a692-96a3e8921a21.mp4
+<https://user-images.githubusercontent.com/83660514/199287006-b5202f23-2643-4b33-a692-96a3e8921a21.mp4>
 
 curl:
+
 ```curl
+
 curl -X POST \
   'http://localhost:8080/minpass/SQLite3Client/website=google.com' \
   --header 'Accept: */*' \
@@ -103,7 +105,9 @@ curl -X POST \
 ```
 
 powershell:
+
 ```powershell
+
 $headers = @{}
 $headers.Add("Accept", "*/*")
 $headers.Add("Content-Type", "application/json")
@@ -118,10 +122,12 @@ Invoke-RestMethod -Uri $reqUrl -Method Post -Headers $headers -ContentType 'appl
 
 Patch:
 
-https://user-images.githubusercontent.com/83660514/199287086-06c18685-994c-44d3-a391-de3fb6e74c27.mp4
+<https://user-images.githubusercontent.com/83660514/199287086-06c18685-994c-44d3-a391-de3fb6e74c27.mp4>
 
 curl:
+
 ```curl
+
 curl -X PATCH \
   'http://localhost:8080/minpass/SQLite3Client/website=google.com' \
   --header 'Accept: */*' \
@@ -134,7 +140,9 @@ curl -X PATCH \
 ```
 
 powershell:
+
 ```powershell
+
 $headers = @{}
 $headers.Add("Accept", "*/*")
 $headers.Add("Content-Type", "application/json")
@@ -149,10 +157,12 @@ Invoke-RestMethod -Uri $reqUrl -Method Patch -Headers $headers -ContentType 'app
 
 Delete:
 
-https://user-images.githubusercontent.com/83660514/199287317-6814fcd6-a3c4-4584-ac5f-d8ffd193fd0f.mp4
+<https://user-images.githubusercontent.com/83660514/199287317-6814fcd6-a3c4-4584-ac5f-d8ffd193fd0f.mp4>
 
 curl:
+
 ```curl
+
 curl -X DELETE \
   'http://localhost:8080/minpass/SQLite3Client/website=google.com' \
   --header 'Accept: */*' \
@@ -160,6 +170,7 @@ curl -X DELETE \
 ```
 
 powershell:
+
 ```powershell
 $headers = @{}
 $headers.Add("Accept", "*/*")
@@ -171,6 +182,7 @@ Invoke-RestMethod -Uri $reqUrl -Method Delete -Headers $headers -ContentType 'ap
 Get:
 
 curl:
+
 ```curl
 curl -X GET \
   'http://localhost:8080/minpass/SQLite3Client/website=google.com' \
@@ -179,6 +191,7 @@ curl -X GET \
 ```
 
 powershell:
+
 ```powershell
 $headers = @{}
 $headers.Add("Accept", "*/*")

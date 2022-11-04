@@ -8,7 +8,7 @@
 
 namespace minpass::utilities {
 
-void OpenSSLGCM::handleErrors() {
+auto OpenSSLGCM::handleErrors() -> void {
   ERR_print_errors_fp(stderr);
   abort();
 }
