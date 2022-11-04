@@ -1,4 +1,4 @@
-#include <iostream>
+#include <fmt/core.h>
 
 #include "utilities/scrypt_kdf.h"
 
@@ -134,6 +134,8 @@ int main(int argc, char* argv[]) {
   // \*********************************/
 
   // return 0;
-  std::cout << "hello\n";
-  minpass::utilities::ScryptKDF::GenerateKey(std::string("General Pass"));
+
+  auto [key, iv] = minpass::utilities::ScryptKDF::GenerateKeyAndIV(
+      std::string("General Pass"));
+  fmt::print("{}\n{}\n", key, iv);
 }

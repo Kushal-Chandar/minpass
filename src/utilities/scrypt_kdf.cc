@@ -1,49 +1,55 @@
 #include "utilities/scrypt_kdf.h"
 
-#include <cryptopp/cryptlib.h>
-#include <cryptopp/files.h>
-#include <cryptopp/hex.h>
-#include <cryptopp/osrng.h>
-#include <cryptopp/scrypt.h>
-#include <cryptopp/secblock.h>
+#include <cryptopp/config_int.h>  // for byte
+#include <cryptopp/files.h>       // for FileSink
+#include <cryptopp/filters.h>     // for StringSource
+#include <cryptopp/hex.h>         // for HexEncoder
+#include <cryptopp/osrng.h>       // for AutoSeededRandomPool
+#include <cryptopp/scrypt.h>      // for Scrypt
+#include <cryptopp/secblock.h>    // for SecByteBlock
 
-#include <vector>
+#include <algorithm>  // copy
+#include <tuple>
+#include <vector>  // for vector
 
 namespace minpass::utilities {
 
-auto ScryptKDF::GenerateKey(const std::string& password) -> void {
+auto ScryptKDF::GenerateKeyAndIV(const std::string& password)
+    -> std::tuple<std::string, std::string> {
   CryptoPP::AutoSeededRandomPool prng;
 
-  constexpr int kKeySize = 32;
-  constexpr int kSaltSize = 8;
-  constexpr int kCost = 1024;
-  constexpr int kBlockSize = 8;
-  constexpr int kParallelization = 16;
-
-  CryptoPP::SecByteBlock key(kKeySize);
-  CryptoPP::SecByteBlock salt(kSaltSize);
+  CryptoPP::SecByteBlock key(kKeySize_);
+  CryptoPP::SecByteBlock initialization_vector(kIVSize_);
+  CryptoPP::SecByteBlock salt(kSaltSize_);
 
   std::vector<CryptoPP::byte> password_bytes(password.size());
   std::copy(password.begin(), password.end(), password_bytes.begin());
 
-  prng.GenerateBlock(key, key.size());
-  prng.GenerateBlock(salt, salt.size());
-
   const CryptoPP::Scrypt scrypt;
 
+  // DeriveKey
+  prng.GenerateBlock(salt, salt.size());
   scrypt.DeriveKey(key, key.size(), password_bytes.data(),
-                   password_bytes.size(), salt, salt.size(), kCost, kBlockSize,
-                   kParallelization);
+                   password_bytes.size(), salt, salt.size(), kCost_,
+                   kBlockSize_, kParallelization_);
 
-  std::cout << "Key: ";
+  // DeriveIV
+  prng.GenerateBlock(salt, salt.size());
+  scrypt.DeriveKey(initialization_vector, initialization_vector.size(),
+                   password_bytes.data(), password_bytes.size(), salt,
+                   salt.size(), kCost_, kBlockSize_, kParallelization_);
 
+  std::string key_out, iv_out;
   {
-    const CryptoPP::StringSource temp(
+    const CryptoPP::StringSource key_out_constructor(
         key, key.size(), true,
-        new CryptoPP::HexEncoder(new CryptoPP::FileSink(std::cout)));
+        new CryptoPP::HexEncoder(new CryptoPP::StringSink(key_out)));
+    const CryptoPP::StringSource iv_out_constructor(
+        initialization_vector, initialization_vector.size(), true,
+        new CryptoPP::HexEncoder(new CryptoPP::StringSink(iv_out)));
   }
 
-  std::cout << "..." << std::endl;
+  return {key_out, iv_out};
 }
 
 }  // namespace minpass::utilities

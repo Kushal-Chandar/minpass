@@ -34,6 +34,7 @@ target_sources(
 target_link_libraries(cryptopp-test PRIVATE project_compile_options)
 target_include_directories(cryptopp-test PUBLIC include)
 target_link_libraries(cryptopp-test PRIVATE cryptopp-static)
+target_link_libraries(cryptopp-test PRIVATE fmt::fmt)
 
 ###########################################
 ### Minpass types
