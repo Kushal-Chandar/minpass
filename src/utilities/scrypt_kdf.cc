@@ -1,12 +1,11 @@
 #include "utilities/scrypt_kdf.h"
 
 #include <cryptopp/config_int.h>  // for byte
-#include <cryptopp/files.h>       // for FileSink
-#include <cryptopp/filters.h>     // for StringSource
 #include <cryptopp/hex.h>         // for HexEncoder
 #include <cryptopp/osrng.h>       // for AutoSeededRandomPool
 #include <cryptopp/scrypt.h>      // for Scrypt
 #include <cryptopp/secblock.h>    // for SecByteBlock
+#include <fmt/core.h>
 
 #include <algorithm>  // copy
 #include <tuple>
@@ -15,7 +14,8 @@
 namespace minpass::utilities {
 
 auto ScryptKDF::GenerateKeyAndIV(const std::string& password)
-    -> std::tuple<std::string, std::string> {
+    -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
+                  CryptoPP::SecByteBlock> {
   CryptoPP::AutoSeededRandomPool prng;
 
   CryptoPP::SecByteBlock key(kKeySize_);
@@ -28,28 +28,16 @@ auto ScryptKDF::GenerateKeyAndIV(const std::string& password)
   const CryptoPP::Scrypt scrypt;
 
   // DeriveKey
+  // note: we need the new random salt for decryption
   prng.GenerateBlock(salt, salt.size());
   scrypt.DeriveKey(key, key.size(), password_bytes.data(),
                    password_bytes.size(), salt, salt.size(), kCost_,
                    kBlockSize_, kParallelization_);
 
   // DeriveIV
-  prng.GenerateBlock(salt, salt.size());
-  scrypt.DeriveKey(initialization_vector, initialization_vector.size(),
-                   password_bytes.data(), password_bytes.size(), salt,
-                   salt.size(), kCost_, kBlockSize_, kParallelization_);
+  prng.GenerateBlock(initialization_vector, initialization_vector.size());
 
-  std::string key_out, iv_out;
-  {
-    const CryptoPP::StringSource key_out_constructor(
-        key, key.size(), true,
-        new CryptoPP::HexEncoder(new CryptoPP::StringSink(key_out)));
-    const CryptoPP::StringSource iv_out_constructor(
-        initialization_vector, initialization_vector.size(), true,
-        new CryptoPP::HexEncoder(new CryptoPP::StringSink(iv_out)));
-  }
-
-  return {key_out, iv_out};
+  return {key, salt, initialization_vector};
 }
 
 }  // namespace minpass::utilities

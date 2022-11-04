@@ -1,15 +1,17 @@
 #if !defined(SCRYPT_KDF)
 #define SCRYPT_KDF
 
+#include <cryptopp/secblock.h>
+
 #include <string>
-#include <tuple>
 
 namespace minpass::utilities {
 
 class ScryptKDF {
  public:
   static auto GenerateKeyAndIV(const std::string &password)
-      -> std::tuple<std::string, std::string>;
+      -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
+                    CryptoPP::SecByteBlock>;
 
  private:
   static constexpr int kKeySize_ = 32;

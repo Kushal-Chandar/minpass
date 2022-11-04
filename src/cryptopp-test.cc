@@ -1,3 +1,5 @@
+#include <cryptopp/filters.h>
+#include <cryptopp/hex.h>  // for HexEncoder
 #include <fmt/core.h>
 
 #include "utilities/scrypt_kdf.h"
@@ -135,7 +137,21 @@ int main(int argc, char* argv[]) {
 
   // return 0;
 
-  auto [key, iv] = minpass::utilities::ScryptKDF::GenerateKeyAndIV(
+  auto [key, salt, iv] = minpass::utilities::ScryptKDF::GenerateKeyAndIV(
       std::string("General Pass"));
-  fmt::print("{}\n{}\n", key, iv);
+
+  std::string key_out, salt_out, iv_out;
+  {
+    const CryptoPP::StringSource key_out_constructor(
+        key, key.size(), true,
+        new CryptoPP::HexEncoder(new CryptoPP::StringSink(key_out)));
+    const CryptoPP::StringSource salt_out_constructor(
+        salt, salt.size(), true,
+        new CryptoPP::HexEncoder(new CryptoPP::StringSink(salt_out)));
+    const CryptoPP::StringSource iv_out_constructor(
+        iv, iv.size(), true,
+        new CryptoPP::HexEncoder(new CryptoPP::StringSink(iv_out)));
+  }
+
+  fmt::print("\n\nout\n{}\n{}\n{}\n", key_out, salt_out, iv_out);
 }
