@@ -8,8 +8,8 @@ include(cmake/init.cmake)
 ### Required packages
 ###########################################
 find_package(Drogon CONFIG REQUIRED)
-find_package(OpenSSL REQUIRED)
 find_package(fmt CONFIG REQUIRED)
+find_package(cryptopp CONFIG REQUIRED)
 
 ###########################################
 ### Utilities
@@ -59,18 +59,14 @@ target_link_libraries(minpass PRIVATE Drogon::Drogon)
 if(WIN32)
   target_link_libraries(minpass PRIVATE wsock32 ws2_32 iphlpapi)
 endif()
-target_link_libraries(minpass PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 
 ###########################################
-### Minpass
+### cryptopp-test
 ###########################################
-add_executable(openssl_test)
+add_executable(cryptopp-test)
 target_sources(
-  openssl_test PRIVATE include/utilities/openssl_gcm.h
-                       src/utilities/openssl_gcm.cc src/openssl_test.cc)
-target_link_libraries(openssl_test PRIVATE project_compile_options)
-target_include_directories(openssl_test PUBLIC include)
-if(WIN32)
-  target_link_libraries(openssl_test PRIVATE wsock32 ws2_32 iphlpapi)
-endif()
-target_link_libraries(openssl_test PRIVATE OpenSSL::Crypto)
+  cryptopp-test PRIVATE include/utilities/aes_gcm.h src/utilities/aes_gcm.cc
+                        src/cryptopp-test.cc)
+target_link_libraries(cryptopp-test PRIVATE project_compile_options)
+target_include_directories(cryptopp-test PUBLIC include)
+target_link_libraries(cryptopp-test PRIVATE cryptopp-static)

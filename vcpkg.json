@@ -2,7 +2,7 @@
   "name": "minpass",
   "version-string": "0.0.1",
   "dependencies": [
-    "fmt","openssl",
+    "fmt","cryptopp",
     {
       "name": "drogon",
       "default-features": false,
