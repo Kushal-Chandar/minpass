@@ -60,3 +60,13 @@ if(WIN32)
   target_link_libraries(minpass PRIVATE wsock32 ws2_32 iphlpapi)
 endif()
 target_link_libraries(minpass PRIVATE OpenSSL::SSL OpenSSL::Crypto)
+
+###########################################
+### Minpass
+###########################################
+add_executable(openssl_test)
+target_sources(
+  openssl_test PRIVATE include/utilities/openssl_gcm.h
+                       src/utilities/openssl_gcm.cc src/openssl_test.cc)
+target_link_libraries(openssl_test PRIVATE project_compile_options)
+target_link_libraries(openssl_test PRIVATE OpenSSL::Crypto)
