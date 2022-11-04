@@ -21,6 +21,21 @@ target_link_libraries(utilities PRIVATE project_compile_options)
 target_include_directories(utilities PUBLIC include)
 
 ###########################################
+### Minpass Crypto
+###########################################
+add_executable(cryptopp-test)
+target_sources(
+  cryptopp-test
+  PRIVATE include/utilities/aes_gcm.h
+          src/utilities/aes_gcm.cc
+          include/utilities/scrypt_kdf.h
+          src/utilities/scrypt_kdf.cc
+          src/cryptopp-test.cc)
+target_link_libraries(cryptopp-test PRIVATE project_compile_options)
+target_include_directories(cryptopp-test PUBLIC include)
+target_link_libraries(cryptopp-test PRIVATE cryptopp-static)
+
+###########################################
 ### Minpass types
 ###########################################
 add_library(minpass_types STATIC)
@@ -59,14 +74,3 @@ target_link_libraries(minpass PRIVATE Drogon::Drogon)
 if(WIN32)
   target_link_libraries(minpass PRIVATE wsock32 ws2_32 iphlpapi)
 endif()
-
-###########################################
-### cryptopp-test
-###########################################
-add_executable(cryptopp-test)
-target_sources(
-  cryptopp-test PRIVATE include/utilities/aes_gcm.h src/utilities/aes_gcm.cc
-                        src/cryptopp-test.cc)
-target_link_libraries(cryptopp-test PRIVATE project_compile_options)
-target_include_directories(cryptopp-test PUBLIC include)
-target_link_libraries(cryptopp-test PRIVATE cryptopp-static)
