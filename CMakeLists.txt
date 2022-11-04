@@ -69,4 +69,8 @@ target_sources(
   openssl_test PRIVATE include/utilities/openssl_gcm.h
                        src/utilities/openssl_gcm.cc src/openssl_test.cc)
 target_link_libraries(openssl_test PRIVATE project_compile_options)
+target_include_directories(openssl_test PUBLIC include)
+if(WIN32)
+  target_link_libraries(openssl_test PRIVATE wsock32 ws2_32 iphlpapi)
+endif()
 target_link_libraries(openssl_test PRIVATE OpenSSL::Crypto)
