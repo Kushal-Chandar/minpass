@@ -5,7 +5,6 @@
 #include <cryptopp/osrng.h>       // for AutoSeededRandomPool
 #include <cryptopp/scrypt.h>      // for Scrypt
 #include <cryptopp/secblock.h>    // for SecByteBlock
-#include <fmt/core.h>
 
 #include <algorithm>  // copy
 #include <tuple>
@@ -13,7 +12,8 @@
 
 namespace minpass::utilities {
 
-auto ScryptKDF::GenerateKeyAndIV(const std::string& password)
+auto ScryptKDF::GenerateKeyAndIV(
+    const std::vector<CryptoPP::byte>& password_bytes)
     -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
                   CryptoPP::SecByteBlock> {
   CryptoPP::AutoSeededRandomPool prng;
@@ -21,9 +21,6 @@ auto ScryptKDF::GenerateKeyAndIV(const std::string& password)
   CryptoPP::SecByteBlock key(kKeySize_);
   CryptoPP::SecByteBlock initialization_vector(kIVSize_);
   CryptoPP::SecByteBlock salt(kSaltSize_);
-
-  std::vector<CryptoPP::byte> password_bytes(password.size());
-  std::copy(password.begin(), password.end(), password_bytes.begin());
 
   const CryptoPP::Scrypt scrypt;
 

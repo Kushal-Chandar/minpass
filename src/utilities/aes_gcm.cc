@@ -2,97 +2,35 @@
 
 #include <iostream>
 
-#include "stdafx.h"
 using std::cerr;
 using std::cout;
+using std::endl;
 
+#include <cryptopp/aes.h>
+#include <cryptopp/cryptlib.h>
+#include <cryptopp/filters.h>
+#include <cryptopp/gcm.h>
+#include <cryptopp/hex.h>
+
+#include <cassert>
 #include <string>
-using std::string;
 
-#include "hex.h"
-using CryptoPP::HexDecoder;
-using CryptoPP::HexEncoder;
-
-#include "osrng.h"
-using CryptoPP::AutoSeededRandomPool;
-
-#include "cryptlib.h"
-using CryptoPP::AuthenticatedSymmetricCipher;
-using CryptoPP::BufferedTransformation;
-
-#include "filters.h"
-using CryptoPP::AuthenticatedDecryptionFilter;
-using CryptoPP::AuthenticatedEncryptionFilter;
-using CryptoPP::Redirector;
-using CryptoPP::StringSink;
-using CryptoPP::StringSource;
-
-#include "aes.h"
-using CryptoPP::AES;
-
-#include "gcm.h"
-using CryptoPP::GCM;
-
-#include "assert.h"
-
-int main(int argc, char* argv[]) {
-  // The test vectors use both ADATA and PDATA. However,
-  //  as a drop in replacement for older modes such as
-  //  CBC, we only exercise (and need) plain text.
-
-  AutoSeededRandomPool prng;
-
-  byte key[AES::DEFAULT_KEYLENGTH];
-  prng.GenerateBlock(key, sizeof(key));
-
-  byte iv[AES::BLOCKSIZE];
-  prng.GenerateBlock(iv, sizeof(iv));
-
-  const int TAG_SIZE = 12;
-
-  // Plain text
-  string pdata = "Authenticated Encryption";
-
-  // Encrypted, with Tag
-  string cipher, encoded;
-
-  // Recovered plain text
-  string rpdata;
-
-  /*********************************\
-  \*********************************/
-
-  // Pretty print
-  encoded.clear();
-  StringSource(key, sizeof(key), true,
-               new HexEncoder(new StringSink(encoded))  // HexEncoder
-  );                                                    // StringSource
-  cout << "key: " << encoded << endl;
-
-  // Pretty print
-  encoded.clear();
-  StringSource(iv, sizeof(iv), true,
-               new HexEncoder(new StringSink(encoded))  // HexEncoder
-  );                                                    // StringSource
-  cout << " iv: " << encoded << endl;
-
-  cout << endl;
-
-  /*********************************\
-  \*********************************/
-
+namespace minpass::utilities {
+auto AES_GCM_256::encrypt(const std::string& plain_text,
+                          std::string& cipher_text) -> bool {
   try {
-    cout << "plain text: " << pdata << endl;
+    cout << "plain text: " << plain_text << endl;
 
-    GCM<AES>::Encryption e;
+    CryptoPP::GCM<CryptoPP::AES>::Encryption e;
+
     e.SetKeyWithIV(key, sizeof(key), iv, sizeof(iv));
-    // e.SpecifyDataLengths( 0, pdata.size(), 0 );
+    // e.SpecifyDataLengths( 0, plain_text.size(), 0 );
 
-    StringSource(pdata, true,
-                 new AuthenticatedEncryptionFilter(
-                     e, new StringSink(cipher), false,
-                     TAG_SIZE)  // AuthenticatedEncryptionFilter
-    );                          // StringSource
+    CryptoPP::StringSource(plain_text, true,
+                           new CryptoPP::AuthenticatedEncryptionFilter(
+                               e, new CryptoPP::StringSink(cipher_text), false,
+                               kTagSize_)  // AuthenticatedEncryptionFilter
+    );                                     // StringSource
   } catch (CryptoPP::InvalidArgument& e) {
     cerr << "Caught InvalidArgument..." << endl;
     cerr << e.what() << endl;
@@ -103,34 +41,30 @@ int main(int argc, char* argv[]) {
     cerr << endl;
   }
 
-  /*********************************\
-  \*********************************/
-
   // Pretty print
+  std::string encoded;
   encoded.clear();
-  StringSource(cipher, true,
-               new HexEncoder(new StringSink(encoded))  // HexEncoder
-  );                                                    // StringSource
-  cout << "cipher text: " << encoded << endl;
+  {
+    const CryptoPP::StringSource printer(
+        cipher_text, true,
+        new CryptoPP::HexEncoder(new CryptoPP::StringSink(encoded)));
+  }
+  cout << "cipher_text text: " << encoded << endl;
 
-  // Attack the first and last byte
-  // if( cipher.size() > 1 )
-  //{
-  // cipher[ 0 ] |= 0x0F;
-  // cipher[ cipher.size()-1 ] |= 0x0F;
-  //}
+  return true;
+}
 
-  /*********************************\
-  \*********************************/
-
+auto AES_GCM_256::decrypt(const std::string& cipher_text,
+                          std::string& plain_text) -> bool {
   try {
-    GCM<AES>::Decryption d;
+    CryptoPP::GCM<CryptoPP::AES>::Decryption d;
     d.SetKeyWithIV(key, sizeof(key), iv, sizeof(iv));
-    // d.SpecifyDataLengths( 0, cipher.size()-TAG_SIZE, 0 );
+    // d.SpecifyDataLengths( 0, cipher_text.size()-kTagSize_, 0 );
 
-    AuthenticatedDecryptionFilter df(
-        d, new StringSink(rpdata), AuthenticatedDecryptionFilter::DEFAULT_FLAGS,
-        TAG_SIZE);  // AuthenticatedDecryptionFilter
+    CryptoPP::AuthenticatedDecryptionFilter df(
+        d, new CryptoPP::StringSink(plain_text),
+        CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_FLAGS,
+        kTagSize_);  // AuthenticatedDecryptionFilter
 
     // The StringSource dtor will be called immediately
     //  after construction below. This will cause the
@@ -139,7 +73,7 @@ int main(int argc, char* argv[]) {
     //  the DecryptionFilter, we must use a redirector
     //  or manually Put(...) into the filter without
     //  using a StringSource.
-    StringSource(cipher, true,
+    StringSource(cipher_text, true,
                  new Redirector(df /*, PASS_EVERYTHING */));  // StringSource
 
     // If the object does not throw, here's the only
@@ -147,7 +81,7 @@ int main(int argc, char* argv[]) {
     bool b = df.GetLastResult();
     assert(true == b);
 
-    cout << "recovered text: " << rpdata << endl;
+    cout << "recovered text: " << plain_text << endl;
   } catch (CryptoPP::HashVerificationFilter::HashVerificationFailed& e) {
     cerr << "Caught HashVerificationFailed..." << endl;
     cerr << e.what() << endl;
@@ -162,14 +96,7 @@ int main(int argc, char* argv[]) {
     cerr << endl;
   }
 
-  /*********************************\
-  \*********************************/
-
-  return 0;
+  return true;
 }
-
-namespace minpass::utilities {
-
-auto AES_GCM_256::encrypt(std::string) -> void {}
 
 }  // namespace minpass::utilities

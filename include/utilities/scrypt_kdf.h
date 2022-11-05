@@ -9,7 +9,8 @@ namespace minpass::utilities {
 
 class ScryptKDF {
  public:
-  static auto GenerateKeyAndIV(const std::string &password)
+  static auto GenerateKeyAndIV(
+      const std::vector<CryptoPP::byte>& password_bytes)
       -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
                     CryptoPP::SecByteBlock>;
 
