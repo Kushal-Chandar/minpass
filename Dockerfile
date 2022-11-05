@@ -10,6 +10,7 @@ RUN apt update -y \
   libsqlite3-dev \
   clang \
   libfmt-dev \
+  && apt purge --auto-remove cmake \
   && apt upgrade -y
 
 WORKDIR /minpass
