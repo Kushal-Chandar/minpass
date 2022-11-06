@@ -10,7 +10,7 @@ set(ENABLE_VCPKG ON) # turn this off for docker
 # set(WARNINGS_AS_ERRORS ON)
 # set(CODE_COVERAGE ON) # enable in github actions
 set(BUILD_TESTING ON)
-# set(ENABLE_DOXYGEN ON) # turn this off for docker
+set(ENABLE_DOXYGEN ON) # turn this off for docker
 
 set(ENABLE_CCACHE ON)
 # set(ENABLE_IPO ON)

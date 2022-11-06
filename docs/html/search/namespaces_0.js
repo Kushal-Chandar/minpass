@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['sum_0',['sum',['../namespacesum.html',1,'']]]
+  ['drogon_0',['drogon',['../namespacedrogon.html',1,'']]],
+  ['orm_1',['orm',['../namespacedrogon_1_1orm.html',1,'drogon']]]
 ];

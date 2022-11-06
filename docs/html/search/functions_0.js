@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['add_0',['add',['../main_8cc.html#a29d3ed63d19b6873da61dd12f5385266',1,'main.cc']]]
+  ['commonexceptioncatch_0',['CommonExceptionCatch',['../classminpass_1_1sqlite3__client_1_1_helpers.html#a788563b3b4b8c9ce2e591b6b2cced0e0',1,'minpass::sqlite3_client::Helpers']]]
 ];

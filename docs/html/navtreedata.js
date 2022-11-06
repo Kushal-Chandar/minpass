@@ -25,20 +25,29 @@
 var NAVTREE =
 [
   [ "minpass", "index.html", [
-    [ "minpass", "md__r_e_a_d_m_e.html", [
-      [ "Todo", "md__r_e_a_d_m_e.html#autotoc_md1", null ],
-      [ "Goals", "md__r_e_a_d_m_e.html#autotoc_md2", null ]
+    [ "Minpass backend", "md__r_e_a_d_m_e.html", [
+      [ "Why C++ ?", "md__r_e_a_d_m_e.html#autotoc_md1", null ],
+      [ "Building", "md__r_e_a_d_m_e.html#autotoc_md2", null ],
+      [ "Docker", "md__r_e_a_d_m_e.html#autotoc_md3", [
+        [ "Using the prebuilt docker image", "md__r_e_a_d_m_e.html#autotoc_md4", null ],
+        [ "Building your own docker image and volume", "md__r_e_a_d_m_e.html#autotoc_md5", null ]
+      ] ],
+      [ "Usage", "md__r_e_a_d_m_e.html#autotoc_md6", null ],
+      [ "Frameworks and tools used", "md__r_e_a_d_m_e.html#autotoc_md7", null ],
+      [ "Goals", "md__r_e_a_d_m_e.html#autotoc_md8", null ]
     ] ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
-        [ "Functions", "namespacemembers_func.html", null ]
+        [ "Functions", "namespacemembers_func.html", null ],
+        [ "Typedefs", "namespacemembers_type.html", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", null ],
         [ "Functions", "functions_func.html", null ]
@@ -48,7 +57,8 @@ var NAVTREE =
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ]
+        [ "Functions", "globals_func.html", null ],
+        [ "Macros", "globals_defs.html", null ]
       ] ]
     ] ]
   ] ]
@@ -56,7 +66,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"annotated.html"
+"aes__gcm__256_8cc.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

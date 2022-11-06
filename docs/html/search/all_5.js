@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['sum_0',['sum',['../namespacesum.html',1,'sum'],['../namespacesum.html#ab433fef582a473d78bd8d7921d7fd060',1,'sum::sum()']]],
-  ['sum_2ecc_1',['sum.cc',['../sum_8cc.html',1,'']]],
-  ['sum_2eh_2',['sum.h',['../sum_8h.html',1,'']]]
+  ['helpers_0',['Helpers',['../classminpass_1_1sqlite3__client_1_1_helpers.html',1,'minpass::sqlite3_client']]],
+  ['helpers_2ecc_1',['helpers.cc',['../helpers_8cc.html',1,'']]],
+  ['helpers_2eh_2',['helpers.h',['../helpers_8h.html',1,'']]],
+  ['helpers_5ftest_2ecc_3',['helpers_test.cc',['../helpers__test_8cc.html',1,'']]]
 ];
