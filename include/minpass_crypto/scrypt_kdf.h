@@ -1,5 +1,5 @@
-#if !defined(SCRYPT_KDF)
-#define SCRYPT_KDF
+#if !defined(MINPASS_INCLUDE_MINPASS_CRYPTO_SCRYPT_KDF_H_)
+#define MINPASS_INCLUDE_MINPASS_CRYPTO_SCRYPT_KDF_H_
 
 #include <cryptopp/config_int.h>  // for byte
 #include <cryptopp/secblock.h>    // for SecByteBlock
@@ -27,4 +27,4 @@ class ScryptKDF {
 
 }  // namespace minpass::minpass_crypto
 
-#endif  // SCRYPT_KDF
+#endif  // MINPASS_INCLUDE_MINPASS_CRYPTO_SCRYPT_KDF_H_

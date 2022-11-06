@@ -1,5 +1,5 @@
-// #if !defined(AES_GCM_256)
-// #define AES_GCM_256
+// #if !defined(MINPASS_INCLUDE_MINPASS_CRYPTO_AES_GCM_256_H_)
+// #define MINPASS_INCLUDE_MINPASS_CRYPTO_AES_GCM_256_H_
 
 // #include <string>
 
@@ -20,4 +20,4 @@
 
 // }  // namespace minpass::minpass_crypto
 
-// #endif  // AES_GCM_256
+// #endif  // MINPASS_INCLUDE_MINPASS_CRYPTO_AES_GCM_256_H_

@@ -1,5 +1,5 @@
-#if !defined(CRYPTOPP_CONVERSIONS)
-#define CRYPTOPP_CONVERSIONS
+#if !defined(MINPASS_INCLUDE_MINPASS_CRYPTO_CRYPTOPP_CONVERSIONS_H_)
+#define MINPASS_INCLUDE_MINPASS_CRYPTO_CRYPTOPP_CONVERSIONS_H_
 
 #include <cryptopp/config_int.h>  // for byte
 #include <cryptopp/secblock.h>    // for SecByteBlock
@@ -19,4 +19,4 @@ class CryptoppConversions {
 
 }  // namespace minpass::minpass_crypto
 
-#endif  // CRYPTOPP_CONVERSIONS
+#endif  // MINPASS_INCLUDE_MINPASS_CRYPTO_CRYPTOPP_CONVERSIONS_H_
