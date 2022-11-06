@@ -26,8 +26,8 @@ target_include_directories(utilities PUBLIC include)
 add_executable(cryptopp-test)
 target_sources(
   cryptopp-test
-  PRIVATE include/utilities/aes_gcm.h
-          src/utilities/aes_gcm.cc
+  PRIVATE include/aes_gcm.h
+          src/aes_gcm.cc
           include/utilities/scrypt_kdf.h
           src/utilities/scrypt_kdf.cc
           src/cryptopp-test.cc)

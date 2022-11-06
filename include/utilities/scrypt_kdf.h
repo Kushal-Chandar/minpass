@@ -1,9 +1,11 @@
 #if !defined(SCRYPT_KDF)
 #define SCRYPT_KDF
 
-#include <cryptopp/secblock.h>
+#include <cryptopp/config_int.h>  // for byte
+#include <cryptopp/secblock.h>    // for SecByteBlock
 
-#include <string>
+#include <tuple>   // for tuple
+#include <vector>  // for vector
 
 namespace minpass::utilities {
 
@@ -13,6 +15,11 @@ class ScryptKDF {
       const std::vector<CryptoPP::byte>& password_bytes)
       -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
                     CryptoPP::SecByteBlock>;
+
+  static auto GetStringFromBytes(const std::vector<CryptoPP::byte>& bytes_in)
+      -> std::string;
+  static auto GetBytesFromString(const std::string& string_in)
+      -> std::vector<CryptoPP::byte>;
 
  private:
   static constexpr int kKeySize_ = 32;
