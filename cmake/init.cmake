@@ -58,18 +58,15 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # ----------------------------------------------------------------------------
 #   Link time optimizations
 # ----------------------------------------------------------------------------
-if(ENABLE_IPO)
-  if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL
-                                            "RelWithDebInfo")
-    include(CheckIPOSupported)
-    check_ipo_supported(RESULT result OUTPUT output)
-    if(result)
-      set(CMAKE_INTERPROCEDURAL_OPTIMIZATION
-          ON
-          PARENT_SCOPE)
-    else()
-      message(STATUS "IPO is not supported: ${output}")
-    endif()
+if(ENABLE_IPO AND (CMAKE_BUILD_TYPE STREQUAL "Release"
+                   OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
+  include(CheckIPOSupported)
+  check_ipo_supported(RESULT result OUTPUT output)
+  if(result)
+    message(STATUS "IPO is supported")
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+  else()
+    message(STATUS "IPO is not supported: ${output}")
   endif()
 endif()
 
@@ -79,19 +76,9 @@ endif()
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # ----------------------------------------------------------------------------
-#   Dependency graph visualization
-# ----------------------------------------------------------------------------
-set(GRAPHVIZ_CUSTOM_TARGETS TRUE)
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/graphviz)
-add_custom_target(
-  graphviz
-  COMMAND ${CMAKE_COMMAND} "--graphviz=graphviz/dependency.dot" .
-  COMMAND dot -Tsvg graphviz/dependency.dot -o graphviz/dependency.svg
-  WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
-
-# ----------------------------------------------------------------------------
 #   Call other scripts from current directory
 # ----------------------------------------------------------------------------
+include(${CMAKE_CURRENT_LIST_DIR}/graphviz.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/ccache.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compiler_warnings.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/sanitizers.cmake)
