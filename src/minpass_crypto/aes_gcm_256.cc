@@ -1,5 +1,3 @@
-// #include "utilities/aes_gcm.h"
-
 // #include <cryptopp/aes.h>
 // #include <cryptopp/cryptlib.h>
 // #include <cryptopp/filters.h>
@@ -10,11 +8,12 @@
 // #include <cassert>
 // #include <string>
 
-// #include "utilities/scrypt_kdf.h"
+// #include "minpass_crypto.h"
+// #include "minpass_crypto/scrypt_kdf.h"
 
-// namespace minpass::utilities {
+// namespace minpass::minpass_crypto {
 
-// auto AES_GCM_256::encrypt(const std::string& plain_text,
+// auto AES_GCM_265::encrypt(const std::string& plain_text,
 //                           std::string& cipher_text) -> bool {
 //   try {
 //     fmt::print("plain text: {}\n", plain_text);
@@ -50,7 +49,7 @@
 //   return true;
 // }
 
-// auto AES_GCM_256::decrypt(const std::string& cipher_text,
+// auto AES_GCM_265::decrypt(const std::string& cipher_text,
 //                           std::string& plain_text) -> bool {
 //   try {
 //     CryptoPP::GCM<CryptoPP::AES>::Decryption decryption;
@@ -72,11 +71,11 @@
 //     CryptoPP::StringSource(
 //         cipher_text, true,
 //         new CryptoPP::Redirector(df /*, PASS_EVERYTHING */));  //
-//         StringSource
+//     StringSource
 
-//     // If the object does not throw, here's the only
-//     //  opportunity to check the data's integrity
-//     bool b = df.GetLastResult();
+//         // If the object does not throw, here's the only
+//         //  opportunity to check the data's integrity
+//         bool b = df.GetLastResult();
 //     assert(true == b);
 
 //     fmt::print("recovered text: {}\n", plain_text);
@@ -92,4 +91,4 @@
 //   return true;
 // }
 
-// }  // namespace minpass::utilities
+// }  // namespace minpass::minpass_crypto

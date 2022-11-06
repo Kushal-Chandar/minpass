@@ -2,10 +2,10 @@
 #include <cryptopp/hex.h>  // for HexEncoder
 #include <fmt/core.h>
 
-#include "utilities/scrypt_kdf.h"
+#include "minpass_crypto/crytopp_conversions.h"
 
 auto main() -> int {
-  auto x = minpass::utilities::ScryptKDF::GetBytesFromString(
+  auto x = minpass::minpass_crypto::CryptoppConversions::GetBytesFromString(
       std::string("Hello world"));
 
   for (auto &&i : x) {
@@ -13,7 +13,7 @@ auto main() -> int {
   }
   fmt::print("\n");
 
-  auto s = minpass::utilities::ScryptKDF::GetStringFromBytes(x);
+  auto s = minpass::minpass_crypto::CryptoppConversions::GetStringFromBytes(x);
   fmt::print("{}\n", s);
 
   // auto [key, salt, iv] =

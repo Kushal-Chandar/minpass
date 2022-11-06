@@ -26,10 +26,14 @@ target_include_directories(utilities PUBLIC include)
 add_executable(cryptopp-test)
 target_sources(
   cryptopp-test
-  PRIVATE include/aes_gcm.h
-          src/aes_gcm.cc
-          include/utilities/scrypt_kdf.h
-          src/utilities/scrypt_kdf.cc
+  PRIVATE include/minpass_crypto.h
+          src/minpass_crypto.cc
+          include/minpass_crypto/scrypt_kdf.h
+          src/minpass_crypto/scrypt_kdf.cc
+          include/minpass_crypto/crytopp_conversions.h
+          src/minpass_crypto/crytopp_conversions.cc
+          include/minpass_crypto/aes_gcm_256.h
+          src/minpass_crypto/aes_gcm_256.cc
           src/cryptopp-test.cc)
 target_link_libraries(cryptopp-test PRIVATE project_compile_options)
 target_include_directories(cryptopp-test PUBLIC include)

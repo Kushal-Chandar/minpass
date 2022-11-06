@@ -1,11 +1,11 @@
-// #if !defined(AES_GCM)
-// #define AES_GCM
+// #if !defined(AES_GCM_256)
+// #define AES_GCM_256
 
 // #include <string>
 
-// namespace minpass::utilities {
+// namespace minpass::minpass_crypto {
 
-// class AES_GCM_256 {
+// class AES_GCM {
 //  public:
 //   static auto encrypt(const std::string& plain_text, std::string&
 //   cipher_text)
@@ -18,6 +18,6 @@
 //   static constexpr int kTagSize_ = 12;
 // };
 
-// }  // namespace minpass::utilities
+// }  // namespace minpass::minpass_crypto
 
-// #endif  // AES_GCM
+// #endif  // AES_GCM_256
