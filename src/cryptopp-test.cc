@@ -1,14 +1,26 @@
+#include <cryptopp/files.h>
 #include <cryptopp/filters.h>
 #include <cryptopp/hex.h>  // for HexEncoder
 #include <fmt/core.h>
+
+#include <iostream>
 
 #include "minpass_crypto/aes_gcm_256.h"
 #include "minpass_crypto/crytopp_conversions.h"
 
 auto main() -> int {
-  std::string plain_text("hello");
-  std::string cipher_text;
-  minpass::minpass_crypto::AES_GCM_256::encrypt(plain_text, cipher_text);
+  auto x = minpass::minpass_crypto::CryptoppConversions::GetByteBlockFromString(
+      "hell");
+  const CryptoPP::StringSource key_out_constructor(
+      x, x.size(), true,
+      new CryptoPP::HexEncoder(new CryptoPP::FileSink(std::cout)));
+  std::cout
+      << minpass::minpass_crypto::CryptoppConversions::GetStringFromByteBlock(x)
+      << '\n';
+
+  // std::string plain_text("hello");
+  // std::string cipher_text;
+  // minpass::minpass_crypto::AES_GCM_256::encrypt(plain_text, cipher_text);
 
   // auto [key, salt, iv] =
   //     minpass::utilities::ScryptKDF::GenerateKeyAndIV(password_bytes);

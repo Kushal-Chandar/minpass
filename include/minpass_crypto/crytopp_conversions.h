@@ -11,10 +11,10 @@ namespace minpass::minpass_crypto {
 
 class CryptoppConversions {
  public:
-  static auto GetStringFromBytes(const std::vector<CryptoPP::byte>& bytes_in)
+  static auto GetStringFromByteBlock(const CryptoPP::SecByteBlock& bytes_in)
       -> std::string;
-  static auto GetBytesFromString(const std::string& string_in)
-      -> std::vector<CryptoPP::byte>;
+  static auto GetByteBlockFromString(const std::string& string_in)
+      -> CryptoPP::SecByteBlock;
 };
 
 }  // namespace minpass::minpass_crypto

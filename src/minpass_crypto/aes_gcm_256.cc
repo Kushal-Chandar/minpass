@@ -1,3 +1,5 @@
+#include "minpass_crypto/aes_gcm_256.h"
+
 #include <cryptopp/aes.h>
 #include <cryptopp/cryptlib.h>
 #include <cryptopp/filters.h>
@@ -8,7 +10,6 @@
 #include <iostream>
 #include <string>
 
-#include "minpass_crypto.h"
 #include "minpass_crypto/scrypt_kdf.h"
 
 namespace minpass::minpass_crypto {
@@ -33,7 +34,7 @@ auto AES_GCM_256::encrypt(const std::string& plain_text,
     auto plain_text_bytes = CryptoppConversions::GetBytesFromString(plain_text);
 
     auto [key, salt, initialization_vector] =
-        ScryptKDF::GenerateKeyAndIV(plain_text_bytes);
+        ScryptKDF::GetEncryptionKeyAndIV(plain_text_bytes);
 
     encryption.SetKeyWithIV(key, sizeof(key), initialization_vector,
                             sizeof(initialization_vector));
@@ -44,6 +45,13 @@ auto AES_GCM_256::encrypt(const std::string& plain_text,
             encryption, new CryptoPP::StringSink(cipher_text), false,
             kTagSize_));
 
+    CryptoPP::byte;
+
+    std::cout << cipher_text << " + "
+              << CryptoppConversions::GetStringFromBytes(
+                     std::vector<CryptoPP::byte>(salt.data()))
+              << '\n';
+
   } catch (CryptoPP::InvalidArgument& e) {
     fmt::print("Caught InvalidArgument...\n{}\n\n", e.what());
   } catch (CryptoPP::Exception& e) {
@@ -51,7 +59,6 @@ auto AES_GCM_256::encrypt(const std::string& plain_text,
   }
 
   pretty_print(cipher_text);
-  std::cout << "Not so pretty: " << cipher_text << '\n';
 
   return true;
 }
@@ -64,7 +71,7 @@ auto AES_GCM_256::decrypt(const std::string& cipher_text,
     auto plain_text_bytes = CryptoppConversions::GetBytesFromString(plain_text);
 
     auto [key, initialization_vector, salt] =
-        ScryptKDF::GenerateKeyAndIV(plain_text_bytes);
+        ScryptKDF::GetDecryptionKeyAndIV(plain_text_bytes);
 
     decryption.SetKeyWithIV(key, sizeof(key), initialization_vector,
                             sizeof(initialization_vector));

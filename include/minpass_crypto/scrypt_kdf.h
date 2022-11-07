@@ -11,7 +11,11 @@ namespace minpass::minpass_crypto {
 
 class ScryptKDF {
  public:
-  static auto GenerateKeyAndIV(
+  static auto GetEncryptionKeyAndIV(
+      const std::vector<CryptoPP::byte>& password_bytes)
+      -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
+                    CryptoPP::SecByteBlock>;
+  static auto GetDecryptionKeyAndIV(
       const std::vector<CryptoPP::byte>& password_bytes)
       -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
                     CryptoPP::SecByteBlock>;

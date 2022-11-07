@@ -11,8 +11,8 @@
 
 namespace minpass::minpass_crypto {
 
-auto CryptoppConversions::GetStringFromBytes(
-    const std::vector<CryptoPP::byte>& bytes_in) -> std::string {
+auto CryptoppConversions::GetStringFromByteBlock(
+    const CryptoPP::SecByteBlock& bytes_in) -> std::string {
   std::string string_out;
   std::transform(
       bytes_in.begin(), bytes_in.end(), std::back_inserter(string_out),
@@ -20,9 +20,9 @@ auto CryptoppConversions::GetStringFromBytes(
   return string_out;
 }
 
-auto CryptoppConversions::GetBytesFromString(const std::string& string_in)
-    -> std::vector<CryptoPP::byte> {
-  std::vector<CryptoPP::byte> bytes_out(string_in.size());
+auto CryptoppConversions::GetByteBlockFromString(const std::string& string_in)
+    -> CryptoPP::SecByteBlock {
+  CryptoPP::SecByteBlock bytes_out(string_in.size());
   std::copy(string_in.begin(), string_in.end(), bytes_out.begin());
   return bytes_out;
 }
