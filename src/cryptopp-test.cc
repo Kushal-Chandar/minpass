@@ -2,19 +2,13 @@
 #include <cryptopp/hex.h>  // for HexEncoder
 #include <fmt/core.h>
 
+#include "minpass_crypto/aes_gcm_256.h"
 #include "minpass_crypto/crytopp_conversions.h"
 
 auto main() -> int {
-  auto x = minpass::minpass_crypto::CryptoppConversions::GetBytesFromString(
-      std::string("Hello world"));
-
-  for (auto &&i : x) {
-    fmt::print("{} ", i);
-  }
-  fmt::print("\n");
-
-  auto s = minpass::minpass_crypto::CryptoppConversions::GetStringFromBytes(x);
-  fmt::print("{}\n", s);
+  std::string plain_text("hello");
+  std::string cipher_text;
+  minpass::minpass_crypto::AES_GCM_256::encrypt(plain_text, cipher_text);
 
   // auto [key, salt, iv] =
   //     minpass::utilities::ScryptKDF::GenerateKeyAndIV(password_bytes);

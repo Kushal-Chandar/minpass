@@ -1,23 +1,22 @@
-// #if !defined(MINPASS_INCLUDE_MINPASS_CRYPTO_AES_GCM_256_H_)
-// #define MINPASS_INCLUDE_MINPASS_CRYPTO_AES_GCM_256_H_
+#if !defined(MINPASS_INCLUDE_MINPASS_CRYPTO_AES_GCM_256_H_)
+#define MINPASS_INCLUDE_MINPASS_CRYPTO_AES_GCM_256_H_
 
-// #include <string>
+#include <string>
 
-// namespace minpass::minpass_crypto {
+namespace minpass::minpass_crypto {
 
-// class AES_GCM {
-//  public:
-//   static auto encrypt(const std::string& plain_text, std::string&
-//   cipher_text)
-//       -> bool;
-//   static auto decrypt(const std::string& cipher_text, std::string&
-//   plain_text)
-//       -> bool;
+class AES_GCM_256 {
+ public:
+  static auto encrypt(const std::string& plain_text, std::string& cipher_text)
+      -> bool;
+  static auto decrypt(const std::string& cipher_text, std::string& plain_text)
+      -> bool;
 
-//  private:
-//   static constexpr int kTagSize_ = 12;
-// };
+ private:
+  static constexpr int kTagSize_ = 12;
+  static auto pretty_print(const std::string& text) -> void;
+};
 
-// }  // namespace minpass::minpass_crypto
+}  // namespace minpass::minpass_crypto
 
-// #endif  // MINPASS_INCLUDE_MINPASS_CRYPTO_AES_GCM_256_H_
+#endif  // MINPASS_INCLUDE_MINPASS_CRYPTO_AES_GCM_256_H_
