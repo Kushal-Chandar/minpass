@@ -7,8 +7,15 @@ namespace minpass {
 
 class MinpassCrypto {
  public:
-  static auto encrypt(const std::string &plain_text) -> std::string;
-  static auto decrypt(const std::string &chipher_text) -> std::string;
+  virtual auto encrypt(const std::string &plain_text) -> std::string = 0;
+  virtual auto decrypt(const std::string &chipher_text) -> std::string = 0;
+  virtual ~MinpassCrypto() = default;
+};
+
+class MinpassCryptoAESGCM256 : public MinpassCrypto {
+ public:
+  auto encrypt(const std::string &plain_text) -> std::string override;
+  auto decrypt(const std::string &chipher_text) -> std::string override;
 };
 
 }  // namespace minpass

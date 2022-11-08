@@ -10,17 +10,10 @@
 #include "minpass_crypto/crytopp_conversions.h"
 
 auto main() -> int {
-  auto xyz =
-      minpass::minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
-          "hell");
-  const CryptoPP::StringSource key_out_constructor(
-      xyz, xyz.size(), true,
-      new CryptoPP::HexEncoder(new CryptoPP::FileSink(std::cout)));
-  std::cout << minpass::minpass_crypto::CryptoppConversions::
-                   GetStringFromSecByteBlock(xyz)
-            << '\n';
+  std::unique_ptr<minpass::MinpassCrypto> ptr =
+      std::make_unique<minpass::MinpassCryptoAESGCM256>();
 
-  std::cout << minpass::MinpassCrypto::encrypt("hello") << '\n';
+  std::cout << ptr->encrypt("hello") << '\n';
 
   // std::string plain_text("hello");
   // std::string cipher_text;

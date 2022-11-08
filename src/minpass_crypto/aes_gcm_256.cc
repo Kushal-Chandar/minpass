@@ -17,52 +17,34 @@
 
 namespace minpass::minpass_crypto {
 
-auto AES_GCM_256::pretty_print(const CryptoPP::SecByteBlock& text) -> void {
-  CryptoPP::SecByteBlock encoded;
-  {
-    const CryptoPP::StringSource printer(
-        text, text.size(), true,
-        new CryptoPP::HexEncoder(new CryptoPP::FileSink(std::cout)));
-  }
-}
-
-auto AES_GCM_256::encrypt(const CryptoPP::SecByteBlock& plain_bytes_in,
-                          CryptoPP::SecByteBlock& cipher_bytes_out) -> bool {
+auto AES_GCM_256::encrypt(const std::string& plain_text_in) -> std::string {
+  std::string cipher_text;
   try {
     CryptoPP::GCM<CryptoPP::AES>::Encryption encryption;
 
-    auto [key, salt, initialization_vector] =
-        ScryptKDF::GetEncryptionKeyAndIV(plain_bytes_in);
+    auto [key, salt, initialization_vector] = ScryptKDF::GetEncryptionKeyAndIV(
+        CryptoppConversions::GetSecByteBlockFromString(plain_text_in));
 
     encryption.SetKeyWithIV(key, sizeof(key), initialization_vector,
                             sizeof(initialization_vector));
 
-    CryptoPP::ByteQueue plain_queue, cipher_queue;
-    plain_queue.Put(plain_bytes_in, plain_bytes_in.size());
+    CryptoPP::StringSource(
+        plain_text_in, true,
+        new CryptoPP::AuthenticatedEncryptionFilter(
+            encryption, new CryptoPP::StringSink(cipher_text), false,
+            kTagSize_));
 
-    CryptoPP::AuthenticatedEncryptionFilter filter(
-        encryption, new CryptoPP::Redirector(cipher_queue), false, kTagSize_);
-    plain_queue.TransferTo(filter);
-    filter.MessageEnd();
-
-    std::string cipher_text{};
-
-    CryptoPP::StringSink store(cipher_text);
-
-    cipher_queue.TransferTo(store);
-    store.MessageEnd();
-
-    std::cout << "hello" << cipher_text << '\n';
-
-    cipher_bytes_out =
-        minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
-            cipher_text);
-
-    // CryptoPP::StringSource(
-    //     plain_, true,
-    //     new CryptoPP::AuthenticatedEncryptionFilter(
-    //         encryption, new CryptoPP::StringSink(cipher_text), false,
-    //         kTagSize_));
+    std::cout << "Salt: "
+              << minpass_crypto::CryptoppConversions::GetStringFromSecByteBlock(
+                     salt)
+                     .size()
+              << '\n';
+    std::cout << "IV: "
+              << minpass_crypto::CryptoppConversions::GetStringFromSecByteBlock(
+                     initialization_vector)
+                     .size()
+              << '\n';
+    std::cout << "Cipher: " << cipher_text.size() << '\n';
 
   } catch (CryptoPP::InvalidArgument& e) {
     fmt::print("Caught InvalidArgument...\n{}\n\n", e.what());
@@ -70,11 +52,10 @@ auto AES_GCM_256::encrypt(const CryptoPP::SecByteBlock& plain_bytes_in,
     fmt::print("Caught Exception...\n{}\n\n", e.what());
   }
 
-  return true;
+  return cipher_text;
 }
 
-auto AES_GCM_256::decrypt(const CryptoPP::SecByteBlock& cipher_bytes_in,
-                          CryptoPP::SecByteBlock& plain_bytes_out) -> bool {
+auto AES_GCM_256::decrypt(const std::string& cipher_text_in) -> std::string {
   // try {
   //   CryptoPP::GCM<CryptoPP::AES>::Decryption decryption;
 
@@ -99,7 +80,7 @@ auto AES_GCM_256::decrypt(const CryptoPP::SecByteBlock& cipher_bytes_in,
   //   //  or manually Put(...) into the filter without
   //   //  using a StringSource.
   //   CryptoPP::StringSource(
-  //       cipher_text, true,
+  //       aes_cipher_text, true,
   //       new CryptoPP::Redirector(df /*, PASS_EVERYTHING */));  //
 
   //   // If the object does not throw, here's the only
@@ -116,7 +97,7 @@ auto AES_GCM_256::decrypt(const CryptoPP::SecByteBlock& cipher_bytes_in,
   //   fmt::print("Caught Exception...\n{}\n\n", e.what());
   // }
 
-  return true;
+  return std::string("");
 }
 
 }  // namespace minpass::minpass_crypto

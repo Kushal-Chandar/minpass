@@ -6,18 +6,14 @@
 
 namespace minpass {
 
-auto MinpassCrypto::encrypt(const std::string& plain_text) -> std::string {
-  const auto plain_text_secure_bytes =
-      minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
-          plain_text);
+auto MinpassCryptoAESGCM256::encrypt(const std::string& plain_text)
+    -> std::string {
+  return minpass_crypto::AES_GCM_256::encrypt(plain_text);
+}
 
-  CryptoPP::SecByteBlock cipher_text_secure_bytes;
-
-  minpass_crypto::AES_GCM_256::encrypt(plain_text_secure_bytes,
-                                       cipher_text_secure_bytes);
-
-  return minpass_crypto::CryptoppConversions::GetStringFromSecByteBlock(
-      cipher_text_secure_bytes);
+auto MinpassCryptoAESGCM256::decrypt(const std::string& plain_text)
+    -> std::string {
+  return minpass_crypto::AES_GCM_256::decrypt(plain_text);
 }
 
 }  // namespace minpass
