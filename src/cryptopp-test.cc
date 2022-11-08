@@ -9,14 +9,15 @@
 #include "minpass_crypto/crytopp_conversions.h"
 
 auto main() -> int {
-  auto x = minpass::minpass_crypto::CryptoppConversions::GetByteBlockFromString(
-      "hell");
+  auto x =
+      minpass::minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
+          "hell");
   const CryptoPP::StringSource key_out_constructor(
       x, x.size(), true,
       new CryptoPP::HexEncoder(new CryptoPP::FileSink(std::cout)));
-  std::cout
-      << minpass::minpass_crypto::CryptoppConversions::GetStringFromByteBlock(x)
-      << '\n';
+  std::cout << minpass::minpass_crypto::CryptoppConversions::
+                   GetStringFromSecByteBlock(x)
+            << '\n';
 
   // std::string plain_text("hello");
   // std::string cipher_text;

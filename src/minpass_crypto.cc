@@ -8,7 +8,8 @@ namespace minpass {
 
 auto MinpassCrypto::encrypt(const std::string& plain_text) -> std::string {
   const auto plain_text_secure_bytes =
-      minpass_crypto::CryptoppConversions::GetByteBlockFromString(plain_text);
+      minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
+          plain_text);
 
   CryptoPP::SecByteBlock cipher_text_secure_bytes;
 

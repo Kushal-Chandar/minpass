@@ -14,8 +14,8 @@
 
 namespace minpass::minpass_crypto {
 
-auto AES_GCM_256::pretty_print(const std::string& text) -> void {
-  std::string encoded;
+auto AES_GCM_256::pretty_print(const CryptoPP::SecByteBlock& text) -> void {
+  CryptoPP::SecByteBlock encoded;
   encoded.clear();
   {
     const CryptoPP::StringSource printer(
@@ -25,8 +25,8 @@ auto AES_GCM_256::pretty_print(const std::string& text) -> void {
   fmt::print("cipher text: {}\n", encoded);
 }
 
-auto AES_GCM_256::encrypt(const std::string& plain_text,
-                          std::string& cipher_text) -> bool {
+auto AES_GCM_256::encrypt(const CryptoPP::SecByteBlock& plain_text,
+                          CryptoPP::SecByteBlock& cipher_text) -> bool {
   try {
     fmt::print("plain text: {}\n", plain_text);
     CryptoPP::GCM<CryptoPP::AES>::Encryption encryption;
@@ -63,8 +63,8 @@ auto AES_GCM_256::encrypt(const std::string& plain_text,
   return true;
 }
 
-auto AES_GCM_256::decrypt(const std::string& cipher_text,
-                          std::string& plain_text) -> bool {
+auto AES_GCM_256::decrypt(const CryptoPP::SecByteBlock& cipher_text,
+                          CryptoPP::SecByteBlock& plain_text) -> bool {
   try {
     CryptoPP::GCM<CryptoPP::AES>::Decryption decryption;
 
