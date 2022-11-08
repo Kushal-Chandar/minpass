@@ -13,7 +13,7 @@ auto main() -> int {
   std::unique_ptr<minpass::MinpassCrypto> ptr =
       std::make_unique<minpass::MinpassCryptoAESGCM256>();
 
-  std::cout << ptr->encrypt("hello") << '\n';
+  std::cout << ptr->encrypt("hello1") << '\n';
 
   // std::string plain_text("hello");
   // std::string cipher_text;

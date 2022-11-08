@@ -18,14 +18,14 @@ class ScryptKDF {
       const CryptoPP::SecByteBlock& password_bytes)
       -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
                     CryptoPP::SecByteBlock>;
+  static const int kKeySize_ = 32;
+  static const int kIVSize_ = 16;
+  static const int kSaltSize_ = 8;
 
  private:
-  static constexpr int kKeySize_ = 32;
-  static constexpr int kIVSize_ = 16;
-  static constexpr int kSaltSize_ = 8;
-  static constexpr int kCost_ = 1024;
-  static constexpr int kBlockSize_ = 8;
-  static constexpr int kParallelization_ = 16;
+  static const int kCost_ = 1024;
+  static const int kBlockSize_ = 8;
+  static const int kParallelization_ = 16;
 };
 
 }  // namespace minpass::minpass_crypto
