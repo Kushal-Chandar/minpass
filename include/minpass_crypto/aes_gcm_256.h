@@ -7,10 +7,10 @@ namespace minpass::minpass_crypto {
 
 class AES_GCM_256 {
  public:
-  static auto encrypt(const CryptoPP::SecByteBlock& plain_text,
-                      CryptoPP::SecByteBlock& cipher_text) -> bool;
-  static auto decrypt(const CryptoPP::SecByteBlock& cipher_text,
-                      CryptoPP::SecByteBlock& plain_text) -> bool;
+  static auto encrypt(const CryptoPP::SecByteBlock& plain_bytes_in,
+                      CryptoPP::SecByteBlock& cipher_bytes_out) -> bool;
+  static auto decrypt(const CryptoPP::SecByteBlock& cipher_bytes_in,
+                      CryptoPP::SecByteBlock& plain_bytes_out) -> bool;
 
  private:
   static constexpr int kTagSize_ = 12;

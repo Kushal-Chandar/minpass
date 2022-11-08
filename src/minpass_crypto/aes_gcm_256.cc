@@ -2,109 +2,119 @@
 
 #include <cryptopp/aes.h>
 #include <cryptopp/cryptlib.h>
+#include <cryptopp/files.h>
 #include <cryptopp/filters.h>
 #include <cryptopp/gcm.h>
 #include <cryptopp/hex.h>
+#include <cryptopp/secblock.h>
 #include <fmt/core.h>
 
 #include <iostream>
 #include <string>
 
+#include "minpass_crypto/crytopp_conversions.h"
 #include "minpass_crypto/scrypt_kdf.h"
 
 namespace minpass::minpass_crypto {
 
 auto AES_GCM_256::pretty_print(const CryptoPP::SecByteBlock& text) -> void {
   CryptoPP::SecByteBlock encoded;
-  encoded.clear();
   {
     const CryptoPP::StringSource printer(
-        text, true,
-        new CryptoPP::HexEncoder(new CryptoPP::StringSink(encoded)));
+        text, text.size(), true,
+        new CryptoPP::HexEncoder(new CryptoPP::FileSink(std::cout)));
   }
-  fmt::print("cipher text: {}\n", encoded);
 }
 
-auto AES_GCM_256::encrypt(const CryptoPP::SecByteBlock& plain_text,
-                          CryptoPP::SecByteBlock& cipher_text) -> bool {
+auto AES_GCM_256::encrypt(const CryptoPP::SecByteBlock& plain_bytes_in,
+                          CryptoPP::SecByteBlock& cipher_bytes_out) -> bool {
   try {
-    fmt::print("plain text: {}\n", plain_text);
     CryptoPP::GCM<CryptoPP::AES>::Encryption encryption;
 
-    auto plain_text_bytes = CryptoppConversions::GetBytesFromString(plain_text);
-
     auto [key, salt, initialization_vector] =
-        ScryptKDF::GetEncryptionKeyAndIV(plain_text_bytes);
+        ScryptKDF::GetEncryptionKeyAndIV(plain_bytes_in);
 
     encryption.SetKeyWithIV(key, sizeof(key), initialization_vector,
                             sizeof(initialization_vector));
 
-    CryptoPP::StringSource(
-        plain_text, true,
-        new CryptoPP::AuthenticatedEncryptionFilter(
-            encryption, new CryptoPP::StringSink(cipher_text), false,
-            kTagSize_));
+    CryptoPP::ByteQueue plain_queue, cipher_queue;
+    plain_queue.Put(plain_bytes_in, plain_bytes_in.size());
 
-    CryptoPP::byte;
+    CryptoPP::AuthenticatedEncryptionFilter filter(
+        encryption, new CryptoPP::Redirector(cipher_queue), false, kTagSize_);
+    plain_queue.TransferTo(filter);
+    filter.MessageEnd();
 
-    std::cout << cipher_text << " + "
-              << CryptoppConversions::GetStringFromBytes(
-                     std::vector<CryptoPP::byte>(salt.data()))
-              << '\n';
+    std::string cipher_text{};
+
+    CryptoPP::StringSink store(cipher_text);
+
+    cipher_queue.TransferTo(store);
+    store.MessageEnd();
+
+    std::cout << "hello" << cipher_text << '\n';
+
+    cipher_bytes_out =
+        minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
+            cipher_text);
+
+    // CryptoPP::StringSource(
+    //     plain_, true,
+    //     new CryptoPP::AuthenticatedEncryptionFilter(
+    //         encryption, new CryptoPP::StringSink(cipher_text), false,
+    //         kTagSize_));
 
   } catch (CryptoPP::InvalidArgument& e) {
     fmt::print("Caught InvalidArgument...\n{}\n\n", e.what());
   } catch (CryptoPP::Exception& e) {
     fmt::print("Caught Exception...\n{}\n\n", e.what());
   }
-
-  pretty_print(cipher_text);
 
   return true;
 }
 
-auto AES_GCM_256::decrypt(const CryptoPP::SecByteBlock& cipher_text,
-                          CryptoPP::SecByteBlock& plain_text) -> bool {
-  try {
-    CryptoPP::GCM<CryptoPP::AES>::Decryption decryption;
+auto AES_GCM_256::decrypt(const CryptoPP::SecByteBlock& cipher_bytes_in,
+                          CryptoPP::SecByteBlock& plain_bytes_out) -> bool {
+  // try {
+  //   CryptoPP::GCM<CryptoPP::AES>::Decryption decryption;
 
-    auto plain_text_bytes = CryptoppConversions::GetBytesFromString(plain_text);
+  //   auto plain_text_bytes = CryptoppConversions::GetBytesFromString(plain_);
 
-    auto [key, initialization_vector, salt] =
-        ScryptKDF::GetDecryptionKeyAndIV(plain_text_bytes);
+  //   auto [key, initialization_vector, salt] =
+  //       ScryptKDF::GetDecryptionKeyAndIV(plain_text_bytes);
 
-    decryption.SetKeyWithIV(key, sizeof(key), initialization_vector,
-                            sizeof(initialization_vector));
+  //   decryption.SetKeyWithIV(key, sizeof(key), initialization_vector,
+  //                           sizeof(initialization_vector));
 
-    CryptoPP::AuthenticatedDecryptionFilter df(
-        decryption, new CryptoPP::StringSink(plain_text),
-        CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_FLAGS,
-        kTagSize_);  // AuthenticatedDecryptionFilter
+  //   CryptoPP::AuthenticatedDecryptionFilter df(
+  //       decryption, new CryptoPP::StringSink(plain_),
+  //       CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_FLAGS,
+  //       kTagSize_);  // AuthenticatedDecryptionFilter
 
-    // The StringSource dtor will be called immediately
-    //  after construction below. This will cause the
-    //  destruction of objects it owns. To stop the
-    //  behavior so we can get the decoding result from
-    //  the DecryptionFilter, we must use a redirector
-    //  or manually Put(...) into the filter without
-    //  using a StringSource.
-    CryptoPP::StringSource(
-        cipher_text, true,
-        new CryptoPP::Redirector(df /*, PASS_EVERYTHING */));  //
+  //   // The StringSource dtor will be called immediately
+  //   //  after construction below. This will cause the
+  //   //  destruction of objects it owns. To stop the
+  //   //  behavior so we can get the decoding result from
+  //   //  the DecryptionFilter, we must use a redirector
+  //   //  or manually Put(...) into the filter without
+  //   //  using a StringSource.
+  //   CryptoPP::StringSource(
+  //       cipher_text, true,
+  //       new CryptoPP::Redirector(df /*, PASS_EVERYTHING */));  //
 
-    // If the object does not throw, here's the only
-    //  opportunity to check the data's integrity
-    bool b = df.GetLastResult();
+  //   // If the object does not throw, here's the only
+  //   //  opportunity to check the data's integrity
+  //   bool b = df.GetLastResult();
 
-    fmt::print("recovered text: {}\n", plain_text);
+  //   fmt::print("recovered text: {}\n", plain_);
 
-  } catch (CryptoPP::HashVerificationFilter::HashVerificationFailed& e) {
-    fmt::print("Caught HashVerificationFailed...\n{}\n\n", e.what());
-  } catch (CryptoPP::InvalidArgument& e) {
-    fmt::print("Caught InvalidArgument...\n{}\n\n", e.what());
-  } catch (CryptoPP::Exception& e) {
-    fmt::print("Caught Exception...\n{}\n\n", e.what());
-  }
+  // } catch (CryptoPP::HashVerificationFilter::HashVerificationFailed& e) {
+  //   fmt::print("Caught HashVerificationFailed...\n{}\n\n", e.what());
+  // } catch (CryptoPP::InvalidArgument& e) {
+  //   fmt::print("Caught InvalidArgument...\n{}\n\n", e.what());
+  // } catch (CryptoPP::Exception& e) {
+  //   fmt::print("Caught Exception...\n{}\n\n", e.what());
+  // }
 
   return true;
 }

@@ -15,6 +15,9 @@ auto MinpassCrypto::encrypt(const std::string& plain_text) -> std::string {
 
   minpass_crypto::AES_GCM_256::encrypt(plain_text_secure_bytes,
                                        cipher_text_secure_bytes);
+
+  return minpass_crypto::CryptoppConversions::GetStringFromSecByteBlock(
+      cipher_text_secure_bytes);
 }
 
 }  // namespace minpass

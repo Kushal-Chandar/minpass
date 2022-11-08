@@ -5,19 +5,22 @@
 
 #include <iostream>
 
+#include "minpass_crypto.h"
 #include "minpass_crypto/aes_gcm_256.h"
 #include "minpass_crypto/crytopp_conversions.h"
 
 auto main() -> int {
-  auto x =
+  auto xyz =
       minpass::minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
           "hell");
   const CryptoPP::StringSource key_out_constructor(
-      x, x.size(), true,
+      xyz, xyz.size(), true,
       new CryptoPP::HexEncoder(new CryptoPP::FileSink(std::cout)));
   std::cout << minpass::minpass_crypto::CryptoppConversions::
-                   GetStringFromSecByteBlock(x)
+                   GetStringFromSecByteBlock(xyz)
             << '\n';
+
+  std::cout << minpass::MinpassCrypto::encrypt("hello") << '\n';
 
   // std::string plain_text("hello");
   // std::string cipher_text;

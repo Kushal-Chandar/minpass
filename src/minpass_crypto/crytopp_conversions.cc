@@ -5,13 +5,11 @@
 #include <cryptopp/scrypt.h>      // for Scrypt
 #include <cryptopp/secblock.h>    // for SecByteBlock, AllocatorBase::size_type
 
-#include <iostream>
-#include <tuple>   // for tuple
-#include <vector>  // for vector
+#include <tuple>  // for tuple
 
 namespace minpass::minpass_crypto {
 
-auto CryptoppConversions::GetStringFromByteBlock(
+auto CryptoppConversions::GetStringFromSecByteBlock(
     const CryptoPP::SecByteBlock& bytes_in) -> std::string {
   std::string string_out;
   std::transform(
@@ -20,8 +18,8 @@ auto CryptoppConversions::GetStringFromByteBlock(
   return string_out;
 }
 
-auto CryptoppConversions::GetByteBlockFromString(const std::string& string_in)
-    -> CryptoPP::SecByteBlock {
+auto CryptoppConversions::GetSecByteBlockFromString(
+    const std::string& string_in) -> CryptoPP::SecByteBlock {
   CryptoPP::SecByteBlock bytes_out(string_in.size());
   std::copy(string_in.begin(), string_in.end(), bytes_out.begin());
   return bytes_out;

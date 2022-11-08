@@ -4,19 +4,18 @@
 #include <cryptopp/config_int.h>  // for byte
 #include <cryptopp/secblock.h>    // for SecByteBlock
 
-#include <tuple>   // for tuple
-#include <vector>  // for vector
+#include <tuple>  // for tuple
 
 namespace minpass::minpass_crypto {
 
 class ScryptKDF {
  public:
   static auto GetEncryptionKeyAndIV(
-      const std::vector<CryptoPP::byte>& password_bytes)
+      const CryptoPP::SecByteBlock& password_bytes)
       -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
                     CryptoPP::SecByteBlock>;
   static auto GetDecryptionKeyAndIV(
-      const std::vector<CryptoPP::byte>& password_bytes)
+      const CryptoPP::SecByteBlock& password_bytes)
       -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
                     CryptoPP::SecByteBlock>;
 
