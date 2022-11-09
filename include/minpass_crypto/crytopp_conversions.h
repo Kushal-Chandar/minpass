@@ -14,10 +14,9 @@ class CryptoppConversions {
       -> std::string;
   static auto GetSecByteBlockFromString(const std::string& string_in)
       -> CryptoPP::SecByteBlock;
-  static auto AddSaltAndIVToCipher(
-      CryptoPP::SecByteBlock& salt,
-      CryptoPP::SecByteBlock& initialization_vector, std::string& cipher_text)
-      -> void;
+  static auto GetSecByteBlockFromString(std::string::const_iterator begin,
+                                        std::string::const_iterator end)
+      -> CryptoPP::SecByteBlock;
 };
 
 }  // namespace minpass::minpass_crypto

@@ -13,8 +13,8 @@ auto main() -> int {
   std::unique_ptr<minpass::MinpassCrypto> ptr =
       std::make_unique<minpass::MinpassCryptoAESGCM256>();
 
-  std::cout << ptr->encrypt("hello1") << '\n';
-
+  // std::cout << << '\n';
+  ptr->decrypt(ptr->encrypt("hello1248343fsjidawr08"));
   // std::string plain_text("hello");
   // std::string cipher_text;
   // minpass::minpass_crypto::AES_GCM_256::encrypt(plain_text, cipher_text);

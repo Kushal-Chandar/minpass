@@ -37,9 +37,15 @@ auto AES_GCM_256::encrypt(const std::string& plain_text) -> std::string {
             kTagSize_));
 
     // store salt and iv with cipher text
+    ScryptKDF::AddSaltAndIVToCipher(salt, initialization_vector, cipher_text);
 
-    CryptoppConversions::AddSaltAndIVToCipher(salt, initialization_vector,
-                                              cipher_text);
+    std::cout << "encrypt function: " << cipher_text << '\n';
+    std::cout << "encrypt function: "
+              << CryptoppConversions::GetStringFromSecByteBlock(salt)
+              << "      ";
+    std::cout << CryptoppConversions::GetStringFromSecByteBlock(
+                     initialization_vector)
+              << '\n';
 
   } catch (CryptoPP::InvalidArgument& e) {
     fmt::print("Caught InvalidArgument...\n{}\n\n", e.what());
@@ -52,16 +58,20 @@ auto AES_GCM_256::encrypt(const std::string& plain_text) -> std::string {
 
 auto AES_GCM_256::decrypt(const std::string& cipher_text) -> std::string {
   std::string recovered_text;
+
+  auto [salt, iv] = ScryptKDF::SeperateSaltAndIVFromCipher(cipher_text);
+  std::cout << "decrypt function: " << cipher_text << '\n';
+  std::cout << "decrypt function: "
+            << CryptoppConversions::GetStringFromSecByteBlock(salt) << "      ";
+  std::cout << CryptoppConversions::GetStringFromSecByteBlock(iv) << '\n';
   // try {
-  //   CryptoPP::GCM<CryptoPP::AES>::Decryption decryption;
+  // CryptoPP::GCM<CryptoPP::AES>::Decryption decryption;
 
-  //   auto plain_text_bytes = CryptoppConversions::GetBytesFromString(plain_);
+  // auto [key, initialization_vector, salt] =
+  //     ScryptKDF::GetDecryptionKeyAndIV(plain_text_bytes);
 
-  //   auto [key, initialization_vector, salt] =
-  //       ScryptKDF::GetDecryptionKeyAndIV(plain_text_bytes);
-
-  //   decryption.SetKeyWithIV(key, sizeof(key), initialization_vector,
-  //                           sizeof(initialization_vector));
+  // decryption.SetKeyWithIV(key, sizeof(key), initialization_vector,
+  //                         sizeof(initialization_vector));
 
   //   CryptoPP::AuthenticatedDecryptionFilter df(
   //       decryption, new CryptoPP::StringSink(plain_),

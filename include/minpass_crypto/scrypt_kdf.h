@@ -14,6 +14,14 @@ class ScryptKDF {
       const CryptoPP::SecByteBlock& password_bytes)
       -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
                     CryptoPP::SecByteBlock>;
+  static auto AddSaltAndIVToCipher(
+      CryptoPP::SecByteBlock& salt,
+      CryptoPP::SecByteBlock& initialization_vector, std::string& cipher_text)
+      -> void;
+  static auto SeperateSaltAndIVFromCipher(
+      const std::string& cipher_text_with_key_and_iv)
+      -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock>;
+
   static const int kKeySize_ = 32;
   static const int kIVSize_ = 16;
   static const int kSaltSize_ = 8;

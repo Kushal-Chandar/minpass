@@ -5,7 +5,10 @@
 #include <cryptopp/scrypt.h>      // for Scrypt
 #include <cryptopp/secblock.h>    // for SecByteBlock, AllocatorBase::size_type
 
+#include <string>
 #include <tuple>  // for tuple
+
+#include "minpass_crypto/crytopp_conversions.h"
 
 namespace minpass::minpass_crypto {
 
@@ -31,6 +34,26 @@ auto ScryptKDF::GetEncryptionKeyAndIV(
   prng.GenerateBlock(initialization_vector, initialization_vector.size());
 
   return {key, salt, initialization_vector};
+}
+
+auto ScryptKDF::AddSaltAndIVToCipher(
+    CryptoPP::SecByteBlock& salt, CryptoPP::SecByteBlock& initialization_vector,
+    std::string& cipher_text) -> void {
+  cipher_text += CryptoppConversions::GetStringFromSecByteBlock(
+      salt + initialization_vector);
+}
+
+auto ScryptKDF::SeperateSaltAndIVFromCipher(
+    const std::string& cipher_text_with_key_and_iv)
+    -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> {
+  auto initialization_vector = CryptoppConversions::GetSecByteBlockFromString(
+      cipher_text_with_key_and_iv.cend() - kIVSize_,
+      cipher_text_with_key_and_iv.cend());
+
+  auto salt = CryptoppConversions::GetSecByteBlockFromString(
+      cipher_text_with_key_and_iv.cend() - kIVSize_ - kSaltSize_,
+      cipher_text_with_key_and_iv.cend() - kIVSize_);
+  return {salt, initialization_vector};
 }
 
 }  // namespace minpass::minpass_crypto
