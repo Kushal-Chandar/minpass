@@ -14,10 +14,6 @@ class ScryptKDF {
       const CryptoPP::SecByteBlock& password_bytes)
       -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
                     CryptoPP::SecByteBlock>;
-  static auto GetDecryptionKeyAndIV(
-      const CryptoPP::SecByteBlock& password_bytes)
-      -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
-                    CryptoPP::SecByteBlock>;
   static const int kKeySize_ = 32;
   static const int kIVSize_ = 16;
   static const int kSaltSize_ = 8;

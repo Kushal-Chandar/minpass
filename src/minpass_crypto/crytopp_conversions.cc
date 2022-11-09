@@ -25,4 +25,11 @@ auto CryptoppConversions::GetSecByteBlockFromString(
   return bytes_out;
 }
 
+auto CryptoppConversions::AddSaltAndIVToCipher(
+    CryptoPP::SecByteBlock& salt, CryptoPP::SecByteBlock& initialization_vector,
+    std::string& cipher_text) -> void {
+  cipher_text += CryptoppConversions::GetStringFromSecByteBlock(
+      salt + initialization_vector);
+}
+
 }  // namespace minpass::minpass_crypto

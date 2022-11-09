@@ -37,8 +37,9 @@ auto AES_GCM_256::encrypt(const std::string& plain_text) -> std::string {
             kTagSize_));
 
     // store salt and iv with cipher text
-    cipher_text += CryptoppConversions::GetStringFromSecByteBlock(
-        salt + initialization_vector);
+
+    CryptoppConversions::AddSaltAndIVToCipher(salt, initialization_vector,
+                                              cipher_text);
 
   } catch (CryptoPP::InvalidArgument& e) {
     fmt::print("Caught InvalidArgument...\n{}\n\n", e.what());
