@@ -23,7 +23,7 @@ target_include_directories(utilities PUBLIC include)
 ###########################################
 ### Minpass crypto
 ###########################################
-add_executable(minpass_crypto)
+add_library(minpass_crypto)
 target_sources(
   minpass_crypto
   PRIVATE include/minpass_crypto.h

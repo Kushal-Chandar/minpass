@@ -33,9 +33,9 @@ auto Helpers::MakeResponse(Json::Value &response_object,
   return http_response;
 }
 
-auto Helpers::ValidateRequest(const drogon::HttpRequestPtr &http_request,
-                              drogon::HttpResponsePtr &http_response,
-                              Json::Value &response_object_out)
+auto Helpers::ParseRequest(const drogon::HttpRequestPtr &http_request,
+                           drogon::HttpResponsePtr &http_response,
+                           Json::Value &response_object_out)
     -> std::tuple<bool, Email, Username, Password> {
   auto json = http_request->getJsonObject();
   if (!json) {

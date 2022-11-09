@@ -26,9 +26,9 @@ class Helpers {
   static auto MakeResponse(Json::Value &response_object,
                            drogon::HttpStatusCode status_code = drogon::k200OK)
       -> drogon::HttpResponsePtr;
-  static auto ValidateRequest(const drogon::HttpRequestPtr &http_request,
-                              drogon::HttpResponsePtr &http_response,
-                              Json::Value &response_object_out)
+  static auto ParseRequest(const drogon::HttpRequestPtr &http_request,
+                           drogon::HttpResponsePtr &http_response,
+                           Json::Value &response_object_out)
       -> std::tuple<bool, Email, Username, Password>;
 };
 

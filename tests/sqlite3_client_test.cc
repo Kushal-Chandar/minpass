@@ -41,13 +41,36 @@ DROGON_TEST(RestAPITest_Get_Case2) {
   // Get when the website is in database.
 
   auto client = drogon::HttpClient::newHttpClient("http://localhost:" PORT);
+
   Json::Value json;
-  auto request = drogon::HttpRequest::newCustomHttpRequest(json);
-  request->setMethod(drogon::HttpMethod::Get);
-  request->setPath(PATH "website=google.com");
+  json["email"] = "google.com";
+  json["password"] = "pas22sls";
+  json["username"] = "ksdkfsd";
+
+  auto request_post = drogon::HttpRequest::newCustomHttpRequest(json);
+  request_post->setMethod(drogon::HttpMethod::Post);
+  request_post->setPath(PATH "website=google.com");
+
   client->sendRequest(
-      request, [TEST_CTX](drogon::ReqResult result,
-                          const drogon::HttpResponsePtr& response) {
+      request_post, [TEST_CTX](drogon::ReqResult result,
+                               const drogon::HttpResponsePtr& response) {
+        REQUIRE(result == drogon::ReqResult::Ok);
+        REQUIRE(response != nullptr);
+
+        auto response_json = *(response->getJsonObject());
+
+        CHECK(response_json["message"] == "ok");
+        CHECK(response->getStatusCode() ==
+              drogon::HttpStatusCode::k202Accepted);
+        CHECK(response->contentType() == drogon::CT_APPLICATION_JSON);
+      });
+
+  auto request_get = drogon::HttpRequest::newCustomHttpRequest(json);
+  request_get->setMethod(drogon::HttpMethod::Get);
+  request_get->setPath(PATH "website=google.com");
+  client->sendRequest(
+      request_get, [TEST_CTX](drogon::ReqResult result,
+                              const drogon::HttpResponsePtr& response) {
         REQUIRE(result == drogon::ReqResult::Ok);
         REQUIRE(response != nullptr);
 
