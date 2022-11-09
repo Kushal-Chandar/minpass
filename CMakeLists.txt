@@ -21,11 +21,11 @@ target_link_libraries(utilities PRIVATE project_compile_options)
 target_include_directories(utilities PUBLIC include)
 
 ###########################################
-### Minpass Crypto
+### Minpass crypto
 ###########################################
-add_executable(cryptopp-test)
+add_executable(minpass_crypto)
 target_sources(
-  cryptopp-test
+  minpass_crypto
   PRIVATE include/minpass_crypto.h
           src/minpass_crypto.cc
           include/minpass_crypto/scrypt_kdf.h
@@ -33,12 +33,11 @@ target_sources(
           include/minpass_crypto/crytopp_conversions.h
           src/minpass_crypto/crytopp_conversions.cc
           include/minpass_crypto/aes_gcm_256.h
-          src/minpass_crypto/aes_gcm_256.cc
-          src/cryptopp-test.cc)
-target_link_libraries(cryptopp-test PRIVATE project_compile_options)
-target_include_directories(cryptopp-test PUBLIC include)
-target_link_libraries(cryptopp-test PRIVATE cryptopp-static)
-target_link_libraries(cryptopp-test PRIVATE fmt::fmt)
+          src/minpass_crypto/aes_gcm_256.cc)
+target_link_libraries(minpass_crypto PRIVATE project_compile_options)
+target_include_directories(minpass_crypto PUBLIC include)
+target_link_libraries(minpass_crypto PRIVATE cryptopp-static)
+target_link_libraries(minpass_crypto PRIVATE fmt::fmt)
 
 ###########################################
 ### Minpass types

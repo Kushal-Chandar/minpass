@@ -6,7 +6,7 @@ You should be able to send and receive requests from this device across your loc
 
 I recommend using the docker image if you can.
 
-**Note:** Don't use your real passwords for testing. There is no encryption and user authencation.
+**Note:** Don't use your real passwords for testing. There is no user authencation.
 This is a v0.0.1 alpha release.
 
 ## Why C++ ?
@@ -208,7 +208,6 @@ Invoke-RestMethod -Uri $reqUrl -Method Get -Headers $headers -ContentType 'appli
 
 ## Goals
 
-- Encryption.
 - CMake install.
 - User authentication.
 - Reduce executable size.
