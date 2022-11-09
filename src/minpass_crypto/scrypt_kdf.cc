@@ -12,7 +12,7 @@
 
 namespace minpass::minpass_crypto {
 
-auto ScryptKDF::GetEncryptionKeyAndIV(
+auto ScryptKDF::GetEncryptionKeySaltIV(
     const CryptoPP::SecByteBlock& password_bytes)
     -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
                   CryptoPP::SecByteBlock> {
@@ -34,6 +34,17 @@ auto ScryptKDF::GetEncryptionKeyAndIV(
   prng.GenerateBlock(initialization_vector, initialization_vector.size());
 
   return {key, salt, initialization_vector};
+}
+
+auto ScryptKDF::GetDecryptionKey(const CryptoPP::SecByteBlock& password_bytes,
+                                 const CryptoPP::SecByteBlock& salt)
+    -> CryptoPP::SecByteBlock {
+  CryptoPP::SecByteBlock key(kKeySize_);
+  const CryptoPP::Scrypt scrypt;
+  // DeriveKey
+  scrypt.DeriveKey(key, key.size(), password_bytes, password_bytes.size(), salt,
+                   salt.size(), kCost_, kBlockSize_, kParallelization_);
+  return key;
 }
 
 auto ScryptKDF::AddSaltAndIVToCipher(

@@ -10,10 +10,13 @@ namespace minpass::minpass_crypto {
 
 class ScryptKDF {
  public:
-  static auto GetEncryptionKeyAndIV(
+  static auto GetEncryptionKeySaltIV(
       const CryptoPP::SecByteBlock& password_bytes)
       -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
                     CryptoPP::SecByteBlock>;
+  static auto GetDecryptionKey(const CryptoPP::SecByteBlock& password_bytes,
+                               const CryptoPP::SecByteBlock& salt)
+      -> CryptoPP::SecByteBlock;
   static auto AddSaltAndIVToCipher(
       CryptoPP::SecByteBlock& salt,
       CryptoPP::SecByteBlock& initialization_vector, std::string& cipher_text)
@@ -22,9 +25,9 @@ class ScryptKDF {
       const std::string& cipher_text_with_key_and_iv)
       -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock>;
 
-  static const int kKeySize_ = 32;
-  static const int kIVSize_ = 16;
-  static const int kSaltSize_ = 8;
+  static const int kKeySize_ = 32;  // 256 bits
+  static const int kIVSize_ = 12;   // 96 bits recommended sizes
+  static const int kSaltSize_ = 8;  // 32 bits recommended sizes
 
  private:
   static const int kCost_ = 1024;
