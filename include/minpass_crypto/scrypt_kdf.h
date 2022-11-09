@@ -22,7 +22,7 @@ class ScryptKDF {
       CryptoPP::SecByteBlock& initialization_vector, std::string& cipher_text)
       -> void;
   static auto SeperateSaltAndIVFromCipher(
-      const std::string& cipher_text_with_key_and_iv)
+      const std::string& cipher_text_with_salt_and_iv)
       -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock>;
 
   static const int kKeySize_ = 32;  // 256 bits
