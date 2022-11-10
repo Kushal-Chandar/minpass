@@ -12,6 +12,15 @@ class MinpassCrypto {
   virtual ~MinpassCrypto() = default;
 };
 
+class MinpassCryptoFactory {
+ public:
+  template <class CryptographicClass>
+  static auto CreateMinpassCrypto(const std::string &master_password)
+      -> std::unique_ptr<MinpassCrypto> {
+    return std::make_unique<CryptographicClass>(master_password);
+  }
+};
+
 }  // namespace minpass
 
 #endif  // MINPASS_INCLUDE_MINPASS_CRYPTO_H_
