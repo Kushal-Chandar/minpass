@@ -24,12 +24,12 @@ set(DOXYGEN_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/docs")
 set(DOXYGEN_EXCLUDE_PATTERNS "${CMAKE_CURRENT_SOURCE_DIR}/tools/*"
                              "${CMAKE_CURRENT_SOURCE_DIR}/build/*")
 # ----------------------------------------------------------------------------
-#   https://github.com/jothepro/doxygen-awesome-css v2.0.3
+#   https://github.com/jothepro/doxygen-awesome-css v2.1.0
 # ----------------------------------------------------------------------------
 FetchContent_Declare(
   _doxygen_theme
   GIT_REPOSITORY https://github.com/jothepro/doxygen-awesome-css.git
-  GIT_TAG v2.0.3)
+  GIT_TAG v2.1.0)
 FetchContent_MakeAvailable(_doxygen_theme)
 set(DOXYGEN_HTML_EXTRA_STYLESHEET
     "${_doxygen_theme_SOURCE_DIR}/doxygen-awesome.css"
@@ -39,5 +39,5 @@ find_package(Doxygen REQUIRED OPTIONAL_COMPONENTS dot)
 doxygen_add_docs(
   doxygen ${PROJECT_SOURCE_DIR}
   COMMENT
-    "Generating documentation - entry file: ${PROJECT_SOURCE_DIR}/docs/index.html"
+    "Generating documentation - entry file: ${PROJECT_SOURCE_DIR}/docs/html/index.html"
 )

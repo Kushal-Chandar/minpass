@@ -55,21 +55,21 @@ DROGON_TEST(HelpersTests_MakeResponse_ResponseTest2) {
   CHECK(http_response_func->statusCode() == http_response_test->statusCode());
 }
 
-DROGON_TEST(HelpersTests_ValidateRequest_ExceptionTest) {
+DROGON_TEST(HelpersTests_ParseRequest_ExceptionTest) {
   // Testing
-  // 1. ParseJsonRequest function should not throw even if json is null
+  // 1. ParseRequest function should not throw even if json is null
   Json::Value request;
   auto http_request = drogon::HttpRequest::newHttpJsonRequest(request);
   auto http_response = drogon::HttpResponse::newHttpJsonResponse(request);
   Json::Value response_object;
 
-  MANDATE_NOTHROW(minpass::sqlite3_client::Helpers::ValidateRequest(
+  MANDATE_NOTHROW(minpass::sqlite3_client::Helpers::ParseRequest(
       http_request, http_response, response_object));
 }
 
-DROGON_TEST(HelpersTests_ValidateRequest_ReturnValueTest1) {
+DROGON_TEST(HelpersTests_ParseRequest_ReturnValueTest1) {
   // Testing
-  // 1. ParseJsonRequest must return the correct structure bindings when json
+  // 1. ParseRequest must return the correct structure bindings when json
   // was parsed
 
   Json::Value request;
@@ -91,7 +91,7 @@ DROGON_TEST(HelpersTests_ValidateRequest_ReturnValueTest1) {
   Json::Value response_object;
 
   auto [is_valid, email, username, password] =
-      minpass::sqlite3_client::Helpers::ValidateRequest(
+      minpass::sqlite3_client::Helpers::ParseRequest(
           http_request, http_response, response_object);
 
   CHECK(is_valid == true);
@@ -101,9 +101,9 @@ DROGON_TEST(HelpersTests_ValidateRequest_ReturnValueTest1) {
   CHECK(http_response->statusCode() == drogon::k202Accepted);
 }
 
-DROGON_TEST(HelpersTests_ValidateRequest_ReturnValueTest2) {
+DROGON_TEST(HelpersTests_ParseRequest_ReturnValueTest2) {
   // Testing
-  // 1. ParseJsonRequest must return empty structure bindings when json
+  // 1. ParseRequest must return empty structure bindings when json
   // was not parsed
 
   std::string illegal_request;
@@ -114,7 +114,7 @@ DROGON_TEST(HelpersTests_ValidateRequest_ReturnValueTest2) {
   Json::Value response_object;
 
   auto [is_valid, email, username, password] =
-      minpass::sqlite3_client::Helpers::ValidateRequest(
+      minpass::sqlite3_client::Helpers::ParseRequest(
           http_request, http_response, response_object);
 
   CHECK(is_valid == false);
@@ -124,9 +124,9 @@ DROGON_TEST(HelpersTests_ValidateRequest_ReturnValueTest2) {
   CHECK(http_response->statusCode() == drogon::k400BadRequest);
 }
 
-DROGON_TEST(HelpersTests_ValidateRequest_SQLi) {
+DROGON_TEST(HelpersTests_ParseRequest_SQLi) {
   // Testing
-  // 1. ParseJsonRequest must not break again SQL injections
+  // 1. ParseRequest must not break again SQL injections
 
   Json::Value sql_injection;
   sql_injection["email"] = "mail@mail.com";
@@ -146,7 +146,7 @@ DROGON_TEST(HelpersTests_ValidateRequest_SQLi) {
   Json::Value response_object;
 
   auto [is_valid, email, username, password] =
-      minpass::sqlite3_client::Helpers::ValidateRequest(
+      minpass::sqlite3_client::Helpers::ParseRequest(
           http_request, http_response, response_object);
 
   CHECK(is_valid == true);

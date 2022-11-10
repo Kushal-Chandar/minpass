@@ -1,5 +1,5 @@
-#if !defined(MINPASS_TYPES)
-#define MINPASS_TYPES
+#if !defined(MINPASS_INCLUDE_MINPASS_TYPES_H_)
+#define MINPASS_INCLUDE_MINPASS_TYPES_H_
 
 #include <sstream>
 #include <string>
@@ -28,4 +28,4 @@ auto operator>>(std::stringstream& string_stream,
 
 }  // namespace minpass
 
-#endif  // MINPASS_TYPES
+#endif  // MINPASS_INCLUDE_MINPASS_TYPES_H_

@@ -15,6 +15,7 @@ find_package(PythonInterp)
 if(PYTHON_EXECUTABLE)
   find_program(RUN-CLANG-TIDY NAMES run-clang-tidy)
   if(RUN-CLANG-TIDY)
+    message(STATUS "clang-tidy was found.")
     add_custom_target(
       clang-tidy
       COMMAND ${PYTHON_EXECUTABLE} ${RUN-CLANG-TIDY}
@@ -28,6 +29,7 @@ if(PYTHON_EXECUTABLE)
   find_program(CPPCHECK NAMES cppcheck)
   find_program(CPPCHECK_HTMLREPORT NAMES cppcheck-htmlreport)
   if(CPPCHECK)
+    message(STATUS "cppcheck was found.")
     set(CPPCHECK_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/cppcheck)
     if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
       set(CPPCHECK_COMPILER_OPTION --clang=clang)
@@ -58,6 +60,7 @@ if(PYTHON_EXECUTABLE)
 
   find_program(IWYU_TOOL NAMES iwyu_tool.py)
   if(IWYU_TOOL)
+    message(STATUS "include-what-you-use was found.")
     add_custom_target(
       iwyu
       COMMAND ${PYTHON_EXECUTABLE} ${IWYU_TOOL} -p ${CMAKE_CURRENT_BINARY_DIR}
@@ -68,5 +71,6 @@ if(PYTHON_EXECUTABLE)
     message(STATUS "include-what-you-use was not found.")
   endif()
 else()
+  # all of them need python
   message(STATUS "python was not found cannot run static analyzers.")
 endif()

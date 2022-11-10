@@ -1,6 +1,6 @@
 var namespaces_dup =
 [
-    [ "sum", "namespacesum.html", [
-      [ "sum", "namespacesum.html#ab433fef582a473d78bd8d7921d7fd060", null ]
-    ] ]
+    [ "drogon", "namespacedrogon.html", "namespacedrogon" ],
+    [ "Json", "namespace_json.html", null ],
+    [ "minpass", "namespaceminpass.html", "namespaceminpass" ]
 ];

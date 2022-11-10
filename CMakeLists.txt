@@ -8,8 +8,8 @@ include(cmake/init.cmake)
 ### Required packages
 ###########################################
 find_package(Drogon CONFIG REQUIRED)
-find_package(OpenSSL REQUIRED)
 find_package(fmt CONFIG REQUIRED)
+find_package(cryptopp CONFIG REQUIRED)
 
 ###########################################
 ### Utilities
@@ -19,6 +19,25 @@ target_sources(utilities PRIVATE src/utilities/strong_types.cc
                                  include/utilities/strong_types.h)
 target_link_libraries(utilities PRIVATE project_compile_options)
 target_include_directories(utilities PUBLIC include)
+
+###########################################
+### Minpass crypto
+###########################################
+add_library(minpass_crypto)
+target_sources(
+  minpass_crypto
+  PRIVATE include/minpass_crypto.h
+          src/minpass_crypto.cc
+          include/minpass_crypto/scrypt_kdf.h
+          src/minpass_crypto/scrypt_kdf.cc
+          include/minpass_crypto/crytopp_conversions.h
+          src/minpass_crypto/crytopp_conversions.cc
+          include/minpass_crypto/aes_gcm_256.h
+          src/minpass_crypto/aes_gcm_256.cc)
+target_link_libraries(minpass_crypto PRIVATE project_compile_options)
+target_include_directories(minpass_crypto PUBLIC include)
+target_link_libraries(minpass_crypto PRIVATE cryptopp-static)
+target_link_libraries(minpass_crypto PRIVATE fmt::fmt)
 
 ###########################################
 ### Minpass types
@@ -59,14 +78,3 @@ target_link_libraries(minpass PRIVATE Drogon::Drogon)
 if(WIN32)
   target_link_libraries(minpass PRIVATE wsock32 ws2_32 iphlpapi)
 endif()
-target_link_libraries(minpass PRIVATE OpenSSL::SSL OpenSSL::Crypto)
-
-###########################################
-### Minpass
-###########################################
-add_executable(openssl_test)
-target_sources(
-  openssl_test PRIVATE include/utilities/openssl_gcm.h
-                       src/utilities/openssl_gcm.cc src/openssl_test.cc)
-target_link_libraries(openssl_test PRIVATE project_compile_options)
-target_link_libraries(openssl_test PRIVATE OpenSSL::Crypto)

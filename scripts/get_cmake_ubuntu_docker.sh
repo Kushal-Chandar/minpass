@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Please remove the existing cmake package before running this script
+
 cmake_version="$1"
 jobs="$2"
 if [ -z "$cmake_version" ]

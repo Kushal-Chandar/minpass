@@ -1,5 +1,5 @@
-#if !defined(SQLITE3_CLIENT_HELPERS)
-#define SQLITE3_CLIENT_HELPERS
+#if !defined(MINPASS_INCLUDE_SQLITE3_CLIENT_HELPERS_H_)
+#define MINPASS_INCLUDE_SQLITE3_CLIENT_HELPERS_H_
 
 #include <drogon/HttpTypes.h>         // for k200OK, HttpStatusCode
 #include <drogon/drogon_callbacks.h>  // for HttpResponsePtr, HttpRequestPtr
@@ -26,12 +26,12 @@ class Helpers {
   static auto MakeResponse(Json::Value &response_object,
                            drogon::HttpStatusCode status_code = drogon::k200OK)
       -> drogon::HttpResponsePtr;
-  static auto ValidateRequest(const drogon::HttpRequestPtr &http_request,
-                              drogon::HttpResponsePtr &http_response,
-                              Json::Value &response_object_out)
+  static auto ParseRequest(const drogon::HttpRequestPtr &http_request,
+                           drogon::HttpResponsePtr &http_response,
+                           Json::Value &response_object_out)
       -> std::tuple<bool, Email, Username, Password>;
 };
 
 }  // namespace minpass::sqlite3_client
 
-#endif  // SQLITE3_CLIENT_HELPERS
+#endif  // MINPASS_INCLUDE_SQLITE3_CLIENT_HELPERS_H_

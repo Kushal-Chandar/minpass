@@ -2,6 +2,7 @@ include_guard()
 
 option(INSTALL_OR_UPDATE_VCPKG
        "Install or update vcpkg in the project root directory" OFF)
+option(ENABLE_VCPKG "Enable package management with vcpkg" OFF)
 option(MANIFEST_FEATURE_TEST "Get packages required for testing" OFF)
 option(WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
 option(CODE_COVERAGE "Enable coverage reporting" OFF)
@@ -57,18 +58,15 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # ----------------------------------------------------------------------------
 #   Link time optimizations
 # ----------------------------------------------------------------------------
-if(ENABLE_IPO)
-  if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL
-                                            "RelWithDebInfo")
-    include(CheckIPOSupported)
-    check_ipo_supported(RESULT result OUTPUT output)
-    if(result)
-      set(CMAKE_INTERPROCEDURAL_OPTIMIZATION
-          ON
-          PARENT_SCOPE)
-    else()
-      message(STATUS "IPO is not supported: ${output}")
-    endif()
+if(ENABLE_IPO AND (CMAKE_BUILD_TYPE STREQUAL "Release"
+                   OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
+  include(CheckIPOSupported)
+  check_ipo_supported(RESULT result OUTPUT output)
+  if(result)
+    message(STATUS "IPO is supported")
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
+  else()
+    message(STATUS "IPO is not supported: ${output}")
   endif()
 endif()
 
@@ -78,24 +76,14 @@ endif()
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # ----------------------------------------------------------------------------
-#   Dependency graph visualization
-# ----------------------------------------------------------------------------
-set(GRAPHVIZ_CUSTOM_TARGETS TRUE)
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/graphviz)
-add_custom_target(
-  graphviz
-  COMMAND ${CMAKE_COMMAND} "--graphviz=graphviz/dependency.dot" .
-  COMMAND dot -Tsvg graphviz/dependency.dot -o graphviz/dependency.svg
-  WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
-
-# ----------------------------------------------------------------------------
 #   Call other scripts from current directory
 # ----------------------------------------------------------------------------
+include(${CMAKE_CURRENT_LIST_DIR}/graphviz.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/ccache.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compiler_warnings.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/sanitizers.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/static_analysis.cmake)
-if(INSTALL_OR_UPDATE_VCPKG)
+if(ENABLE_VCPKG)
   include(${CMAKE_CURRENT_LIST_DIR}/vcpkg.cmake)
 endif()
 if(BUILD_TESTING)
