@@ -2,6 +2,11 @@
 
 #include <drogon/drogon_test.h>
 
+#include "test_utilities/include/random_string_generator.h"
+
+const int kMasterPasswordLen = 20;
+const int kPasswordLen = 30;
+
 DROGON_TEST(MinpassCryptoAESGCM256_EncryptionDecryptionTest_Case1) {
   // Testing:
   // Encryption and decryption of text where the encrypted text is not modifed
@@ -9,9 +14,10 @@ DROGON_TEST(MinpassCryptoAESGCM256_EncryptionDecryptionTest_Case1) {
   // Expected:
   // Text must decrypt with as usual
 
-  auto master_password = std::string("8k23cc8k3298");  // Random password
+  auto master_password =
+      minpass::tests::generate_random_string(kMasterPasswordLen);
   minpass::minpass_crypto::AES_GCM_256 crypto(master_password);
-  auto password = std::string("This is very very long password");
+  auto password = minpass::tests::generate_random_string(kPasswordLen);
   auto enc = crypto.Encrypt(password);
   auto dec = crypto.Decrypt(enc);
   CHECK(password == dec);
@@ -24,9 +30,10 @@ DROGON_TEST(MinpassCryptoAESGCM256_EncryptionDecryptionTest_Case2) {
   // Expected:
   // Text must not decrypt
 
-  auto master_password = std::string("8k23cc8k3298");  // Random password
+  auto master_password =
+      minpass::tests::generate_random_string(kMasterPasswordLen);
   minpass::minpass_crypto::AES_GCM_256 crypto(master_password);
-  auto password = std::string("This is very very long password");
+  auto password = minpass::tests::generate_random_string(kPasswordLen);
   auto enc = crypto.Encrypt(password);
   enc.push_back('i');
   auto dec = crypto.Decrypt(enc);

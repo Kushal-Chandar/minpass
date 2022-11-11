@@ -10,8 +10,14 @@
 
 #include <string_view>  // for basic_string_view
 
+#include "test_utilities/include/random_string_generator.h"
+
 #define PORT "8080"  // if you have a different port to listen
 #define PATH "/minpass/SQLite3Client/"
+
+const int kUsernameLen = 20;
+const int kEmailLen = 20;
+const int kPasswordLen = 30;
 
 DROGON_TEST(RestAPITest_Get_Case1) {
   // Testing
@@ -43,9 +49,9 @@ DROGON_TEST(RestAPITest_Get_Case2) {
   auto client = drogon::HttpClient::newHttpClient("http://localhost:" PORT);
 
   Json::Value json;
-  json["email"] = "google.com";
-  json["password"] = "pas22sls";
-  json["username"] = "ksdkfsd";
+  json["email"] = minpass::tests::generate_random_string(kEmailLen);
+  json["username"] = minpass::tests::generate_random_string(kUsernameLen);
+  json["password"] = minpass::tests::generate_random_string(kPasswordLen);
 
   auto request_post = drogon::HttpRequest::newHttpJsonRequest(json);
   request_post->setMethod(drogon::HttpMethod::Post);
@@ -89,9 +95,9 @@ DROGON_TEST(RestAPITest_Delete_Case1) {
   auto client = drogon::HttpClient::newHttpClient("http://localhost:" PORT);
 
   Json::Value json;
-  json["email"] = "google.com";
-  json["password"] = "pas22sls";
-  json["username"] = "ksdkfsd";
+  json["email"] = minpass::tests::generate_random_string(kEmailLen);
+  json["username"] = minpass::tests::generate_random_string(kUsernameLen);
+  json["password"] = minpass::tests::generate_random_string(kPasswordLen);
 
   auto request_post = drogon::HttpRequest::newHttpJsonRequest(json);
   request_post->setMethod(drogon::HttpMethod::Post);

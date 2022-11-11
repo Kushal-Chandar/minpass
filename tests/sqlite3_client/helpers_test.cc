@@ -8,6 +8,11 @@
 
 #include <iostream>
 
+#include "test_utilities/include/random_string_generator.h"
+
+const int kUsernameLen = 20;
+const int kPasswordLen = 30;
+
 DROGON_TEST(HelpersTests_CommonExceptionCatch) {
   // Testing
   // 1. CommonExceptionCatch function should not throw
@@ -74,8 +79,8 @@ DROGON_TEST(HelpersTests_ParseRequest_ReturnValueTest1) {
 
   Json::Value request;
   request["email"] = "mail@mail.com";
-  request["password"] = "pas22sls";
-  request["username"] = "ksdkfsd";
+  request["password"] = minpass::tests::generate_random_string(kUsernameLen);
+  request["username"] = minpass::tests::generate_random_string(kPasswordLen);
 
   // build the json into a string
   Json::StreamWriterBuilder builder;
@@ -130,7 +135,8 @@ DROGON_TEST(HelpersTests_ParseRequest_SQLi) {
 
   Json::Value sql_injection;
   sql_injection["email"] = "mail@mail.com";
-  sql_injection["username"] = "ksdkfsd";
+  sql_injection["username"] =
+      minpass::tests::generate_random_string(kUsernameLen).data();
   sql_injection["password"] = "pas22sls'); AND '1' = '1'";
 
   // build the json into a string

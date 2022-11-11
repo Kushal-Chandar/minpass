@@ -54,7 +54,7 @@ auto ScryptKDF::AddSaltAndIVToCipher(
       salt + initialization_vector);
 }
 
-auto ScryptKDF::SeperateSaltAndIVFromCipher(
+auto ScryptKDF::GetSaltAndIVFromCipher(
     const std::string& cipher_text_with_salt_and_iv)
     -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> {
   auto initialization_vector = CryptoppConversions::GetSecByteBlockFromString(

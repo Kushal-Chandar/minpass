@@ -1,11 +1,8 @@
 #include "minpass_crypto/aes_gcm_256.h"
 
 #include <cryptopp/aes.h>
-#include <cryptopp/cryptlib.h>
-#include <cryptopp/files.h>
 #include <cryptopp/filters.h>
 #include <cryptopp/gcm.h>
-#include <cryptopp/hex.h>
 #include <cryptopp/secblock.h>
 #include <fmt/core.h>
 
@@ -67,7 +64,7 @@ auto AES_GCM_256::Decrypt(const std::string& cipher_text) -> std::string {
 
     // Get salt and iv from cipher text
     auto [salt, initialization_vector] =
-        ScryptKDF::SeperateSaltAndIVFromCipher(cipher_text);
+        ScryptKDF::GetSaltAndIVFromCipher(cipher_text);
 
     // Generate same derived key using the salt
     auto derived_key = ScryptKDF::GetDecryptionKey(
