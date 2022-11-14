@@ -20,8 +20,6 @@ DROGON_TEST(MinpassScrypt_EncryptionKeySaltIV_DecryptionKey) {
   // Testing:
   // EncryptionKeySaltIv and DecryptionKey must generate the same derived key
 
-  const int tag_size = 16;
-
   auto password = minpass::tests::generate_random_string(kMasterPasswordLen);
   auto password_bytes =
       minpass::minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
@@ -41,8 +39,6 @@ DROGON_TEST(MinpassScrypt_EncryptionKeySaltIV_DecryptionKey) {
 DROGON_TEST(MinpassScrypt_AddSaltAndIVToCipher_GetSaltAndIVFromCipher) {
   // Testing:
   // Get same salt, iv and cipher before adding and getting
-
-  const int tag_size = 16;
 
   auto password = minpass::tests::generate_random_string(kMasterPasswordLen);
   auto cipher = minpass::tests::generate_random_string(kCipherLen);

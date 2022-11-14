@@ -58,7 +58,9 @@ target_sources(
   PRIVATE src/sqlite3_client.cc
           include/sqlite3_client.h
           src/sqlite3_client/helpers.cc
-          include/sqlite3_client/helpers.h)
+          include/sqlite3_client/helpers.h
+          src/sqlite3_client/request_handler.cc
+          include/sqlite3_client/request_handler.h)
 target_link_libraries(sqlite3_client PRIVATE project_compile_options)
 target_include_directories(sqlite3_client PUBLIC include)
 target_link_libraries(sqlite3_client PRIVATE Drogon::Drogon)

@@ -5,7 +5,8 @@
 
 #include <tuple>  // for tuple_element<>::type
 
-#include "sqlite3_client/helpers.h"  // for Helpers
+#include "sqlite3_client/helpers.h"          // for Helpers
+#include "sqlite3_client/request_handler.h"  // for Request Handler
 namespace drogon {
 class DrObjectBase;
 }  // namespace drogon
@@ -34,8 +35,8 @@ auto SQLite3Client::SetPasswordData(
   Json::Value response_object;
   drogon::HttpResponsePtr http_response;
   auto [is_valid, email, username, password] =
-      sqlite3_client::Helpers::ParseRequest(http_request, http_response,
-                                            response_object);
+      sqlite3_client::RequestHandler::ParseRequestJson(
+          http_request, http_response, response_object);
   if (is_valid) {
     client_->execSqlAsync(
         "INSERT INTO " + table_name_.get() + " VALUES ($1, $2, $3, $4);\n",
@@ -78,8 +79,8 @@ auto SQLite3Client::ModifyPasswordData(
   Json::Value response_object;
   drogon::HttpResponsePtr http_response;
   auto [is_valid, email, username, password] =
-      sqlite3_client::Helpers::ParseRequest(http_request, http_response,
-                                            response_object);
+      sqlite3_client::RequestHandler::ParseRequestJson(
+          http_request, http_response, response_object);
   if (is_valid) {
     client_->execSqlAsync("UPDATE " + table_name_.get() +
                               " SET Email = $1, Username = $2, Password = $3\n"
