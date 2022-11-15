@@ -5,8 +5,8 @@
 
 #include <tuple>  // for tuple_element<>::type
 
-#include "sqlite3_client/helpers.h"          // for Helpers
-#include "sqlite3_client/request_handler.h"  // for Request Handler
+#include "sqlite3_client/helpers.h"            // for Helpers
+#include "sqlite3_client/request_processor.h"  // for RequestProcessor
 namespace drogon {
 class DrObjectBase;
 }  // namespace drogon
@@ -34,8 +34,8 @@ auto SQLite3Client::SetPasswordData(
     const Website &website) -> void {
   Json::Value response_object;
   drogon::HttpResponsePtr http_response;
-  auto [is_valid, email, username, password] =
-      sqlite3_client::RequestHandler::ParseRequestJson(
+  auto [is_valid, email, username, password, master_password] =
+      sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
   if (is_valid) {
     client_->execSqlAsync(
@@ -78,8 +78,8 @@ auto SQLite3Client::ModifyPasswordData(
     const Website &website) -> void {
   Json::Value response_object;
   drogon::HttpResponsePtr http_response;
-  auto [is_valid, email, username, password] =
-      sqlite3_client::RequestHandler::ParseRequestJson(
+  auto [is_valid, email, username, password, master_password] =
+      sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
   if (is_valid) {
     client_->execSqlAsync("UPDATE " + table_name_.get() +

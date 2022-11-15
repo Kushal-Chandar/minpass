@@ -1,4 +1,4 @@
-#include "sqlite3_client/request_handler.h"
+#include "sqlite3_client/request_processor.h"
 
 #include <drogon/HttpRequest.h>    // for HttpRequestPtr
 #include <drogon/HttpResponse.h>   // for HttpResponse
@@ -13,8 +13,9 @@
 
 const int kUsernameLen = 20;
 const int kPasswordLen = 30;
+const int kMasterPasswordLen = 30;
 
-DROGON_TEST(RequestHandlerTests_ParseRequestJson_ExceptionTest) {
+DROGON_TEST(RequestProcessorTests_ParseRequestJson_ExceptionTest) {
   // Testing
   // 1. ParseRequest function should not throw even if json is null
   Json::Value request;
@@ -22,11 +23,11 @@ DROGON_TEST(RequestHandlerTests_ParseRequestJson_ExceptionTest) {
   auto http_response = drogon::HttpResponse::newHttpJsonResponse(request);
   Json::Value response_object;
 
-  MANDATE_NOTHROW(minpass::sqlite3_client::RequestHandler::ParseRequestJson(
+  MANDATE_NOTHROW(minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
       http_request, http_response, response_object));
 }
 
-DROGON_TEST(RequestHandlerTests_ParseRequestJson_ReturnValueTest1) {
+DROGON_TEST(RequestProcessorTests_ParseRequestJson_ReturnValueTest1) {
   // Testing
   // 1. ParseRequest must return the correct structure bindings when json
   // was parsed
@@ -35,6 +36,8 @@ DROGON_TEST(RequestHandlerTests_ParseRequestJson_ReturnValueTest1) {
   request["email"] = "mail@mail.com";
   request["password"] = minpass::tests::generate_random_string(kUsernameLen);
   request["username"] = minpass::tests::generate_random_string(kPasswordLen);
+  request["master_password"] =
+      minpass::tests::generate_random_string(kMasterPasswordLen);
 
   // build the json into a string
   Json::StreamWriterBuilder builder;
@@ -50,7 +53,7 @@ DROGON_TEST(RequestHandlerTests_ParseRequestJson_ReturnValueTest1) {
   Json::Value response_object;
 
   auto [is_valid, email, username, password] =
-      minpass::sqlite3_client::RequestHandler::ParseRequestJson(
+      minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
 
   CHECK(is_valid == true);
@@ -60,7 +63,7 @@ DROGON_TEST(RequestHandlerTests_ParseRequestJson_ReturnValueTest1) {
   CHECK(http_response->statusCode() == drogon::k202Accepted);
 }
 
-DROGON_TEST(RequestHandlerTests_ParseRequestJson_ReturnValueTest2) {
+DROGON_TEST(RequestProcessorTests_ParseRequestJson_ReturnValueTest2) {
   // Testing
   // 1. ParseRequest must return empty structure bindings when json
   // was not parsed
@@ -73,7 +76,7 @@ DROGON_TEST(RequestHandlerTests_ParseRequestJson_ReturnValueTest2) {
   Json::Value response_object;
 
   auto [is_valid, email, username, password] =
-      minpass::sqlite3_client::RequestHandler::ParseRequestJson(
+      minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
 
   CHECK(is_valid == false);
@@ -83,7 +86,7 @@ DROGON_TEST(RequestHandlerTests_ParseRequestJson_ReturnValueTest2) {
   CHECK(http_response->statusCode() == drogon::k400BadRequest);
 }
 
-DROGON_TEST(RequestHandlerTests_ParseRequestJson_SQLi) {
+DROGON_TEST(RequestProcessorTests_ParseRequestJson_SQLi) {
   // Testing
   // 1. ParseRequest must not break again SQL injections
 
@@ -106,7 +109,7 @@ DROGON_TEST(RequestHandlerTests_ParseRequestJson_SQLi) {
   Json::Value response_object;
 
   auto [is_valid, email, username, password] =
-      minpass::sqlite3_client::RequestHandler::ParseRequestJson(
+      minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
 
   CHECK(is_valid == true);

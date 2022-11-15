@@ -23,7 +23,7 @@ add_executable(
   minpass_crypto/crytopp_conversions_test.cc
   minpass_crypto/scrypt_kdf_test.cc
   sqlite3_client/helpers_test.cc
-  sqlite3_client/request_handler_test.cc
+  sqlite3_client/request_processor_test.cc
   utilities/strong_types_test.cc)
 target_link_libraries(minpass_tests PRIVATE sqlite3_client)
 target_link_libraries(minpass_tests PRIVATE minpass_crypto)
