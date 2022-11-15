@@ -5,7 +5,6 @@
 #include <drogon/orm/Exception.h>         // for DrogonDbException
 #include <drogon/utils/FunctionTraits.h>  // for HttpResponsePtr
 #include <fmt/color.h>                    // for fg, print, color, color::red
-#include <fmt/core.h>                     // for basic_string_view
 #include <fmt/format.h>                   // for buffer::append
 #include <json/value.h>                   // for Value
 

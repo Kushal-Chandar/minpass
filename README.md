@@ -204,6 +204,7 @@ Invoke-RestMethod -Uri $reqUrl -Method Get -Headers $headers -ContentType 'appli
 
 - [drogon](https://github.com/drogonframework/drogon)
 - [fmt](https://github.com/fmtlib/fmt)
+- [cryptopp](https://github.com/weidai11/cryptopp)
 - I would like to mention [Thunder Client](https://www.thunderclient.com/), I have used it for the demo.
 
 ## Goals
