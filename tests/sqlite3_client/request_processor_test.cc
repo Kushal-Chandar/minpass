@@ -52,7 +52,7 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_ReturnValueTest1) {
   auto http_response = drogon::HttpResponse::newHttpResponse();
   Json::Value response_object;
 
-  auto [is_valid, email, username, password] =
+  auto [is_valid, email, username, password, master_password] =
       minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
 
@@ -60,6 +60,7 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_ReturnValueTest1) {
   CHECK(email.get() == request["email"]);
   CHECK(username.get() == request["username"]);
   CHECK(password.get() == request["password"]);
+  CHECK(master_password.get() == request["master_password"]);
   CHECK(http_response->statusCode() == drogon::k202Accepted);
 }
 
@@ -75,7 +76,7 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_ReturnValueTest2) {
   auto http_response = drogon::HttpResponse::newHttpResponse();
   Json::Value response_object;
 
-  auto [is_valid, email, username, password] =
+  auto [is_valid, email, username, password, master_password] =
       minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
 
@@ -83,6 +84,7 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_ReturnValueTest2) {
   CHECK(email.get() == "");
   CHECK(username.get() == "");
   CHECK(password.get() == "");
+  CHECK(master_password.get() == "");
   CHECK(http_response->statusCode() == drogon::k400BadRequest);
 }
 
@@ -95,6 +97,8 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_SQLi) {
   sql_injection["username"] =
       minpass::tests::generate_random_string(kUsernameLen).data();
   sql_injection["password"] = "pas22sls'); AND '1' = '1'";
+  sql_injection["master_password"] =
+      minpass::tests::generate_random_string(kMasterPasswordLen).data();
 
   // build the json into a string
   Json::StreamWriterBuilder builder;
@@ -108,7 +112,7 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_SQLi) {
   auto http_response = drogon::HttpResponse::newHttpResponse();
   Json::Value response_object;
 
-  auto [is_valid, email, username, password] =
+  auto [is_valid, email, username, password, master_password] =
       minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
 
@@ -116,5 +120,6 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_SQLi) {
   CHECK(email.get() == sql_injection["email"]);
   CHECK(username.get() == sql_injection["username"]);
   CHECK(password.get() == sql_injection["password"]);
+  CHECK(master_password.get() == sql_injection["master_password"]);
   CHECK(http_response->statusCode() == drogon::k202Accepted);
 }
