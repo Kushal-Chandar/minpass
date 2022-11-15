@@ -30,4 +30,11 @@ auto RequestProcessor::ParseRequestJson(
   };
 }
 
+auto RequestProcessor::EncryptData(Email &email, Username &username,
+                                   Password &password,
+                                   MasterPassword &master_password) -> void {}
+
+auto RequestProcessor::DecryptData(Email &email, Username &username,
+                                   Password &password,
+                                   MasterPassword &master_password) -> void {}
 }  // namespace minpass::sqlite3_client

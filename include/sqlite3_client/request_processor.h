@@ -19,13 +19,11 @@ class RequestProcessor {
                                Json::Value &response_object_out)
       -> std::tuple<bool, Email, Username, Password, MasterPassword>;
 
-  // static auto EncryptData(Email &email, Username &username, Password
-  // &password,
-  //                         MasterPassword &master_password) -> void;
+  static auto EncryptData(Email &email, Username &username, Password &password,
+                          MasterPassword &master_password) -> void;
 
-  // static auto DecryptData(Email &email, Username &username, Password
-  // &password,
-  //                         MasterPassword &master_password) -> void;
+  static auto DecryptData(Email &email, Username &username, Password &password,
+                          MasterPassword &master_password) -> void;
 };
 
 }  // namespace minpass::sqlite3_client
