@@ -18,6 +18,7 @@
 const int kUsernameLen = 20;
 const int kEmailLen = 20;
 const int kPasswordLen = 30;
+const int kMasterPasswordLen = 30;
 
 DROGON_TEST(RestAPITest_Get_Case1) {
   // Testing
@@ -25,9 +26,12 @@ DROGON_TEST(RestAPITest_Get_Case1) {
 
   auto client = drogon::HttpClient::newHttpClient("http://localhost:" PORT);
   Json::Value json;
-  auto request = drogon::HttpRequest::newCustomHttpRequest(json);
+  auto request = drogon::HttpRequest::newHttpJsonRequest(json);
+  json["master_password"] =
+      minpass::tests::generate_random_string(kMasterPasswordLen);
   request->setMethod(drogon::HttpMethod::Get);
   request->setPath(PATH "website=notthere.com");
+
   client->sendRequest(request, [TEST_CTX](
                                    drogon::ReqResult result,
                                    const drogon::HttpResponsePtr& response) {
@@ -47,15 +51,17 @@ DROGON_TEST(RestAPITest_Get_Case2) {
   // Get when the website is in database.
 
   auto client = drogon::HttpClient::newHttpClient("http://localhost:" PORT);
-
+  auto master_password = minpass::tests::generate_random_string(
+      kMasterPasswordLen);  // we need same master password to decrypt
   Json::Value json;
   json["email"] = minpass::tests::generate_random_string(kEmailLen);
   json["username"] = minpass::tests::generate_random_string(kUsernameLen);
   json["password"] = minpass::tests::generate_random_string(kPasswordLen);
+  json["master_password"] = master_password;
 
   auto request_post = drogon::HttpRequest::newHttpJsonRequest(json);
   request_post->setMethod(drogon::HttpMethod::Post);
-  request_post->setPath(PATH "website=google.com");
+  request_post->setPath(PATH "website=there.com");
 
   client->sendRequest(
       request_post, [TEST_CTX](drogon::ReqResult result,
@@ -71,9 +77,11 @@ DROGON_TEST(RestAPITest_Get_Case2) {
         CHECK(response->contentType() == drogon::CT_APPLICATION_JSON);
       });
 
-  auto request_get = drogon::HttpRequest::newHttpRequest();
+  json.clear();
+  auto request_get = drogon::HttpRequest::newHttpJsonRequest(json);
+  json["master_password"] = master_password;
   request_get->setMethod(drogon::HttpMethod::Get);
-  request_get->setPath(PATH "website=google.com");
+  request_get->setPath(PATH "website=there.com");
   client->sendRequest(
       request_get, [TEST_CTX](drogon::ReqResult result,
                               const drogon::HttpResponsePtr& response) {
@@ -98,6 +106,8 @@ DROGON_TEST(RestAPITest_Delete_Case1) {
   json["email"] = minpass::tests::generate_random_string(kEmailLen);
   json["username"] = minpass::tests::generate_random_string(kUsernameLen);
   json["password"] = minpass::tests::generate_random_string(kPasswordLen);
+  json["master_password"] =
+      minpass::tests::generate_random_string(kMasterPasswordLen);
 
   auto request_post = drogon::HttpRequest::newHttpJsonRequest(json);
   request_post->setMethod(drogon::HttpMethod::Post);
@@ -133,5 +143,3 @@ DROGON_TEST(RestAPITest_Delete_Case1) {
         CHECK(response->contentType() == drogon::CT_APPLICATION_JSON);
       });
 }
-
-// Need more tests to validate requests

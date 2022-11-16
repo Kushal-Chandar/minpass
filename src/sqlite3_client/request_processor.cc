@@ -2,6 +2,8 @@
 
 #include <drogon/HttpRequest.h>
 
+#include "minpass_crypto.h"
+#include "minpass_crypto/aes_gcm_256.h"
 #include "sqlite3_client/helpers.h"
 
 namespace minpass::sqlite3_client {
@@ -11,7 +13,7 @@ auto RequestProcessor::ParseRequestJson(
     drogon::HttpResponsePtr &http_response, Json::Value &response_object_out)
     -> std::tuple<bool, Email, Username, Password, MasterPassword> {
   auto json = http_request->getJsonObject();
-  if (!json) {
+  if (!json || ((*json)["master_password"].asString().empty())) {
     response_object_out["message"] = "could not parse request";
     http_response =
         Helpers::MakeResponse(response_object_out, drogon::k400BadRequest);
@@ -32,9 +34,23 @@ auto RequestProcessor::ParseRequestJson(
 
 auto RequestProcessor::EncryptData(Email &email, Username &username,
                                    Password &password,
-                                   MasterPassword &master_password) -> void {}
+                                   MasterPassword &master_password) -> void {
+  auto crypto =
+      MinpassCryptoFactory::CreateMinpassCrypto<minpass_crypto::AES_GCM_256>(
+          master_password.get());
+  email = Email(crypto->Encrypt(email.get()));
+  username = Username(crypto->Encrypt(username.get()));
+  password = Password(crypto->Encrypt(password.get()));
+}
 
 auto RequestProcessor::DecryptData(Email &email, Username &username,
                                    Password &password,
-                                   MasterPassword &master_password) -> void {}
+                                   MasterPassword &master_password) -> void {
+  auto crypto =
+      MinpassCryptoFactory::CreateMinpassCrypto<minpass_crypto::AES_GCM_256>(
+          master_password.get());
+  email = Email(crypto->Decrypt(email.get()));
+  username = Username(crypto->Decrypt(username.get()));
+  password = Password(crypto->Decrypt(password.get()));
+}
 }  // namespace minpass::sqlite3_client

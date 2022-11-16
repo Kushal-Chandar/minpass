@@ -88,6 +88,41 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_ReturnValueTest2) {
   CHECK(http_response->statusCode() == drogon::k400BadRequest);
 }
 
+DROGON_TEST(RequestProcessorTests_ParseRequestJson_MasterPasswordNotGiven) {
+  // Testing
+  // 1. ParseRequest must return error response when master_password is not in
+  // the request
+
+  Json::Value request;
+  request["email"] = "mail@mail.com";
+  request["password"] = minpass::tests::generate_random_string(kUsernameLen);
+  request["username"] = minpass::tests::generate_random_string(kPasswordLen);
+
+  // build the json into a string
+  Json::StreamWriterBuilder builder;
+  builder["indentation"] = "";  // If you want whitespace-less output
+  const std::string output = Json::writeString(builder, request);
+
+  auto http_request = drogon::HttpRequest::newHttpRequest();
+  http_request->setBody(output);  // feed in that string
+  http_request->setContentTypeCode(
+      drogon::CT_APPLICATION_JSON);  // feed in that string
+
+  auto http_response = drogon::HttpResponse::newHttpResponse();
+  Json::Value response_object;
+
+  auto [is_valid, email, username, password, master_password] =
+      minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
+          http_request, http_response, response_object);
+
+  CHECK(is_valid == false);
+  CHECK(email.get() == "");
+  CHECK(username.get() == "");
+  CHECK(password.get() == "");
+  CHECK(master_password.get() == "");
+  CHECK(http_response->statusCode() == drogon::k400BadRequest);
+}
+
 DROGON_TEST(RequestProcessorTests_ParseRequestJson_SQLi) {
   // Testing
   // 1. ParseRequest must not break again SQL injections

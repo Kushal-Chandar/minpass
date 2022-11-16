@@ -64,6 +64,7 @@ target_sources(
 target_link_libraries(sqlite3_client PRIVATE project_compile_options)
 target_include_directories(sqlite3_client PUBLIC include)
 target_link_libraries(sqlite3_client PRIVATE Drogon::Drogon)
+target_link_libraries(sqlite3_client PRIVATE minpass_crypto)
 target_link_libraries(sqlite3_client PRIVATE minpass_types)
 target_link_libraries(sqlite3_client PRIVATE fmt::fmt)
 
