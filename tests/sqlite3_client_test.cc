@@ -8,11 +8,8 @@
 #include <json/value.h>          // for Value
 #include <json/writer.h>         // for operator<<
 
-#include <string_view>  // for basic_string_view
-
 #include "test_utilities/include/random_string_generator.h"
 
-#define PORT "8080"  // if you have a different port to listen
 #define PATH "/minpass/SQLite3Client/"
 
 const int kUsernameLen = 20;

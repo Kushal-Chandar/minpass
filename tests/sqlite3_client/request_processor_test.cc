@@ -52,7 +52,7 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_ReturnValueTest1) {
   auto http_response = drogon::HttpResponse::newHttpResponse();
   Json::Value response_object;
 
-  auto [is_valid, email, username, password, master_password] =
+  auto request_data =
       minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
 

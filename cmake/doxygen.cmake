@@ -35,9 +35,11 @@ set(DOXYGEN_HTML_EXTRA_STYLESHEET
     "${_doxygen_theme_SOURCE_DIR}/doxygen-awesome.css"
     "${_doxygen_theme_SOURCE_DIR}/doxygen-awesome-sidebar-only.css")
 
-find_package(Doxygen REQUIRED OPTIONAL_COMPONENTS dot)
-doxygen_add_docs(
-  doxygen ${PROJECT_SOURCE_DIR}
-  COMMENT
-    "Generating documentation - entry file: ${PROJECT_SOURCE_DIR}/docs/html/index.html"
-)
+find_package(Doxygen OPTIONAL_COMPONENTS dot)
+if(Doxygen_FOUND)
+  doxygen_add_docs(
+    doxygen ${PROJECT_SOURCE_DIR}
+    COMMENT
+      "Generating documentation - entry file: ${PROJECT_SOURCE_DIR}/docs/html/index.html"
+  )
+endif()

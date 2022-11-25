@@ -3,6 +3,7 @@
 
 #include <drogon/drogon_callbacks.h>  // for HttpResponsePtr, HttpRequestPtr
 
+#include <optional>
 #include <tuple>  // for tuple
 
 #include "minpass_types.h"  // for Email, Password, Username
@@ -17,7 +18,7 @@ class RequestProcessor {
   static auto ParseRequestJson(const drogon::HttpRequestPtr &http_request,
                                drogon::HttpResponsePtr &http_response,
                                Json::Value &response_object_out)
-      -> std::tuple<bool, Email, Username, Password, MasterPassword>;
+      -> std::optional<std::tuple<Email, Username, Password, MasterPassword>>;
 
   static auto EncryptData(Email &email, Username &username, Password &password,
                           MasterPassword &master_password) -> void;

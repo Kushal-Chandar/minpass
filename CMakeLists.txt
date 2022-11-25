@@ -36,7 +36,7 @@ target_sources(
           src/minpass_crypto/aes_gcm_256.cc)
 target_link_libraries(minpass_crypto PRIVATE project_compile_options)
 target_include_directories(minpass_crypto PUBLIC include)
-target_link_libraries(minpass_crypto PRIVATE cryptopp-static)
+target_link_libraries(minpass_crypto PRIVATE cryptopp::cryptopp)
 target_link_libraries(minpass_crypto PRIVATE fmt::fmt)
 
 ###########################################

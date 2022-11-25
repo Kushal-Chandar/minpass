@@ -34,12 +34,12 @@ auto SQLite3Client::SetPasswordData(
     const Website &website) -> void {
   Json::Value response_object;
   drogon::HttpResponsePtr http_response;
-  auto [is_valid, email, username, password, master_password] =
-      sqlite3_client::RequestProcessor::ParseRequestJson(
-          http_request, http_response, response_object);
-  sqlite3_client::RequestProcessor::EncryptData(email, username, password,
-                                                master_password);
-  if (is_valid) {
+  auto request_data = sqlite3_client::RequestProcessor::ParseRequestJson(
+      http_request, http_response, response_object);
+  if (request_data) {
+    auto [email, username, password, master_password] = request_data.value();
+    sqlite3_client::RequestProcessor::EncryptData(email, username, password,
+                                                  master_password);
     client_->execSqlAsync(
         "INSERT INTO " + table_name_.get() + " VALUES ($1, $2, $3, $4);\n",
         sqlite3_client::Helpers::EmptyCallback,
@@ -56,15 +56,21 @@ auto SQLite3Client::GetPasswordData(
   Json::Value response_object;
   drogon::HttpResponsePtr http_response;
 
+  // Multiple get requests not working need to fix
+  // consider making it an issue github
+
   client_->execSqlAsync(
       "SELECT * FROM " + table_name_.get() + " WHERE Website = $1;\n",
       [&response_object, &http_response, &http_request,
        &http_callback]([[maybe_unused]] const drogon::orm::Result &result) {
-        auto [is_valid, email, username, password, master_password] =
-            sqlite3_client::RequestProcessor::ParseRequestJson(
-                http_request, http_response, response_object);
+        auto request_data = sqlite3_client::RequestProcessor::ParseRequestJson(
+            http_request, http_response, response_object);
 
-        if (is_valid) {
+        if (request_data) {
+          auto [email, username, password, master_password] =
+              request_data.value();
+          sqlite3_client::RequestProcessor::EncryptData(
+              email, username, password, master_password);
           drogon::HttpStatusCode status_code = drogon::k404NotFound;
           response_object["message"] = "website not found";
           if (!result.empty()) {
@@ -97,10 +103,12 @@ auto SQLite3Client::ModifyPasswordData(
     const Website &website) -> void {
   Json::Value response_object;
   drogon::HttpResponsePtr http_response;
-  auto [is_valid, email, username, password, master_password] =
-      sqlite3_client::RequestProcessor::ParseRequestJson(
-          http_request, http_response, response_object);
-  if (is_valid) {
+  auto request_data = sqlite3_client::RequestProcessor::ParseRequestJson(
+      http_request, http_response, response_object);
+  if (request_data) {
+    auto [email, username, password, master_password] = request_data.value();
+    sqlite3_client::RequestProcessor::EncryptData(email, username, password,
+                                                  master_password);
     client_->execSqlAsync("UPDATE " + table_name_.get() +
                               " SET Email = $1, Username = $2, Password = $3\n"
                               "WHERE Website = $4;\n",
