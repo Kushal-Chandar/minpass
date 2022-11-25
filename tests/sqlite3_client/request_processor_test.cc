@@ -56,7 +56,8 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_ReturnValueTest1) {
       minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
 
-  CHECK(is_valid == true);
+  REQUIRE(request_data.has_value() == true);
+  auto [email, username, password, master_password] = request_data.value();
   CHECK(email.get() == request["email"]);
   CHECK(username.get() == request["username"]);
   CHECK(password.get() == request["password"]);
@@ -76,15 +77,11 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_ReturnValueTest2) {
   auto http_response = drogon::HttpResponse::newHttpResponse();
   Json::Value response_object;
 
-  auto [is_valid, email, username, password, master_password] =
+  auto request_data =
       minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
 
-  CHECK(is_valid == false);
-  CHECK(email.get() == "");
-  CHECK(username.get() == "");
-  CHECK(password.get() == "");
-  CHECK(master_password.get() == "");
+  REQUIRE(request_data.has_value() == false);
   CHECK(http_response->statusCode() == drogon::k400BadRequest);
 }
 
@@ -111,15 +108,11 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_MasterPasswordNotGiven) {
   auto http_response = drogon::HttpResponse::newHttpResponse();
   Json::Value response_object;
 
-  auto [is_valid, email, username, password, master_password] =
+  auto request_data =
       minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
 
-  CHECK(is_valid == false);
-  CHECK(email.get() == "");
-  CHECK(username.get() == "");
-  CHECK(password.get() == "");
-  CHECK(master_password.get() == "");
+  REQUIRE(request_data.has_value() == false);
   CHECK(http_response->statusCode() == drogon::k400BadRequest);
 }
 
@@ -147,11 +140,12 @@ DROGON_TEST(RequestProcessorTests_ParseRequestJson_SQLi) {
   auto http_response = drogon::HttpResponse::newHttpResponse();
   Json::Value response_object;
 
-  auto [is_valid, email, username, password, master_password] =
+  auto request_data =
       minpass::sqlite3_client::RequestProcessor::ParseRequestJson(
           http_request, http_response, response_object);
 
-  CHECK(is_valid == true);
+  REQUIRE(request_data.has_value() == true);
+  auto [email, username, password, master_password] = request_data.value();
   CHECK(email.get() == sql_injection["email"]);
   CHECK(username.get() == sql_injection["username"]);
   CHECK(password.get() == sql_injection["password"]);

@@ -11,6 +11,7 @@
 #include "test_utilities/include/random_string_generator.h"
 
 #define PATH "/minpass/SQLite3Client/"
+#define PORT "8080"
 
 const int kUsernameLen = 20;
 const int kEmailLen = 20;
