@@ -56,7 +56,7 @@ auto SQLite3Client::GetPasswordData(
   Json::Value response_object;
   drogon::HttpResponsePtr http_response;
 
-  // Multiple get requests not working need to fix
+  // Todo: Multiple get requests not working need to fix
   // consider making it an issue github
 
   client_->execSqlAsync(
@@ -103,6 +103,12 @@ auto SQLite3Client::ModifyPasswordData(
     const Website &website) -> void {
   Json::Value response_object;
   drogon::HttpResponsePtr http_response;
+
+  // Todo: update passwords should only update the data given in json object
+  // steps: do a async get call, to get email, username, password
+  // now parse the request
+  // check for items that don't match, and update them with the items in request
+
   auto request_data = sqlite3_client::RequestProcessor::ParseRequestJson(
       http_request, http_response, response_object);
   if (request_data) {
