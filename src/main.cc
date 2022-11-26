@@ -1,5 +1,5 @@
 #include <drogon/HttpAppFramework.h>  // for app, HttpAppFramework
-#include <fmt/core.h>
+#include <fmt/color.h>
 
 #include <cstdlib>  // for EXIT_SUCCESS
 
@@ -12,6 +12,7 @@ auto main() -> int {
     // exit_code = EXIT_SUCCESS; //code already intialised with 0;
   } catch (const std::exception& error) {
     fmt::print(
+        fmt::fg(fmt::color::red),
         "{}.\nConfiguration cannot be loaded\n. Please grab the file from the "
         "Github repo.\n",
         error.what());

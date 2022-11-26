@@ -1,38 +1,43 @@
-// #include "minpass_crypto/crytopp_conversions.h"
+#include "minpass_crypto/crytopp_conversions.h"
 
-// #include <cryptopp/config_int.h>  // for byte
-// #include <cryptopp/osrng.h>       // for AutoSeededRandomPool
-// #include <cryptopp/scrypt.h>      // for Scrypt
-// #include <cryptopp/secblock.h>    // for SecByteBlock,
-// AllocatorBase::size_type
+#include <drogon/drogon_test.h>
 
-// #include <tuple>  // for tuple
+#include "test_utilities/include/random_string_generator.h"
 
-// namespace minpass::minpass_crypto {
+const int kRandomStringLen = 30;
 
-// auto CryptoppConversions::GetStringFromSecByteBlock(
-//     const CryptoPP::SecByteBlock& bytes_in) -> std::string {
-//   std::string string_out;
-//   std::transform(
-//       bytes_in.begin(), bytes_in.end(), std::back_inserter(string_out),
-//       [](char character) { return static_cast<CryptoPP::byte>(character); });
-//   return string_out;
-// }
+DROGON_TEST(MinpassCryptoppConversions_StringAndSecByteBlock_Overload1) {
+  // Testing:
+  // Back and forth conversion between GetSecByteBlockFromString_Overload1 (pass
+  // in string) and GetStringFromSecByteBlock
 
-// auto CryptoppConversions::GetSecByteBlockFromString(
-//     const std::string& string_in) -> CryptoPP::SecByteBlock {
-//   CryptoPP::SecByteBlock bytes_out(string_in.size());
-//   std::copy(string_in.begin(), string_in.end(), bytes_out.begin());
-//   return bytes_out;
-// }
+  auto random_string = minpass::tests::generate_random_string(kRandomStringLen);
+  auto random_string_bytes =
+      minpass::minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
+          random_string);
 
-// auto CryptoppConversions::GetSecByteBlockFromString(
-//     std::string::const_iterator begin, std::string::const_iterator end)
-//     -> CryptoPP::SecByteBlock {
-//   CryptoPP::SecByteBlock bytes_out(
-//       static_cast<size_t>(std::distance(begin, end)));
-//   std::copy(begin, end, bytes_out.begin());
-//   return bytes_out;
-// }
+  auto random_string_recovered =
+      minpass::minpass_crypto::CryptoppConversions::GetStringFromSecByteBlock(
+          random_string_bytes);
 
-// }  // namespace minpass::minpass_crypto
+  CHECK(random_string == random_string_recovered);
+}
+
+DROGON_TEST(MinpassCryptoppConversions_StringAndSecByteBlock_Overload2) {
+  // Back and forth conversion between GetSecByteBlockFromString_Overload2 (pass
+  // in from and back iterators) and GetStringFromSecByteBlock
+
+  auto random_string = minpass::tests::generate_random_string(kRandomStringLen);
+  auto random_string_bytes =
+      minpass::minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
+          random_string.begin() + 1, random_string.end() - 3);
+
+  auto random_string_recovered =
+      minpass::minpass_crypto::CryptoppConversions::GetStringFromSecByteBlock(
+          random_string_bytes);
+
+  std::string const substring(random_string.begin() + 1,
+                              random_string.end() - 3);
+
+  CHECK(substring == random_string_recovered);
+}

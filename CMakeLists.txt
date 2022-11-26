@@ -36,7 +36,7 @@ target_sources(
           src/minpass_crypto/aes_gcm_256.cc)
 target_link_libraries(minpass_crypto PRIVATE project_compile_options)
 target_include_directories(minpass_crypto PUBLIC include)
-target_link_libraries(minpass_crypto PRIVATE cryptopp-static)
+target_link_libraries(minpass_crypto PRIVATE cryptopp::cryptopp)
 target_link_libraries(minpass_crypto PRIVATE fmt::fmt)
 
 ###########################################
@@ -58,10 +58,13 @@ target_sources(
   PRIVATE src/sqlite3_client.cc
           include/sqlite3_client.h
           src/sqlite3_client/helpers.cc
-          include/sqlite3_client/helpers.h)
+          include/sqlite3_client/helpers.h
+          src/sqlite3_client/request_processor.cc
+          include/sqlite3_client/request_processor.h)
 target_link_libraries(sqlite3_client PRIVATE project_compile_options)
 target_include_directories(sqlite3_client PUBLIC include)
 target_link_libraries(sqlite3_client PRIVATE Drogon::Drogon)
+target_link_libraries(sqlite3_client PRIVATE minpass_crypto)
 target_link_libraries(sqlite3_client PRIVATE minpass_types)
 target_link_libraries(sqlite3_client PRIVATE fmt::fmt)
 

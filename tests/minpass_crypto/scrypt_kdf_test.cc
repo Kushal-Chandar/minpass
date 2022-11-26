@@ -1,75 +1,62 @@
-// #include "minpass_crypto/scrypt_kdf.h"
+#include "minpass_crypto/scrypt_kdf.h"
 
-// #include <cryptopp/config_int.h>  // for byte
-// #include <cryptopp/osrng.h>       // for AutoSeededRandomPool
-// #include <cryptopp/scrypt.h>      // for Scrypt
-// #include <cryptopp/secblock.h>    // for SecByteBlock,
-// AllocatorBase::size_type
+#include <cryptopp/aes.h>
+#include <cryptopp/cryptlib.h>
+#include <cryptopp/files.h>
+#include <cryptopp/filters.h>
+#include <cryptopp/gcm.h>
+#include <cryptopp/secblock.h>
+#include <drogon/drogon_test.h>
 
-// #include <string>
-// #include <tuple>  // for tuple
+#include "minpass_crypto/aes_gcm_256.h"
+#include "minpass_crypto/crytopp_conversions.h"
+#include "test_utilities/include/random_string_generator.h"
 
-// #include "minpass_crypto/crytopp_conversions.h"
+const int kMasterPasswordLen = 30;
+const int kPlainLen = 30;
+const int kCipherLen = 30;
 
-// namespace minpass::minpass_crypto {
+DROGON_TEST(MinpassScrypt_EncryptionKeySaltIV_DecryptionKey) {
+  // Testing:
+  // EncryptionKeySaltIv and DecryptionKey must generate the same derived key
 
-// auto ScryptKDF::GetEncryptionKeySaltIV(
-//     const CryptoPP::SecByteBlock& password_bytes)
-//     -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock,
-//                   CryptoPP::SecByteBlock> {
-//   CryptoPP::AutoSeededRandomPool prng;
+  auto password = minpass::tests::generate_random_string(kMasterPasswordLen);
+  auto password_bytes =
+      minpass::minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
+          password);
 
-//   CryptoPP::SecByteBlock key(kKeySize_);
-//   CryptoPP::SecByteBlock initialization_vector(kIVSize_);
-//   CryptoPP::SecByteBlock salt(kSaltSize_);
+  auto [derived_key1, salt, initialization_vector] =
+      minpass::minpass_crypto::ScryptKDF::GetEncryptionKeySaltIV(
+          password_bytes);
 
-//   const CryptoPP::Scrypt scrypt;
+  // Generate same derived key using the salt
+  auto derived_key2 = minpass::minpass_crypto::ScryptKDF::GetDecryptionKey(
+      password_bytes, salt);
 
-//   // DeriveKey
-//   // note: we need the same salt for decryption
-//   prng.GenerateBlock(salt, salt.size());
-//   scrypt.DeriveKey(key, key.size(), password_bytes, password_bytes.size(),
-//   salt,
-//                    salt.size(), kCost_, kBlockSize_, kParallelization_);
+  CHECK(derived_key1 == derived_key2);
+}
 
-//   // DeriveIV
-//   prng.GenerateBlock(initialization_vector, initialization_vector.size());
+DROGON_TEST(MinpassScrypt_AddSaltAndIVToCipher_GetSaltAndIVFromCipher) {
+  // Testing:
+  // Get same salt, iv and cipher before adding and getting
 
-//   return {key, salt, initialization_vector};
-// }
+  auto password = minpass::tests::generate_random_string(kMasterPasswordLen);
+  auto cipher = minpass::tests::generate_random_string(kCipherLen);
+  auto cipher_text(cipher);
 
-// auto ScryptKDF::GetDecryptionKey(const CryptoPP::SecByteBlock&
-// password_bytes,
-//                                  const CryptoPP::SecByteBlock& salt)
-//     -> CryptoPP::SecByteBlock {
-//   CryptoPP::SecByteBlock key(kKeySize_);
-//   const CryptoPP::Scrypt scrypt;
-//   // DeriveKey
-//   scrypt.DeriveKey(key, key.size(), password_bytes, password_bytes.size(),
-//   salt,
-//                    salt.size(), kCost_, kBlockSize_, kParallelization_);
-//   return key;
-// }
+  auto [derived_key1, salt1, iv1] =
+      minpass::minpass_crypto::ScryptKDF::GetEncryptionKeySaltIV(
+          minpass::minpass_crypto::CryptoppConversions::
+              GetSecByteBlockFromString(password));
 
-// auto ScryptKDF::AddSaltAndIVToCipher(
-//     CryptoPP::SecByteBlock& salt, CryptoPP::SecByteBlock&
-//     initialization_vector, std::string& cipher_text) -> void {
-//   cipher_text += CryptoppConversions::GetStringFromSecByteBlock(
-//       salt + initialization_vector);
-// }
+  minpass::minpass_crypto::ScryptKDF::AddSaltAndIVToCipher(salt1, iv1, cipher);
 
-// auto ScryptKDF::SeperateSaltAndIVFromCipher(
-//     const std::string& cipher_text_with_salt_and_iv)
-//     -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock> {
-//   auto initialization_vector =
-//   CryptoppConversions::GetSecByteBlockFromString(
-//       cipher_text_with_salt_and_iv.cend() - kIVSize_,
-//       cipher_text_with_salt_and_iv.cend());
+  auto [salt2, iv2] =
+      minpass::minpass_crypto::ScryptKDF::GetSaltAndIVFromCipher(cipher);
 
-//   auto salt = CryptoppConversions::GetSecByteBlockFromString(
-//       cipher_text_with_salt_and_iv.cend() - kIVSize_ - kSaltSize_,
-//       cipher_text_with_salt_and_iv.cend() - kIVSize_);
-//   return {salt, initialization_vector};
-// }
+  auto cipher_text_without_key_and_iv = cipher.substr(0, kCipherLen);
 
-// }  // namespace minpass::minpass_crypto
+  CHECK(salt1 == salt2);
+  CHECK(iv1 == iv2);
+  CHECK(cipher_text == cipher_text_without_key_and_iv);
+}

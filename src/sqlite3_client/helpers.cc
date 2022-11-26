@@ -5,11 +5,12 @@
 #include <drogon/orm/Exception.h>         // for DrogonDbException
 #include <drogon/utils/FunctionTraits.h>  // for HttpResponsePtr
 #include <fmt/color.h>                    // for fg, print, color, color::red
-#include <fmt/core.h>                     // for basic_string_view
 #include <fmt/format.h>                   // for buffer::append
 #include <json/value.h>                   // for Value
 
 #include <exception>  // for exception
+
+#include "minpass_crypto.h"
 namespace drogon::orm {
 class Result;
 }  // namespace drogon::orm
@@ -31,26 +32,6 @@ auto Helpers::MakeResponse(Json::Value &response_object,
       drogon::HttpResponse::newHttpJsonResponse(response_object);
   http_response->setStatusCode(status_code);
   return http_response;
-}
-
-auto Helpers::ParseRequest(const drogon::HttpRequestPtr &http_request,
-                           drogon::HttpResponsePtr &http_response,
-                           Json::Value &response_object_out)
-    -> std::tuple<bool, Email, Username, Password> {
-  auto json = http_request->getJsonObject();
-  if (!json) {
-    response_object_out["message"] = "could not parse request";
-    http_response = MakeResponse(response_object_out, drogon::k400BadRequest);
-    return {false, Email(), Username(), Password()};
-  }
-  response_object_out["message"] = "ok";
-  http_response = MakeResponse(response_object_out, drogon::k202Accepted);
-  return {
-      true,
-      Email((*json)["email"].asString()),
-      Username((*json)["username"].asString()),
-      Password((*json)["password"].asString()),
-  };
 }
 
 }  // namespace minpass::sqlite3_client

@@ -1,13 +1,10 @@
 #include "minpass_crypto/aes_gcm_256.h"
 
 #include <cryptopp/aes.h>
-#include <cryptopp/cryptlib.h>
-#include <cryptopp/files.h>
 #include <cryptopp/filters.h>
 #include <cryptopp/gcm.h>
-#include <cryptopp/hex.h>
 #include <cryptopp/secblock.h>
-#include <fmt/core.h>
+#include <fmt/color.h>
 
 #include <iostream>
 #include <string>
@@ -48,9 +45,11 @@ auto AES_GCM_256::Encrypt(const std::string& plain_text) -> std::string {
     ScryptKDF::AddSaltAndIVToCipher(salt, initialization_vector, cipher_text);
 
   } catch (CryptoPP::InvalidArgument& e) {
-    fmt::print("Caught InvalidArgument...\n{}\n\n", e.what());
+    fmt::print(fmt::fg(fmt::color::red), "Caught InvalidArgument...\n{}\n\n",
+               e.what());
   } catch (CryptoPP::Exception& e) {
-    fmt::print("Caught Exception...\n{}\n\n", e.what());
+    fmt::print(fmt::fg(fmt::color::red), "Caught Exception...\n{}\n\n",
+               e.what());
   }
 
   return cipher_text;
@@ -67,7 +66,7 @@ auto AES_GCM_256::Decrypt(const std::string& cipher_text) -> std::string {
 
     // Get salt and iv from cipher text
     auto [salt, initialization_vector] =
-        ScryptKDF::SeperateSaltAndIVFromCipher(cipher_text);
+        ScryptKDF::GetSaltAndIVFromCipher(cipher_text);
 
     // Generate same derived key using the salt
     auto derived_key = ScryptKDF::GetDecryptionKey(
@@ -84,11 +83,14 @@ auto AES_GCM_256::Decrypt(const std::string& cipher_text) -> std::string {
             CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_FLAGS, kTagSize_));
 
   } catch (CryptoPP::HashVerificationFilter::HashVerificationFailed& e) {
-    fmt::print("Caught HashVerificationFailed...\n{}\n\n", e.what());
+    fmt::print(fmt::fg(fmt::color::red),
+               "Caught HashVerificationFailed...\n{}\n\n", e.what());
   } catch (CryptoPP::InvalidArgument& e) {
-    fmt::print("Caught InvalidArgument...\n{}\n\n", e.what());
+    fmt::print(fmt::fg(fmt::color::red), "Caught InvalidArgument...\n{}\n\n",
+               e.what());
   } catch (CryptoPP::Exception& e) {
-    fmt::print("Caught Exception...\n{}\n\n", e.what());
+    fmt::print(fmt::fg(fmt::color::red), "Caught Exception...\n{}\n\n",
+               e.what());
   }
 
   return recovered_text;

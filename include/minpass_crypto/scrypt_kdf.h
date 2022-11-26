@@ -21,7 +21,7 @@ class ScryptKDF {
       CryptoPP::SecByteBlock& salt,
       CryptoPP::SecByteBlock& initialization_vector, std::string& cipher_text)
       -> void;
-  static auto SeperateSaltAndIVFromCipher(
+  static auto GetSaltAndIVFromCipher(
       const std::string& cipher_text_with_salt_and_iv)
       -> std::tuple<CryptoPP::SecByteBlock, CryptoPP::SecByteBlock>;
 
