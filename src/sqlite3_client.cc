@@ -18,12 +18,12 @@ SQLite3Client::SQLite3Client(const DatabaseName &database_name,
     : client_(drogon::app().getDbClient(database_name.get())),
       table_name_(std::move(table_name)) {
   client_->execSqlAsync("CREATE TABLE IF NOT EXISTS " + table_name_.get() +
-                            " (\n"
-                            "  Website varchar(100) NOT NULL PRIMARY KEY,\n"
-                            "  Email varchar(50),\n"
-                            "  Username varchar(100),\n"
-                            "  Password varchar(50) NOT NULL\n"
-                            ");\n",
+                            " ("
+                            "  Website varchar(100) NOT NULL PRIMARY KEY,"
+                            "  Email varchar(50),"
+                            "  Username varchar(100),"
+                            "  Password varchar(50) NOT NULL"
+                            ");",
                         sqlite3_client::Helpers::EmptyCallback,
                         sqlite3_client::Helpers::CommonExceptionCatch);
 }
@@ -41,7 +41,7 @@ auto SQLite3Client::SetPasswordData(
     sqlite3_client::RequestProcessor::EncryptData(email, username, password,
                                                   master_password);
     client_->execSqlAsync(
-        "INSERT INTO " + table_name_.get() + " VALUES ($1, $2, $3, $4);\n",
+        "INSERT INTO " + table_name_.get() + " VALUES ($1, $2, $3, $4);",
         sqlite3_client::Helpers::EmptyCallback,
         sqlite3_client::Helpers::CommonExceptionCatch, website.get(),
         email.get(), username.get(), password.get());
@@ -53,16 +53,11 @@ auto SQLite3Client::GetPasswordData(
     [[maybe_unused]] const drogon::HttpRequestPtr &http_request,
     std::function<void(const drogon::HttpResponsePtr &)> &&http_callback,
     const Website &website) -> void {
-  Json::Value response_object;
-  drogon::HttpResponsePtr http_response;
-
-  // Todo: Multiple get requests not working need to fix
-  // consider making it an issue github
-
   client_->execSqlAsync(
-      "SELECT * FROM " + table_name_.get() + " WHERE Website = $1;\n",
-      [&response_object, &http_response, &http_request,
-       &http_callback]([[maybe_unused]] const drogon::orm::Result &result) {
+      "SELECT * FROM " + table_name_.get() + " WHERE Website = $1;",
+      [http_request, http_callback](const drogon::orm::Result &result) {
+        Json::Value response_object;
+        drogon::HttpResponsePtr http_response;
         auto request_data = sqlite3_client::RequestProcessor::ParseRequestJson(
             http_request, http_response, response_object);
 
@@ -116,8 +111,8 @@ auto SQLite3Client::ModifyPasswordData(
     sqlite3_client::RequestProcessor::EncryptData(email, username, password,
                                                   master_password);
     client_->execSqlAsync("UPDATE " + table_name_.get() +
-                              " SET Email = $1, Username = $2, Password = $3\n"
-                              "WHERE Website = $4;\n",
+                              " SET Email = $1, Username = $2, Password = $3"
+                              "WHERE Website = $4;",
                           sqlite3_client::Helpers::EmptyCallback,
                           sqlite3_client::Helpers::CommonExceptionCatch,
                           email.get(), username.get(), password.get(),
@@ -132,7 +127,7 @@ auto SQLite3Client::RemovePasswordData(
     const Website &website) -> void {
   Json::Value response_object;
   client_->execSqlAsync(
-      "DELETE FROM " + table_name_.get() + " WHERE Website = $1;\n",
+      "DELETE FROM " + table_name_.get() + " WHERE Website = $1;",
       sqlite3_client::Helpers::EmptyCallback,
       sqlite3_client::Helpers::CommonExceptionCatch, website.get());
 
@@ -148,7 +143,6 @@ auto SQLite3Client::QuitServer(
   response_object["message"] = "server has been stopped";
   http_callback(sqlite3_client::Helpers::MakeResponse(
       response_object, drogon::k503ServiceUnavailable));
-
   drogon::app().quit();
 }
 
