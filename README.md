@@ -1,5 +1,7 @@
 # Minpass backend
 
+[![GitHub Super-Linter](https://github.com/Kushal-Chandar/minpass/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
+
 A minimal password manager written in C++ as a REST API which can be used with any client.
 This project aims to create a server sitting on your machine or hosted on a device like raspberry pi.
 You should be able to send and receive requests from this device across your local network once a port is open.
