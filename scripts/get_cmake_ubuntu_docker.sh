@@ -4,7 +4,7 @@
 
 cmake_version="$1"
 jobs="$2"
-if [ -z "$cmake_version"]
+if [ -z "$cmake_version" ]
 then
       cmake_version=$(curl -s 'https://cmake.org/files/LatestRelease/cmake-latest-files-v1.json' | jq -r '.version.string')
 fi
