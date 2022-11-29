@@ -11,7 +11,7 @@ This is a v0.0.1 alpha release.
 
 ## Why C++ ?
 
-It is harder to this C++ but the fast run time of C++ and the async nature drogon framework motivated me.
+It is harder to this C++ but the fast runtime of C++ and the async nature drogon framework motivated me.
 
 Is C++ is a viable option for building fast and light weight webservers?
 I was driven by this question and the answer turns out to be **YES**.

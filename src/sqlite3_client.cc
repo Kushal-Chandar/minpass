@@ -130,7 +130,6 @@ auto SQLite3Client::RemovePasswordData(
       "DELETE FROM " + table_name_.get() + " WHERE Website = $1;",
       sqlite3_client::Helpers::EmptyCallback,
       sqlite3_client::Helpers::CommonExceptionCatch, website.get());
-
   response_object["message"] = "ok";
   http_callback(sqlite3_client::Helpers::MakeResponse(response_object));
 }
