@@ -1,7 +1,7 @@
 FROM drogonframework/drogon:latest
 
-RUN apt update -y \
-  && apt install -y \
+RUN apt-get update -y \
+  && apt-get install -y \
   ccache \
   curl \
   tar \
@@ -10,8 +10,8 @@ RUN apt update -y \
   libsqlite3-dev \
   clang \
   libfmt-dev \
-  && apt purge --auto-remove cmake \
-  && apt upgrade -y
+  && apt-get purge --auto-remove cmake \
+  && apt-get upgrade -y
 
 WORKDIR /minpass
 
@@ -35,12 +35,12 @@ WORKDIR /app
 RUN cp /build/minpass /build/server_config.json .\
   && rm -rf /build
 
-RUN apt remove -y \
+RUN apt-get remove -y \
   jq \
   ninja-build \
   libsqlite3-dev \
   clang \
   libfmt-dev \
-  && apt auto-remove -y
+  && apt-get auto-remove -y
 
 CMD [ "./minpass" ]
