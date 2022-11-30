@@ -1,12 +1,14 @@
 {
   "name": "minpass",
-  "version-string": "0.0.1",
   "dependencies": [
-    "fmt","cryptopp",
+    "fmt",
+    "cryptopp",
     {
       "name": "drogon",
       "default-features": false,
-      "features": ["sqlite3"]
+      "features": [
+        "sqlite3"
+      ]
     }
   ]
 }

@@ -9,33 +9,39 @@ set(VCPKG_DIR ${VCPKG_PARENT_DIR}/vcpkg)
 #   Install or update vcpkg and all dependencies
 # ----------------------------------------------------------------------------
 function(install_or_update_vcpkg)
-  find_program(GIT_EXECUTABLE "git" REQUIRED)
-  file(MAKE_DIRECTORY ${VCPKG_PARENT_DIR})
-
-  if(EXISTS ${VCPKG_DIR} AND EXISTS ${VCPKG_DIR}/.git/)
-    message("Updating vcpkg\n")
-    execute_process(COMMAND "${GIT_EXECUTABLE}" "pull"
-                    WORKING_DIRECTORY "${VCPKG_DIR}")
-  else()
-    if(EXISTS ${VCPKG_DIR})
-      file(REMOVE_RECURSE ${VCPKG_DIR})
+  find_package(Git)
+  if(Git_FOUND)
+    file(MAKE_DIRECTORY ${VCPKG_PARENT_DIR})
+    if(EXISTS ${VCPKG_DIR} AND EXISTS ${VCPKG_DIR}/.git/)
+      message("Updating vcpkg\n")
+      execute_process(COMMAND "${GIT_EXECUTABLE}" "pull"
+                      WORKING_DIRECTORY "${VCPKG_DIR}")
+    else()
+      if(EXISTS ${VCPKG_DIR})
+        file(REMOVE_RECURSE ${VCPKG_DIR})
+      endif()
+      execute_process(
+        COMMAND "${GIT_EXECUTABLE}" "clone"
+                "https://github.com/microsoft/vcpkg.git"
+        WORKING_DIRECTORY "${VCPKG_PARENT_DIR}" COMMAND_ERROR_IS_FATAL LAST)
     endif()
-    execute_process(
-      COMMAND "${GIT_EXECUTABLE}" "clone"
-              "https://github.com/microsoft/vcpkg.git"
-      WORKING_DIRECTORY "${VCPKG_PARENT_DIR}" COMMAND_ERROR_IS_FATAL LAST)
-  endif()
 
-  if(WIN32)
-    execute_process(
-      COMMAND "bootstrap-vcpkg.bat" "-disableMetrics"
-      WORKING_DIRECTORY "${VCPKG_DIR}" COMMAND_ERROR_IS_FATAL LAST)
+    if(WIN32)
+      execute_process(
+        COMMAND "bootstrap-vcpkg.bat" "-disableMetrics"
+        WORKING_DIRECTORY "${VCPKG_DIR}" COMMAND_ERROR_IS_FATAL LAST)
+    else()
+      execute_process(
+        COMMAND "./bootstrap-vcpkg.sh" "-disableMetrics"
+        WORKING_DIRECTORY "${VCPKG_DIR}" COMMAND_ERROR_IS_FATAL LAST)
+    endif()
+    message("You can turn this OFF in options.cmake\n")
   else()
-    execute_process(
-      COMMAND "./bootstrap-vcpkg.sh" "-disableMetrics"
-      WORKING_DIRECTORY "${VCPKG_DIR}" COMMAND_ERROR_IS_FATAL LAST)
-  endif()
-  message("You can turn this OFF in options.cmake\n")
+    message(
+      WARNING
+        "Git was not found. Git is required to clone the VCPKG repository. VCPKG not available.\n"
+    )
+  endif(Git_FOUND)
 endfunction()
 
 # ----------------------------------------------------------------------------
