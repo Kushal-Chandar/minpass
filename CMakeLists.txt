@@ -74,6 +74,7 @@ target_link_libraries(sqlite3_client PRIVATE fmt::fmt)
 add_executable(minpass)
 target_sources(minpass PRIVATE src/main.cc)
 target_link_libraries(minpass PRIVATE project_compile_options)
+target_link_libraries(minpass PRIVATE configuration_header)
 target_link_libraries(minpass PRIVATE sqlite3_client)
 target_link_libraries(minpass PRIVATE Drogon::Drogon)
 # For drogon compilation to work
