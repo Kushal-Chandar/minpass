@@ -3,9 +3,13 @@
 
 #include <cstdlib>  // for EXIT_SUCCESS
 
+#include "configuration/config.h"
 #include "sqlite3_client.h"
 
 auto main() -> int {
+  fmt::print(fmt::fg(fmt::color::green), "{}-{}\nCommit:{}\n",
+             minpass::config::project_name, minpass::config::project_version,
+             minpass::config::git_sha);
   int exit_code{};
   try {
     drogon::app().loadConfigFile("./server_config.json").run();

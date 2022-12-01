@@ -22,6 +22,18 @@ option(SANITIZE_UNDEFINED "Enable sanitizer for undefined behaviour" OFF)
 include(${CMAKE_CURRENT_SOURCE_DIR}/options.cmake)
 
 # ----------------------------------------------------------------------------
+#   Replace "-" with "_" in project name and get upper and lower case name
+# ----------------------------------------------------------------------------
+string(
+  REGEX
+  REPLACE "-"
+          "_"
+          PROJECT_NAME
+          ${PROJECT_NAME})
+string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
+string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
+
+# ----------------------------------------------------------------------------
 #   Detecting linux
 # ----------------------------------------------------------------------------
 if(UNIX AND NOT APPLE)
@@ -86,6 +98,9 @@ include(${CMAKE_CURRENT_LIST_DIR}/compiler_warnings.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/sanitizers.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/static_analysis.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/git_tag_versioning.cmake)
+if(ENABLE_CONFIGURATION_HEADER)
+  include(${CMAKE_CURRENT_LIST_DIR}/configuration_header.cmake)
+endif()
 if(ENABLE_VCPKG)
   include(${CMAKE_CURRENT_LIST_DIR}/vcpkg.cmake)
 endif()
