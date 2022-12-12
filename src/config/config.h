@@ -3,7 +3,7 @@
 
 // This is a configuration file which will be used to generate config.h file
 
-#include<string_view>
+#include <string_view>
 
 namespace minpass::config {
 inline constexpr std::string_view project_name = "minpass";

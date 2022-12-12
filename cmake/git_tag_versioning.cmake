@@ -1,7 +1,7 @@
 include_guard()
 
 function(get_latest_annotated_tag)
-  message(${CMAKE_SOURCE_DIR})
+  find_package(Git)
   execute_process(
     COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --match "v*"
     WORKING_DIRECTORY "${PROJEC_SOURCE_DIR}"
@@ -55,7 +55,6 @@ function(get_latest_annotated_tag)
         "Failed to determine project version from GIT TAGS (annotated). Using default version ${PROJ_VER}."
     )
   endif()
-
 endfunction(get_latest_annotated_tag)
 
 # ----------------------------------------------------------------------------
