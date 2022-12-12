@@ -15,19 +15,19 @@ target_include_directories(utilities PRIVATE ${MINPASS_PRIVATE_HEADER_DIR})
 ###########################################
 ### Minpass crypto
 ###########################################
-add_library(minpass_crypto)
-target_link_libraries(minpass_crypto PRIVATE project_compile_options)
-target_link_libraries(minpass_crypto PRIVATE cryptopp::cryptopp)
-target_link_libraries(minpass_crypto PRIVATE fmt::fmt)
-target_include_directories(minpass_crypto PRIVATE ${MINPASS_PRIVATE_HEADER_DIR})
+add_library(crypto)
+target_link_libraries(crypto PRIVATE project_compile_options)
+target_link_libraries(crypto PRIVATE cryptopp::cryptopp)
+target_link_libraries(crypto PRIVATE fmt::fmt)
+target_include_directories(crypto PRIVATE ${MINPASS_PRIVATE_HEADER_DIR})
 
 ###########################################
 ### Minpass types
 ###########################################
-add_library(minpass_types STATIC)
-target_link_libraries(minpass_types PRIVATE project_compile_options)
-target_link_libraries(minpass_types PRIVATE utilities)
-target_include_directories(minpass_types PRIVATE ${MINPASS_PRIVATE_HEADER_DIR})
+add_library(types STATIC)
+target_link_libraries(types PRIVATE project_compile_options)
+target_link_libraries(types PRIVATE utilities)
+target_include_directories(types PRIVATE ${MINPASS_PRIVATE_HEADER_DIR})
 
 ###########################################
 ### SQLite3 client
@@ -35,8 +35,8 @@ target_include_directories(minpass_types PRIVATE ${MINPASS_PRIVATE_HEADER_DIR})
 add_library(sqlite3_client STATIC)
 target_link_libraries(sqlite3_client PRIVATE project_compile_options)
 target_link_libraries(sqlite3_client PRIVATE Drogon::Drogon)
-target_link_libraries(sqlite3_client PRIVATE minpass_crypto)
-target_link_libraries(sqlite3_client PRIVATE minpass_types)
+target_link_libraries(sqlite3_client PRIVATE crypto)
+target_link_libraries(sqlite3_client PRIVATE types)
 target_link_libraries(sqlite3_client PRIVATE fmt::fmt)
 target_include_directories(sqlite3_client PRIVATE ${MINPASS_PRIVATE_HEADER_DIR})
 

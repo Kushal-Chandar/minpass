@@ -5,5 +5,4 @@
 #####################################################
 ### adding sources
 #####################################################
-target_sources(sqlite3_client PRIVATE aes_gcm_256.h crytopp_conversions.h
-                                      scrypt_kdf.h)
+target_sources(crypto PRIVATE aes_gcm_256.h crytopp_conversions.h scrypt_kdf.h)

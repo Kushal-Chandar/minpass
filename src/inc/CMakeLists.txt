@@ -6,8 +6,8 @@
 ### adding sources
 #####################################################
 target_sources(utilities PRIVATE)
-target_sources(minpass_crypto PRIVATE minpass_crypto.h)
-target_sources(minpass_types PRIVATE minpass_types.h)
+target_sources(crypto PRIVATE minpass_crypto.h)
+target_sources(types PRIVATE minpass_types.h)
 target_sources(sqlite3_client PRIVATE sqlite3_client.h)
 target_sources(minpass PRIVATE)
 
