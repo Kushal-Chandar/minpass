@@ -1,4 +1,4 @@
-#include "test_utilities/include/random_string_generator.h"
+#include "random_string_generator.h"
 
 #include <iostream>
 #include <random>

@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include "sqlite3_client/helpers.h"
-#include "test_utilities/include/random_string_generator.h"
+#include "test_utilities/random_string_generator.h"
 
 const int kUsernameLen = 20;
 const int kPasswordLen = 30;

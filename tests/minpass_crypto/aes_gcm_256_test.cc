@@ -2,7 +2,7 @@
 
 #include <drogon/drogon_test.h>
 
-#include "test_utilities/include/random_string_generator.h"
+#include "test_utilities/random_string_generator.h"
 
 const int kMasterPasswordLen = 20;
 const int kPasswordLen = 30;

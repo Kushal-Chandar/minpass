@@ -7,13 +7,16 @@ include_guard()
 # set(BUILD_SHARED_LIBS ON)
 set(ENABLE_VCPKG ON) # turn this off for docker
 # set(INSTALL_OR_UPDATE_VCPKG ON)
+set(ENABLE_AUTOMATIC_VERSIONING ON)
+set(ENABLE_CONFIGURATION_HEADER ON)
+set(ENABLE_CUSTOM_VARIABLES ON)
 # set(WARNINGS_AS_ERRORS ON)
 # set(CODE_COVERAGE ON) # enable in github actions
 set(BUILD_TESTING ON)
 set(ENABLE_DOXYGEN ON) # turn this off for docker
 
 set(ENABLE_CCACHE ON)
-# set(ENABLE_IPO ON)
+set(ENABLE_IPO ON)
 
 # ----------------------------------------------------------------------------
 #   Enable sanitizer checks (only on at a time)
