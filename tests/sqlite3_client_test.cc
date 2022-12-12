@@ -8,7 +8,7 @@
 #include <json/value.h>          // for Value
 #include <json/writer.h>         // for operator<<
 
-#include "test_utilities/include/random_string_generator.h"
+#include "test_utilities/random_string_generator.h"
 
 #define PATH "/minpass/SQLite3Client/"
 #define PORT "8080"

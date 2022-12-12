@@ -16,7 +16,7 @@ set(BUILD_TESTING ON)
 set(ENABLE_DOXYGEN ON) # turn this off for docker
 
 set(ENABLE_CCACHE ON)
-# set(ENABLE_IPO ON)
+set(ENABLE_IPO ON)
 
 # ----------------------------------------------------------------------------
 #   Enable sanitizer checks (only on at a time)
