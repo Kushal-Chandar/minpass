@@ -3,7 +3,7 @@
 
 #include <cstdlib>  // for EXIT_SUCCESS
 
-#include "configuration/config.h"
+#include "config.h"
 #include "sqlite3_client.h"
 
 auto main() -> int {
