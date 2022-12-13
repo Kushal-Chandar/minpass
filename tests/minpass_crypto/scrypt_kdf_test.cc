@@ -1,4 +1,4 @@
-#include "minpass_crypto/scrypt_kdf.h"
+#include "crypto/scrypt_kdf.h"
 
 #include <cryptopp/aes.h>
 #include <cryptopp/cryptlib.h>
@@ -8,8 +8,8 @@
 #include <cryptopp/secblock.h>
 #include <drogon/drogon_test.h>
 
-#include "minpass_crypto/aes_gcm_256.h"
-#include "minpass_crypto/crytopp_conversions.h"
+#include "crypto/aes_gcm_256.h"
+#include "crypto/crytopp_conversions.h"
 #include "test_utilities/random_string_generator.h"
 
 const int kMasterPasswordLen = 30;
@@ -22,16 +22,14 @@ DROGON_TEST(MinpassScrypt_EncryptionKeySaltIV_DecryptionKey) {
 
   auto password = minpass::tests::generate_random_string(kMasterPasswordLen);
   auto password_bytes =
-      minpass::minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
-          password);
+      minpass::crypto::CryptoppConversions::GetSecByteBlockFromString(password);
 
   auto [derived_key1, salt, initialization_vector] =
-      minpass::minpass_crypto::ScryptKDF::GetEncryptionKeySaltIV(
-          password_bytes);
+      minpass::crypto::ScryptKDF::GetEncryptionKeySaltIV(password_bytes);
 
   // Generate same derived key using the salt
-  auto derived_key2 = minpass::minpass_crypto::ScryptKDF::GetDecryptionKey(
-      password_bytes, salt);
+  auto derived_key2 =
+      minpass::crypto::ScryptKDF::GetDecryptionKey(password_bytes, salt);
 
   CHECK(derived_key1 == derived_key2);
 }
@@ -45,14 +43,14 @@ DROGON_TEST(MinpassScrypt_AddSaltAndIVToCipher_GetSaltAndIVFromCipher) {
   auto cipher_text(cipher);
 
   auto [derived_key1, salt1, iv1] =
-      minpass::minpass_crypto::ScryptKDF::GetEncryptionKeySaltIV(
-          minpass::minpass_crypto::CryptoppConversions::
-              GetSecByteBlockFromString(password));
+      minpass::crypto::ScryptKDF::GetEncryptionKeySaltIV(
+          minpass::crypto::CryptoppConversions::GetSecByteBlockFromString(
+              password));
 
-  minpass::minpass_crypto::ScryptKDF::AddSaltAndIVToCipher(salt1, iv1, cipher);
+  minpass::crypto::ScryptKDF::AddSaltAndIVToCipher(salt1, iv1, cipher);
 
   auto [salt2, iv2] =
-      minpass::minpass_crypto::ScryptKDF::GetSaltAndIVFromCipher(cipher);
+      minpass::crypto::ScryptKDF::GetSaltAndIVFromCipher(cipher);
 
   auto cipher_text_without_key_and_iv = cipher.substr(0, kCipherLen);
 

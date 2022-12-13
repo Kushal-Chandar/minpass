@@ -4,8 +4,8 @@
 
 #include <optional>
 
-#include "minpass_crypto.h"
-#include "minpass_crypto/aes_gcm_256.h"
+#include "crypto.h"
+#include "crypto/aes_gcm_256.h"
 #include "sqlite3_client/helpers.h"
 
 namespace minpass::sqlite3_client {
@@ -35,9 +35,8 @@ auto RequestProcessor::ParseRequestJson(
 auto RequestProcessor::EncryptData(Email &email, Username &username,
                                    Password &password,
                                    MasterPassword &master_password) -> void {
-  auto crypto =
-      MinpassCryptoFactory::CreateMinpassCrypto<minpass_crypto::AES_GCM_256>(
-          master_password.get());
+  auto crypto = MinpassCryptoFactory::CreateMinpassCrypto<crypto::AES_GCM_256>(
+      master_password.get());
   email = Email(crypto->Encrypt(email.get()));
   username = Username(crypto->Encrypt(username.get()));
   password = Password(crypto->Encrypt(password.get()));
@@ -46,9 +45,8 @@ auto RequestProcessor::EncryptData(Email &email, Username &username,
 auto RequestProcessor::DecryptData(Email &email, Username &username,
                                    Password &password,
                                    MasterPassword &master_password) -> void {
-  auto crypto =
-      MinpassCryptoFactory::CreateMinpassCrypto<minpass_crypto::AES_GCM_256>(
-          master_password.get());
+  auto crypto = MinpassCryptoFactory::CreateMinpassCrypto<crypto::AES_GCM_256>(
+      master_password.get());
   email = Email(crypto->Decrypt(email.get()));
   username = Username(crypto->Decrypt(username.get()));
   password = Password(crypto->Decrypt(password.get()));

@@ -6,7 +6,7 @@
 
 #include <tuple>  // for tuple
 
-#include "minpass_types.h"  // for Email, Password, Username
+#include "types.h"  // for Email, Password, Username
 namespace Json {
 class Value;
 }  // namespace Json

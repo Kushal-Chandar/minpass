@@ -1,4 +1,4 @@
-#include "minpass_crypto/aes_gcm_256.h"
+#include "crypto/aes_gcm_256.h"
 
 #include <drogon/drogon_test.h>
 
@@ -16,7 +16,7 @@ DROGON_TEST(MinpassCryptoAESGCM256_EncryptionDecryptionTest_Case1) {
 
   auto master_password =
       minpass::tests::generate_random_string(kMasterPasswordLen);
-  minpass::minpass_crypto::AES_GCM_256 crypto(master_password);
+  minpass::crypto::AES_GCM_256 crypto(master_password);
   auto password = minpass::tests::generate_random_string(kPasswordLen);
   auto enc = crypto.Encrypt(password);
   auto dec = crypto.Decrypt(enc);
@@ -32,7 +32,7 @@ DROGON_TEST(MinpassCryptoAESGCM256_EncryptionDecryptionTest_Case2) {
 
   auto master_password =
       minpass::tests::generate_random_string(kMasterPasswordLen);
-  minpass::minpass_crypto::AES_GCM_256 crypto(master_password);
+  minpass::crypto::AES_GCM_256 crypto(master_password);
   auto password = minpass::tests::generate_random_string(kPasswordLen);
   auto enc = crypto.Encrypt(password);
   enc.push_back('i');

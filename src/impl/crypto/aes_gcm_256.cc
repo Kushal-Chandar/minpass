@@ -1,4 +1,4 @@
-#include "minpass_crypto/aes_gcm_256.h"
+#include "crypto/aes_gcm_256.h"
 
 #include <cryptopp/aes.h>
 #include <cryptopp/filters.h>
@@ -9,10 +9,10 @@
 #include <iostream>
 #include <string>
 
-#include "minpass_crypto/crytopp_conversions.h"
-#include "minpass_crypto/scrypt_kdf.h"
+#include "crypto/crytopp_conversions.h"
+#include "crypto/scrypt_kdf.h"
 
-namespace minpass::minpass_crypto {
+namespace minpass::crypto {
 
 AES_GCM_256::AES_GCM_256(std::string key) : kKey_(std::move(key)) {}
 
@@ -96,4 +96,4 @@ auto AES_GCM_256::Decrypt(const std::string& cipher_text) -> std::string {
   return recovered_text;
 }
 
-}  // namespace minpass::minpass_crypto
+}  // namespace minpass::crypto

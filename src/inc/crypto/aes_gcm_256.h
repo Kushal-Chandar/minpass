@@ -1,11 +1,11 @@
-#if !defined(MINPASS_INCLUDE_MINPASS_CRYPTO_AES_GCM_256_H_)
-#define MINPASS_INCLUDE_MINPASS_CRYPTO_AES_GCM_256_H_
+#if !defined(MINPASS_SRC_INC_CRYPTO_AES_GCM_256_H_)
+#define MINPASS_SRC_INC_CRYPTO_AES_GCM_256_H_
 
 #include <string>
 
-#include "minpass_crypto.h"
+#include "crypto.h"
 
-namespace minpass::minpass_crypto {
+namespace minpass::crypto {
 
 class AES_GCM_256 : public minpass::MinpassCrypto {
  public:
@@ -20,6 +20,6 @@ class AES_GCM_256 : public minpass::MinpassCrypto {
       -> size_t;
 };
 
-}  // namespace minpass::minpass_crypto
+}  // namespace minpass::crypto
 
-#endif  // MINPASS_INCLUDE_MINPASS_CRYPTO_AES_GCM_256_H_
+#endif  // MINPASS_SRC_INC_CRYPTO_AES_GCM_256_H_

@@ -10,7 +10,7 @@
 #include <functional>  // for function
 #include <iostream>    // for string
 
-#include "minpass_types.h"  // for Website
+#include "types.h"  // for Website
 
 namespace minpass {
 class SQLite3Client : public drogon::HttpController<SQLite3Client> {
