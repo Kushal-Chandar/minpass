@@ -1,4 +1,4 @@
-#include "minpass_crypto/scrypt_kdf.h"
+#include "crypto/scrypt_kdf.h"
 
 #include <cryptopp/config_int.h>  // for byte
 #include <cryptopp/osrng.h>       // for AutoSeededRandomPool
@@ -8,9 +8,9 @@
 #include <string>
 #include <tuple>  // for tuple
 
-#include "minpass_crypto/crytopp_conversions.h"
+#include "crypto/crytopp_conversions.h"
 
-namespace minpass::minpass_crypto {
+namespace minpass::crypto {
 
 auto ScryptKDF::GetEncryptionKeySaltIV(
     const CryptoPP::SecByteBlock& password_bytes)
@@ -67,4 +67,4 @@ auto ScryptKDF::GetSaltAndIVFromCipher(
   return {salt, initialization_vector};
 }
 
-}  // namespace minpass::minpass_crypto
+}  // namespace minpass::crypto

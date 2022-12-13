@@ -10,7 +10,7 @@
 
 #include <exception>  // for exception
 
-#include "minpass_crypto.h"
+#include "crypto.h"
 namespace drogon::orm {
 class Result;
 }  // namespace drogon::orm

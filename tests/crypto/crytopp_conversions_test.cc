@@ -1,4 +1,4 @@
-#include "minpass_crypto/crytopp_conversions.h"
+#include "crypto/crytopp_conversions.h"
 
 #include <drogon/drogon_test.h>
 
@@ -13,11 +13,11 @@ DROGON_TEST(MinpassCryptoppConversions_StringAndSecByteBlock_Overload1) {
 
   auto random_string = minpass::tests::generate_random_string(kRandomStringLen);
   auto random_string_bytes =
-      minpass::minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
+      minpass::crypto::CryptoppConversions::GetSecByteBlockFromString(
           random_string);
 
   auto random_string_recovered =
-      minpass::minpass_crypto::CryptoppConversions::GetStringFromSecByteBlock(
+      minpass::crypto::CryptoppConversions::GetStringFromSecByteBlock(
           random_string_bytes);
 
   CHECK(random_string == random_string_recovered);
@@ -29,11 +29,11 @@ DROGON_TEST(MinpassCryptoppConversions_StringAndSecByteBlock_Overload2) {
 
   auto random_string = minpass::tests::generate_random_string(kRandomStringLen);
   auto random_string_bytes =
-      minpass::minpass_crypto::CryptoppConversions::GetSecByteBlockFromString(
+      minpass::crypto::CryptoppConversions::GetSecByteBlockFromString(
           random_string.begin() + 1, random_string.end() - 3);
 
   auto random_string_recovered =
-      minpass::minpass_crypto::CryptoppConversions::GetStringFromSecByteBlock(
+      minpass::crypto::CryptoppConversions::GetStringFromSecByteBlock(
           random_string_bytes);
 
   std::string const substring(random_string.begin() + 1,

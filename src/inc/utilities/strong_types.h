@@ -1,5 +1,5 @@
-#if !defined(MINPASS_INCLUDE_UTILITIES_STRONG_TYPES_H_)
-#define MINPASS_INCLUDE_UTILITIES_STRONG_TYPES_H_
+#if !defined(MINPASS_SRC_INC_UTILITIES_STRONG_TYPES_H_)
+#define MINPASS_SRC_INC_UTILITIES_STRONG_TYPES_H_
 
 namespace minpass::utilities {
 
@@ -18,4 +18,4 @@ class StrongType {
 
 }  // namespace minpass::utilities
 
-#endif  // MINPASS_INCLUDE_UTILITIES_STRONG_TYPES_H_
+#endif  // MINPASS_SRC_INC_UTILITIES_STRONG_TYPES_H_

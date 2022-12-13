@@ -1,8 +1,7 @@
-#include "minpass_crypto.h"
-
 #include <drogon/drogon_test.h>
 
-#include "minpass_crypto/aes_gcm_256.h"
+#include "crypto.h"
+#include "crypto/aes_gcm_256.h"
 #include "test_utilities/random_string_generator.h"
 
 const int kMasterPasswordLen = 20;
@@ -16,7 +15,7 @@ DROGON_TEST(MinpassCryptoFactoryTest) {
   auto master_password = minpass::tests::generate_random_string(
       kMasterPasswordLen);  // Random password
   auto crypto = minpass::MinpassCryptoFactory::CreateMinpassCrypto<
-      minpass::minpass_crypto::AES_GCM_256>(master_password);
+      minpass::crypto::AES_GCM_256>(master_password);
   auto password =
       minpass::tests::generate_random_string(kPasswordLen);  // Random password;
   auto enc = crypto->Encrypt(password);

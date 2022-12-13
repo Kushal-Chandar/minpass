@@ -1,4 +1,4 @@
-#include "minpass_crypto/crytopp_conversions.h"
+#include "crypto/crytopp_conversions.h"
 
 #include <cryptopp/config_int.h>  // for byte
 #include <cryptopp/osrng.h>       // for AutoSeededRandomPool
@@ -7,7 +7,7 @@
 
 #include <tuple>  // for tuple
 
-namespace minpass::minpass_crypto {
+namespace minpass::crypto {
 
 auto CryptoppConversions::GetStringFromSecByteBlock(
     const CryptoPP::SecByteBlock& bytes_in) -> std::string {
@@ -34,4 +34,4 @@ auto CryptoppConversions::GetSecByteBlockFromString(
   return bytes_out;
 }
 
-}  // namespace minpass::minpass_crypto
+}  // namespace minpass::crypto

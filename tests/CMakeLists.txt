@@ -38,8 +38,8 @@ target_include_directories(tests PRIVATE test_utilities/include)
 target_sources(
   tests
   PRIVATE main_test.cc
-          minpass_crypto_test.cc
-          minpass_types_test.cc
+          crypto_test.cc
+          types_test.cc
           sqlite3_client_test.cc)
 
 ###########################################
@@ -48,6 +48,6 @@ target_sources(
 add_subdirectory(utilities)
 add_subdirectory(test_utilities)
 add_subdirectory(sqlite3_client)
-add_subdirectory(minpass_crypto)
+add_subdirectory(crypto)
 
 parseandadddrogontests(tests)

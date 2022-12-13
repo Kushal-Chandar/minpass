@@ -1,12 +1,12 @@
-#if !defined(MINPASS_INCLUDE_MINPASS_CRYPTO_SCRYPT_KDF_H_)
-#define MINPASS_INCLUDE_MINPASS_CRYPTO_SCRYPT_KDF_H_
+#if !defined(MINPASS_SRC_INC_CRYPTO_SCRYPT_KDF_H_)
+#define MINPASS_SRC_INC_CRYPTO_SCRYPT_KDF_H_
 
 #include <cryptopp/config_int.h>  // for byte
 #include <cryptopp/secblock.h>    // for SecByteBlock
 
 #include <tuple>  // for tuple
 
-namespace minpass::minpass_crypto {
+namespace minpass::crypto {
 
 class ScryptKDF {
  public:
@@ -35,6 +35,6 @@ class ScryptKDF {
   static const int kParallelization_ = 16;
 };
 
-}  // namespace minpass::minpass_crypto
+}  // namespace minpass::crypto
 
-#endif  // MINPASS_INCLUDE_MINPASS_CRYPTO_SCRYPT_KDF_H_
+#endif  // MINPASS_SRC_INC_CRYPTO_SCRYPT_KDF_H_

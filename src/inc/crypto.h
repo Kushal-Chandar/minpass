@@ -1,5 +1,5 @@
-#if !defined(MINPASS_INCLUDE_MINPASS_CRYPTO_H_)
-#define MINPASS_INCLUDE_MINPASS_CRYPTO_H_
+#if !defined(MINPASS_SRC_INC_MINPASS_CRYPTO_H_)
+#define MINPASS_SRC_INC_MINPASS_CRYPTO_H_
 
 #include <string>
 
@@ -23,4 +23,4 @@ class MinpassCryptoFactory {
 
 }  // namespace minpass
 
-#endif  // MINPASS_INCLUDE_MINPASS_CRYPTO_H_
+#endif  // MINPASS_SRC_INC_MINPASS_CRYPTO_H_

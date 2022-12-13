@@ -1,12 +1,12 @@
-#if !defined(MINPASS_INCLUDE_SQLITE3_CLIENT_REQUEST_PROCESSOR_H_)
-#define MINPASS_INCLUDE_SQLITE3_CLIENT_REQUEST_PROCESSOR_H_
+#if !defined(MINPASS_SRC_INC_SQLITE3_CLIENT_REQUEST_PROCESSOR_H_)
+#define MINPASS_SRC_INC_SQLITE3_CLIENT_REQUEST_PROCESSOR_H_
 
 #include <drogon/drogon_callbacks.h>  // for HttpResponsePtr, HttpRequestPtr
 
 #include <optional>
 #include <tuple>  // for tuple
 
-#include "minpass_types.h"  // for Email, Password, Username
+#include "types.h"  // for Email, Password, Username
 namespace Json {
 class Value;
 }  // namespace Json
@@ -29,4 +29,4 @@ class RequestProcessor {
 
 }  // namespace minpass::sqlite3_client
 
-#endif  // MINPASS_INCLUDE_SQLITE3_CLIENT_REQUEST_PROCESSOR_H_
+#endif  // MINPASS_SRC_INC_SQLITE3_CLIENT_REQUEST_PROCESSOR_H_
