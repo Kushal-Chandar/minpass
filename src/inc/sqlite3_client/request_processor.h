@@ -1,5 +1,5 @@
-#if !defined(MINPASS_INCLUDE_SQLITE3_CLIENT_REQUEST_PROCESSOR_H_)
-#define MINPASS_INCLUDE_SQLITE3_CLIENT_REQUEST_PROCESSOR_H_
+#if !defined(MINPASS_SRC_INC_SQLITE3_CLIENT_REQUEST_PROCESSOR_H_)
+#define MINPASS_SRC_INC_SQLITE3_CLIENT_REQUEST_PROCESSOR_H_
 
 #include <drogon/drogon_callbacks.h>  // for HttpResponsePtr, HttpRequestPtr
 
@@ -29,4 +29,4 @@ class RequestProcessor {
 
 }  // namespace minpass::sqlite3_client
 
-#endif  // MINPASS_INCLUDE_SQLITE3_CLIENT_REQUEST_PROCESSOR_H_
+#endif  // MINPASS_SRC_INC_SQLITE3_CLIENT_REQUEST_PROCESSOR_H_

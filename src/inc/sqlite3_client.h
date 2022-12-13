@@ -1,5 +1,5 @@
-#if !defined(MINPASS_INCLUDE_SQLITE3_CLIENT_H_)
-#define MINPASS_INCLUDE_SQLITE3_CLIENT_H_
+#if !defined(MINPASS_SRC_INC_SQLITE3_CLIENT_H_)
+#define MINPASS_SRC_INC_SQLITE3_CLIENT_H_
 
 #include <drogon/HttpController.h>    // for METHOD_ADD, HttpController, MET...
 #include <drogon/HttpResponse.h>      // for HttpResponsePtr
@@ -55,4 +55,4 @@ class SQLite3Client : public drogon::HttpController<SQLite3Client> {
 
 }  // namespace minpass
 
-#endif  // MINPASS_INCLUDE_SQLITE3_CLIENT_H_
+#endif  // MINPASS_SRC_INC_SQLITE3_CLIENT_H_

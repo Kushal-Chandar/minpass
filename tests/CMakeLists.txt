@@ -48,6 +48,6 @@ target_sources(
 add_subdirectory(utilities)
 add_subdirectory(test_utilities)
 add_subdirectory(sqlite3_client)
-add_subdirectory(minpass_crypto)
+add_subdirectory(crypto)
 
 parseandadddrogontests(tests)
