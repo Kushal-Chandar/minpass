@@ -3,9 +3,15 @@
 
 #include <cstdlib>  // for EXIT_SUCCESS
 
+#include "cli.h"
 #include "sqlite3_client.h"
 
-auto main() -> int {
+auto main(int argc, char const* argv[]) -> int {
+  auto optional = minpass::CLI::Parse(argc, argv);
+  if (optional.has_value()) {
+    return optional.value();
+  }
+
   int exit_code{};
   try {
     drogon::app().loadConfigFile("./server_config.json").run();

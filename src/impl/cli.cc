@@ -10,18 +10,16 @@
 namespace minpass {
 
 auto CLI::Parse(int argc, char const **argv) noexcept -> std::optional<int> {
-  ::CLI::App cmake_init_cli{
-      "cmake-init.exe is an executable generated with cmake-init project "
-      "template."};
+  ::CLI::App minpass_cli{"Minpass is a self-hosted password manager."};
 
   // Add flags and options here
   bool version = false;
-  cmake_init_cli.add_flag("-v,--version", version, "Show version information");
+  minpass_cli.add_flag("-v,--version", version, "Show version information");
 
   try {
-    cmake_init_cli.parse(argc, argv);
+    minpass_cli.parse(argc, argv);
   } catch (const ::CLI::ParseError &parse_error) {
-    return cmake_init_cli.exit(parse_error);
+    return minpass_cli.exit(parse_error);
   }
 
   // Implement funtionality based on flags and options
