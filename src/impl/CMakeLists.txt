@@ -8,6 +8,7 @@
 target_sources(utilities PRIVATE)
 target_sources(crypto PRIVATE crypto.cc)
 target_sources(types PRIVATE types.cc)
+target_sources(cli PRIVATE cli.cc)
 target_sources(sqlite3_client PRIVATE sqlite3_client.cc)
 target_sources(minpass PRIVATE main.cc)
 

@@ -8,6 +8,7 @@
 target_sources(utilities PRIVATE)
 target_sources(crypto PRIVATE crypto.h)
 target_sources(types PRIVATE types.h)
+target_sources(cli PRIVATE cli.h)
 target_sources(sqlite3_client PRIVATE sqlite3_client.h)
 target_sources(minpass PRIVATE)
 
