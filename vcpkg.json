@@ -3,6 +3,7 @@
   "dependencies": [
     "fmt",
     "cryptopp",
+    "cli11",
     {
       "name": "drogon",
       "default-features": false,

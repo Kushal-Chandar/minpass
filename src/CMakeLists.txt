@@ -4,6 +4,7 @@
 find_package(Drogon CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 find_package(cryptopp CONFIG REQUIRED)
+find_package(CLI11 CONFIG REQUIRED)
 
 ###########################################
 ### Utilities
@@ -11,6 +12,15 @@ find_package(cryptopp CONFIG REQUIRED)
 add_library(utilities STATIC)
 target_link_libraries(utilities PRIVATE project_compile_options)
 target_include_directories(utilities PRIVATE ${MINPASS_PRIVATE_HEADER_DIR})
+
+###########################################
+### Minpass cli
+###########################################
+add_library(cli STATIC)
+target_link_libraries(cli PRIVATE project_compile_options)
+target_link_libraries(cli PRIVATE CLI11::CLI11)
+target_link_libraries(cli PRIVATE configuration_header)
+target_include_directories(cli PRIVATE ${MINPASS_PRIVATE_HEADER_DIR})
 
 ###########################################
 ### Minpass crypto
@@ -44,9 +54,9 @@ target_include_directories(sqlite3_client PRIVATE ${MINPASS_PRIVATE_HEADER_DIR})
 ### Minpass
 ###########################################
 target_link_libraries(minpass PRIVATE project_compile_options)
-target_link_libraries(minpass PRIVATE configuration_header)
 target_link_libraries(minpass PRIVATE sqlite3_client)
 target_link_libraries(minpass PRIVATE Drogon::Drogon)
+target_link_libraries(minpass PRIVATE cli)
 # For drogon compilation to work
 # link winsock, winsock2, iphlpapi (Googled for undefined references and link those libraries where they are found)
 if(WIN32)
