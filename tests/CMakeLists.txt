@@ -21,6 +21,7 @@ target_link_libraries(tests PRIVATE sqlite3_client)
 target_link_libraries(tests PRIVATE crypto)
 target_link_libraries(tests PRIVATE test_utilities)
 target_link_libraries(tests PRIVATE types)
+target_link_libraries(tests PRIVATE cli)
 target_link_libraries(tests PRIVATE utilities)
 target_link_libraries(tests PRIVATE Drogon::Drogon)
 target_link_libraries(tests PRIVATE coverage_options)
@@ -38,6 +39,7 @@ target_include_directories(tests PRIVATE test_utilities/include)
 target_sources(
   tests
   PRIVATE main_test.cc
+          cli_test.cc
           crypto_test.cc
           types_test.cc
           sqlite3_client_test.cc)
