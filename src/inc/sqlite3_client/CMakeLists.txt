@@ -5,4 +5,5 @@
 #####################################################
 ### adding sources
 #####################################################
-target_sources(sqlite3_client PRIVATE helpers.h request_processor.h)
+target_sources(sqlite3_client PRIVATE helpers.h request_processor.h
+                                      json_processor.h)

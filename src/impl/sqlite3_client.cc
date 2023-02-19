@@ -5,8 +5,8 @@
 
 #include <tuple>  // for tuple_element<>::type
 
-#include "sqlite3_client/helpers.h"            // for Helpers
-#include "sqlite3_client/request_processor.h"  // for RequestProcessor
+#include "sqlite3_client/helpers.h"         // for Helpers
+#include "sqlite3_client/json_processor.h"  // for JsonProcessor
 namespace drogon {
 class DrObjectBase;
 }  // namespace drogon
@@ -34,12 +34,12 @@ auto SQLite3Client::SetPasswordData(
     const Website &website) -> void {
   Json::Value response_object;
   drogon::HttpResponsePtr http_response;
-  auto request_data = sqlite3_client::RequestProcessor::ParseRequestJson(
+  auto request_data = sqlite3_client::JsonProcessor::ParseRequestJson(
       http_request, http_response, response_object);
   if (request_data) {
     auto [email, username, password, master_password] = request_data.value();
-    sqlite3_client::RequestProcessor::EncryptData(email, username, password,
-                                                  master_password);
+    sqlite3_client::JsonProcessor::EncryptData(email, username, password,
+                                               master_password);
     client_->execSqlAsync(
         "INSERT INTO " + table_name_.get() + " VALUES ($1, $2, $3, $4);",
         sqlite3_client::Helpers::EmptyCallback,
@@ -58,14 +58,14 @@ auto SQLite3Client::GetPasswordData(
       [http_request, http_callback](const drogon::orm::Result &result) {
         Json::Value response_object;
         drogon::HttpResponsePtr http_response;
-        auto request_data = sqlite3_client::RequestProcessor::ParseRequestJson(
+        auto request_data = sqlite3_client::JsonProcessor::ParseRequestJson(
             http_request, http_response, response_object);
 
         if (request_data) {
           auto [email, username, password, master_password] =
               request_data.value();
-          sqlite3_client::RequestProcessor::EncryptData(
-              email, username, password, master_password);
+          sqlite3_client::JsonProcessor::EncryptData(email, username, password,
+                                                     master_password);
           drogon::HttpStatusCode status_code = drogon::k404NotFound;
           response_object["message"] = "website not found";
           if (!result.empty()) {
@@ -78,7 +78,7 @@ auto SQLite3Client::GetPasswordData(
             username = Username(first_row["username"].as<std::string>());
             password = Password(first_row["password"].as<std::string>());
 
-            sqlite3_client::RequestProcessor::DecryptData(
+            sqlite3_client::JsonProcessor::DecryptData(
                 email, username, password, master_password);
 
             response_object["email"] = email.get();
@@ -104,12 +104,12 @@ auto SQLite3Client::ModifyPasswordData(
   // now parse the request
   // check for items that don't match, and update them with the items in request
 
-  auto request_data = sqlite3_client::RequestProcessor::ParseRequestJson(
+  auto request_data = sqlite3_client::JsonProcessor::ParseRequestJson(
       http_request, http_response, response_object);
   if (request_data) {
     auto [email, username, password, master_password] = request_data.value();
-    sqlite3_client::RequestProcessor::EncryptData(email, username, password,
-                                                  master_password);
+    sqlite3_client::JsonProcessor::EncryptData(email, username, password,
+                                               master_password);
     client_->execSqlAsync("UPDATE " + table_name_.get() +
                               " SET Email = $1, Username = $2, Password = $3"
                               "WHERE Website = $4;",

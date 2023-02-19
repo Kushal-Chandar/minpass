@@ -5,4 +5,5 @@
 #####################################################
 ### adding sources
 #####################################################
-target_sources(sqlite3_client PRIVATE helpers.cc request_processor.cc)
+target_sources(sqlite3_client PRIVATE helpers.cc request_processor.cc
+                                      json_processor.cc)
