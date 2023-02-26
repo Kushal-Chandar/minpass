@@ -8,12 +8,20 @@
 
 namespace minpass {
 
-using Email = utilities::StrongType<std::string, struct EmailParam>;
 using Website = utilities::StrongType<std::string, struct WebsiteParam>;
+using Email = utilities::StrongType<std::string, struct EmailParam>;
 using Username = utilities::StrongType<std::string, struct UsernameParam>;
 using Password = utilities::StrongType<std::string, struct PasswordParam>;
 using MasterPassword =
     utilities::StrongType<std::string, struct MasterPasswordParam>;
+
+struct PasswordData {
+  Email email;
+  Username username;
+  Password password;
+  MasterPassword master_password;
+};
+
 using DatabaseName = utilities::StrongType<std::string, struct DatabaseParam>;
 using TableName = utilities::StrongType<std::string, struct TableParam>;
 
