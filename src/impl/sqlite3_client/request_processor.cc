@@ -13,7 +13,7 @@ namespace minpass::sqlite3_client {
 auto RequestProcessor::ParseRequestJson(
     const drogon::HttpRequestPtr &http_request,
     drogon::HttpResponsePtr &http_response, Json::Value &response_object_out)
-    -> std::optional<std::tuple<Email, Username, Password, MasterPassword>> {
+    -> std::optional<PasswordData> {
   auto json = http_request->getJsonObject();
   if (!json || ((*json)["master_password"].asString().empty())) {
     response_object_out["message"] = "could not parse request";
@@ -25,30 +25,27 @@ auto RequestProcessor::ParseRequestJson(
   http_response =
       Helpers::MakeResponse(response_object_out, drogon::k202Accepted);
 
-  return std::make_tuple(
-      Email(((*json)["email"].asString())),
-      Username(((*json)["username"].asString())),
-      Password(((*json)["password"].asString())),
-      MasterPassword(((*json)["master_password"].asString())));
+  PasswordData password_data;
+  password_data.email.set((*json)["email"].asString());
+  password_data.username.set((*json)["username"].asString());
+  password_data.password.set((*json)["password"].asString());
+  password_data.master_password.set((*json)["master_password"].asString());
+  return password_data;
 }
 
-auto RequestProcessor::EncryptData(Email &email, Username &username,
-                                   Password &password,
-                                   MasterPassword &master_password) -> void {
+auto RequestProcessor::EncryptData(PasswordData &password_data) -> void {
   auto crypto = MinpassCryptoFactory::CreateMinpassCrypto<crypto::AES_GCM_256>(
-      master_password.get());
-  email = Email(crypto->Encrypt(email.get()));
-  username = Username(crypto->Encrypt(username.get()));
-  password = Password(crypto->Encrypt(password.get()));
+      password_data.master_password.get());
+  password_data.email.set(crypto->Encrypt(password_data.email.get()));
+  password_data.username.set(crypto->Encrypt(password_data.username.get()));
+  password_data.password.set(crypto->Encrypt(password_data.password.get()));
 }
 
-auto RequestProcessor::DecryptData(Email &email, Username &username,
-                                   Password &password,
-                                   MasterPassword &master_password) -> void {
+auto RequestProcessor::DecryptData(PasswordData &password_data) -> void {
   auto crypto = MinpassCryptoFactory::CreateMinpassCrypto<crypto::AES_GCM_256>(
-      master_password.get());
-  email = Email(crypto->Decrypt(email.get()));
-  username = Username(crypto->Decrypt(username.get()));
-  password = Password(crypto->Decrypt(password.get()));
+      password_data.master_password.get());
+  password_data.email.set(crypto->Decrypt(password_data.email.get()));
+  password_data.username.set(crypto->Decrypt(password_data.username.get()));
+  password_data.password.set(crypto->Decrypt(password_data.password.get()));
 }
 }  // namespace minpass::sqlite3_client
