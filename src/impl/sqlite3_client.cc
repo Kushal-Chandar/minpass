@@ -37,14 +37,14 @@ auto SQLite3Client::SetPasswordData(
   auto request_data = sqlite3_client::JsonProcessor::ParseRequestJson(
       http_request, http_response, response_object);
   if (request_data) {
-    auto [email, username, password, master_password] = request_data.value();
-    sqlite3_client::JsonProcessor::EncryptData(email, username, password,
-                                               master_password);
+    auto password_data = request_data.value();
+    sqlite3_client::RequestProcessor::EncryptData(password_data);
     client_->execSqlAsync(
         "INSERT INTO " + table_name_.get() + " VALUES ($1, $2, $3, $4);",
         sqlite3_client::Helpers::EmptyCallback,
         sqlite3_client::Helpers::CommonExceptionCatch, website.get(),
-        email.get(), username.get(), password.get());
+        password_data.email.get(), password_data.username.get(),
+        password_data.password.get());
   }
   http_callback(http_response);
 }
@@ -62,10 +62,8 @@ auto SQLite3Client::GetPasswordData(
             http_request, http_response, response_object);
 
         if (request_data) {
-          auto [email, username, password, master_password] =
-              request_data.value();
-          sqlite3_client::JsonProcessor::EncryptData(email, username, password,
-                                                     master_password);
+          auto password_data = request_data.value();
+          sqlite3_client::RequestProcessor::EncryptData(password_data);
           drogon::HttpStatusCode status_code = drogon::k404NotFound;
           response_object["message"] = "website not found";
           if (!result.empty()) {
@@ -74,16 +72,17 @@ auto SQLite3Client::GetPasswordData(
             response_object["message"] = "ok";
             response_object["website"] = first_row["website"].as<std::string>();
 
-            email = Email(first_row["email"].as<std::string>());
-            username = Username(first_row["username"].as<std::string>());
-            password = Password(first_row["password"].as<std::string>());
+            password_data.email = Email(first_row["email"].as<std::string>());
+            password_data.username =
+                Username(first_row["username"].as<std::string>());
+            password_data.password =
+                Password(first_row["password"].as<std::string>());
 
-            sqlite3_client::JsonProcessor::DecryptData(
-                email, username, password, master_password);
+            sqlite3_client::RequestProcessor::DecryptData(password_data);
 
-            response_object["email"] = email.get();
-            response_object["username"] = username.get();
-            response_object["password"] = password.get();
+            response_object["email"] = password_data.email.get();
+            response_object["username"] = password_data.username.get();
+            response_object["password"] = password_data.password.get();
           }
           http_callback(sqlite3_client::Helpers::MakeResponse(response_object,
                                                               status_code));
@@ -107,16 +106,16 @@ auto SQLite3Client::ModifyPasswordData(
   auto request_data = sqlite3_client::JsonProcessor::ParseRequestJson(
       http_request, http_response, response_object);
   if (request_data) {
-    auto [email, username, password, master_password] = request_data.value();
-    sqlite3_client::JsonProcessor::EncryptData(email, username, password,
-                                               master_password);
+    auto password_data = request_data.value();
+    sqlite3_client::RequestProcessor::EncryptData(password_data);
     client_->execSqlAsync("UPDATE " + table_name_.get() +
                               " SET Email = $1, Username = $2, Password = $3"
                               "WHERE Website = $4;",
                           sqlite3_client::Helpers::EmptyCallback,
                           sqlite3_client::Helpers::CommonExceptionCatch,
-                          email.get(), username.get(), password.get(),
-                          website.get());
+                          password_data.email.get(),
+                          password_data.username.get(),
+                          password_data.password.get(), website.get());
   }
   http_callback(http_response);
 }

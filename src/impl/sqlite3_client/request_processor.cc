@@ -32,6 +32,7 @@ auto RequestProcessor::GetPassword() -> void {
     sqlite3_client = e
   }
 }
+
 auto RequestProcessor::UpdatePassword() -> void {}
 auto RequestProcessor::RemovePassword() -> void {}
 

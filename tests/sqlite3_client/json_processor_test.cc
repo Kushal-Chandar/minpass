@@ -56,11 +56,11 @@ DROGON_TEST(JsonProcessorTests_ParseRequestJson_ReturnValueTest1) {
       http_request, http_response, response_object);
 
   REQUIRE(request_data.has_value() == true);
-  auto [email, username, password, master_password] = request_data.value();
-  CHECK(email.get() == request["email"]);
-  CHECK(username.get() == request["username"]);
-  CHECK(password.get() == request["password"]);
-  CHECK(master_password.get() == request["master_password"]);
+  auto password_data = request_data.value();
+  CHECK(password_data.email.get() == request["email"]);
+  CHECK(password_data.username.get() == request["username"]);
+  CHECK(password_data.password.get() == request["password"]);
+  CHECK(password_data.master_password.get() == request["master_password"]);
   CHECK(http_response->statusCode() == drogon::k202Accepted);
 }
 
@@ -141,10 +141,11 @@ DROGON_TEST(JsonProcessorTests_ParseRequestJson_SQLi) {
       http_request, http_response, response_object);
 
   REQUIRE(request_data.has_value() == true);
-  auto [email, username, password, master_password] = request_data.value();
-  CHECK(email.get() == sql_injection["email"]);
-  CHECK(username.get() == sql_injection["username"]);
-  CHECK(password.get() == sql_injection["password"]);
-  CHECK(master_password.get() == sql_injection["master_password"]);
+  auto password_data = request_data.value();
+  CHECK(password_data.email.get() == sql_injection["email"]);
+  CHECK(password_data.username.get() == sql_injection["username"]);
+  CHECK(password_data.password.get() == sql_injection["password"]);
+  CHECK(password_data.master_password.get() ==
+        sql_injection["master_password"]);
   CHECK(http_response->statusCode() == drogon::k202Accepted);
 }

@@ -18,13 +18,11 @@ class JsonProcessor {
   static auto ParseRequestJson(const drogon::HttpRequestPtr &http_request,
                                drogon::HttpResponsePtr &http_response,
                                Json::Value &response_object_out)
-      -> std::optional<std::tuple<Email, Username, Password, MasterPassword>>;
+      -> std::optional<PasswordData>;
 
-  static auto EncryptData(Email &email, Username &username, Password &password,
-                          MasterPassword &master_password) -> void;
+  static auto EncryptData(PasswordData &password_data) -> void;
 
-  static auto DecryptData(Email &email, Username &username, Password &password,
-                          MasterPassword &master_password) -> void;
+  static auto DecryptData(PasswordData &password_data) -> void;
 };
 
 }  // namespace minpass::sqlite3_client
