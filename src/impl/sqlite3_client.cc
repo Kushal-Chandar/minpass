@@ -38,7 +38,7 @@ auto SQLite3Client::SetPasswordData(
       http_request, http_response, response_object);
   if (request_data) {
     auto password_data = request_data.value();
-    sqlite3_client::RequestProcessor::EncryptData(password_data);
+    sqlite3_client::JsonProcessor::EncryptData(password_data);
     client_->execSqlAsync(
         "INSERT INTO " + table_name_.get() + " VALUES ($1, $2, $3, $4);",
         sqlite3_client::Helpers::EmptyCallback,
@@ -63,7 +63,7 @@ auto SQLite3Client::GetPasswordData(
 
         if (request_data) {
           auto password_data = request_data.value();
-          sqlite3_client::RequestProcessor::EncryptData(password_data);
+          sqlite3_client::JsonProcessor::EncryptData(password_data);
           drogon::HttpStatusCode status_code = drogon::k404NotFound;
           response_object["message"] = "website not found";
           if (!result.empty()) {
@@ -78,7 +78,7 @@ auto SQLite3Client::GetPasswordData(
             password_data.password =
                 Password(first_row["password"].as<std::string>());
 
-            sqlite3_client::RequestProcessor::DecryptData(password_data);
+            sqlite3_client::JsonProcessor::DecryptData(password_data);
 
             response_object["email"] = password_data.email.get();
             response_object["username"] = password_data.username.get();
@@ -107,7 +107,7 @@ auto SQLite3Client::ModifyPasswordData(
       http_request, http_response, response_object);
   if (request_data) {
     auto password_data = request_data.value();
-    sqlite3_client::RequestProcessor::EncryptData(password_data);
+    sqlite3_client::JsonProcessor::EncryptData(password_data);
     client_->execSqlAsync("UPDATE " + table_name_.get() +
                               " SET Email = $1, Username = $2, Password = $3"
                               "WHERE Website = $4;",
