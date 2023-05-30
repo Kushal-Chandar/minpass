@@ -60,10 +60,8 @@ auto SQLite3Client::GetPasswordData(
         drogon::HttpResponsePtr http_response;
         auto request_data = sqlite3_client::JsonProcessor::ParseRequestJson(
             http_request, http_response, response_object);
-
         if (request_data) {
           auto password_data = request_data.value();
-          sqlite3_client::JsonProcessor::EncryptData(password_data);
           drogon::HttpStatusCode status_code = drogon::k404NotFound;
           response_object["message"] = "website not found";
           if (!result.empty()) {
@@ -110,7 +108,7 @@ auto SQLite3Client::ModifyPasswordData(
     sqlite3_client::JsonProcessor::EncryptData(password_data);
     client_->execSqlAsync("UPDATE " + table_name_.get() +
                               " SET Email = $1, Username = $2, Password = $3"
-                              "WHERE Website = $4;",
+                              " WHERE Website = $4;",
                           sqlite3_client::Helpers::EmptyCallback,
                           sqlite3_client::Helpers::CommonExceptionCatch,
                           password_data.email.get(),

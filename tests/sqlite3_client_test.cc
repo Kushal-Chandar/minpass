@@ -76,13 +76,30 @@ DROGON_TEST(RestAPITest_Get_Case2) {
       });
 
   json.clear();
-  auto request_get = drogon::HttpRequest::newHttpJsonRequest(json);
   json["master_password"] = master_password;
+  auto request_get = drogon::HttpRequest::newHttpJsonRequest(json);
   request_get->setMethod(drogon::HttpMethod::Get);
   request_get->setPath(PATH "website=there.com");
   client->sendRequest(
       request_get, [TEST_CTX](drogon::ReqResult result,
                               const drogon::HttpResponsePtr& response) {
+        REQUIRE(result == drogon::ReqResult::Ok);
+        REQUIRE(response != nullptr);
+
+        auto response_json = *(response->getJsonObject());
+
+        CHECK(response_json["message"] == "ok");
+        CHECK(response->getStatusCode() == drogon::HttpStatusCode::k200OK);
+        CHECK(response->contentType() == drogon::CT_APPLICATION_JSON);
+      });
+
+  json.clear();
+  auto request_delete = drogon::HttpRequest::newHttpRequest();
+  request_delete->setMethod(drogon::HttpMethod::Delete);
+  request_delete->setPath(PATH "website=google.com");
+  client->sendRequest(
+      request_delete, [TEST_CTX](drogon::ReqResult result,
+                                 const drogon::HttpResponsePtr& response) {
         REQUIRE(result == drogon::ReqResult::Ok);
         REQUIRE(response != nullptr);
 

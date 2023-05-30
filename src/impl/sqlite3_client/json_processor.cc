@@ -10,9 +10,9 @@
 
 namespace minpass::sqlite3_client {
 
-auto RequestProcessor::ParseRequestJson(
-    const drogon::HttpRequestPtr &http_request,
-    drogon::HttpResponsePtr &http_response, Json::Value &response_object_out)
+auto JsonProcessor::ParseRequestJson(const drogon::HttpRequestPtr &http_request,
+                                     drogon::HttpResponsePtr &http_response,
+                                     Json::Value &response_object_out)
     -> std::optional<PasswordData> {
   auto json = http_request->getJsonObject();
   if (!json || ((*json)["master_password"].asString().empty())) {
@@ -33,7 +33,7 @@ auto RequestProcessor::ParseRequestJson(
   return password_data;
 }
 
-auto RequestProcessor::EncryptData(PasswordData &password_data) -> void {
+auto JsonProcessor::EncryptData(PasswordData &password_data) -> void {
   auto crypto = MinpassCryptoFactory::CreateMinpassCrypto<crypto::AES_GCM_256>(
       password_data.master_password.get());
   password_data.email.set(crypto->Encrypt(password_data.email.get()));
@@ -41,7 +41,7 @@ auto RequestProcessor::EncryptData(PasswordData &password_data) -> void {
   password_data.password.set(crypto->Encrypt(password_data.password.get()));
 }
 
-auto RequestProcessor::DecryptData(PasswordData &password_data) -> void {
+auto JsonProcessor::DecryptData(PasswordData &password_data) -> void {
   auto crypto = MinpassCryptoFactory::CreateMinpassCrypto<crypto::AES_GCM_256>(
       password_data.master_password.get());
   password_data.email.set(crypto->Decrypt(password_data.email.get()));
