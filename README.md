@@ -209,10 +209,10 @@ Invoke-RestMethod -Uri $reqUrl -Method Get -Headers $headers -ContentType 'appli
 
 ## Goals
 
-- CMake install.
 - User authentication.
 - Reduce executable size.
-- Securing API.
+- Adding rate limiter
 - Better Documentation for functions
-- An example client in both C++ and ReactJS for desktop and browser access.
+- An example client in both Python (cli), C++ (Qt, GUI, Desktop) and ReactJS (web)
+- CMake install.
 - Add a way to automatically open ports while installation.

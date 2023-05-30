@@ -84,6 +84,8 @@ auto SQLite3Client::GetPasswordData(
           }
           http_callback(sqlite3_client::Helpers::MakeResponse(response_object,
                                                               status_code));
+        } else {
+          http_callback(http_response);
         }
       },
       sqlite3_client::Helpers::CommonExceptionCatch, website.get());

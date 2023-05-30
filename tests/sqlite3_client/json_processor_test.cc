@@ -70,7 +70,7 @@ DROGON_TEST(JsonProcessorTests_ParseRequestJson_ReturnValueTest2) {
   // 1. ParseRequest must return empty structure bindings when json
   // was not parsed
 
-  std::string illegal_request;
+  const std::string illegal_request;
   auto http_request = drogon::HttpRequest::newHttpRequest();
   http_request->setBody(illegal_request);
   http_request->setContentTypeCode(drogon::CT_APPLICATION_JSON);
@@ -82,6 +82,7 @@ DROGON_TEST(JsonProcessorTests_ParseRequestJson_ReturnValueTest2) {
 
   REQUIRE(request_data.has_value() == false);
   CHECK(http_response->statusCode() == drogon::k400BadRequest);
+  CHECK(response_object["message"] == "could not parse request");
 }
 
 DROGON_TEST(JsonProcessorTests_ParseRequestJson_MasterPasswordNotGiven) {
@@ -112,6 +113,7 @@ DROGON_TEST(JsonProcessorTests_ParseRequestJson_MasterPasswordNotGiven) {
 
   REQUIRE(request_data.has_value() == false);
   CHECK(http_response->statusCode() == drogon::k400BadRequest);
+  CHECK(response_object["message"] == "master password not given");
 }
 
 DROGON_TEST(JsonProcessorTests_ParseRequestJson_SQLi) {
