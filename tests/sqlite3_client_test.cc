@@ -164,7 +164,7 @@ DROGON_TEST(RestAPITest_Get_Case3) {
               json["username"].asString());
         CHECK(response_json["password"].asString() !=
               json["password"].asString());
-        CHECK(response_json["master_password"].asString() ==
+        CHECK(response_json["master_password"].asString() !=
               json["master_password"].asString());
 
         CHECK(response_json["message"] == "ok");

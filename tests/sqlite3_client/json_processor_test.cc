@@ -70,7 +70,7 @@ DROGON_TEST(JsonProcessorTests_ParseRequestJson_ReturnValueTest2) {
   // 1. ParseRequest must return empty structure bindings when json
   // was not parsed
 
-  const std::string illegal_request;
+  const std::string illegal_request = "{";
   auto http_request = drogon::HttpRequest::newHttpRequest();
   http_request->setBody(illegal_request);
   http_request->setContentTypeCode(drogon::CT_APPLICATION_JSON);

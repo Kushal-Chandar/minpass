@@ -20,12 +20,13 @@ add_library(cli STATIC)
 target_link_libraries(cli PRIVATE project_compile_options)
 target_link_libraries(cli PRIVATE CLI11::CLI11)
 target_link_libraries(cli PRIVATE configuration_header)
+target_link_libraries(cli PRIVATE fmt::fmt)
 target_include_directories(cli PRIVATE ${MINPASS_PRIVATE_HEADER_DIR})
 
 ###########################################
 ### Minpass crypto
 ###########################################
-add_library(crypto)
+add_library(crypto STATIC)
 target_link_libraries(crypto PRIVATE project_compile_options)
 target_link_libraries(crypto PRIVATE cryptopp::cryptopp)
 target_link_libraries(crypto PRIVATE fmt::fmt)
