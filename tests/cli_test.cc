@@ -12,20 +12,16 @@ DROGON_TEST(MinpassCliTest) {
   // When --help command line arguments is given
   argv.emplace_back("--help");
   CHECK(minpass::CLI::Parse(2, argv.data()) != std::nullopt);
-  argv.clear();
+  argv.pop_back();
 
   // When -e command line arguments is given
   argv.emplace_back("-e");
   CHECK(minpass::CLI::Parse(2, argv.data()) != std::nullopt);
-  argv.clear();
+  argv.pop_back();
 
   // When both command line arguments are given (if --help is given help should
   // print first)
   argv.emplace_back("-v");
   argv.emplace_back("--help");
   CHECK(minpass::CLI::Parse(3, argv.data()) != std::nullopt);
-}
-
-auto main(int argc, char *argv[]) -> int {
-  return drogon::test::run(argc, argv);
 }
