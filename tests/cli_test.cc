@@ -25,3 +25,7 @@ DROGON_TEST(MinpassCliTest) {
   argv.emplace_back("--help");
   CHECK(minpass::CLI::Parse(3, argv.data()) != std::nullopt);
 }
+
+auto main(int argc, char *argv[]) -> int {
+  return drogon::test::run(argc, argv);
+}

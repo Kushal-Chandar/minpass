@@ -18,8 +18,9 @@ auto JsonProcessor::ParseRequestJson(const drogon::HttpRequestPtr &http_request,
   if (!json || ((*json)["master_password"].asString().empty())) {
     if (!json) {
       response_object_out["message"] = "could not parse request";
+    } else {
+      response_object_out["message"] = "master password not given";
     }
-    response_object_out["message"] = "master password not given";
     http_response =
         Helpers::MakeResponse(response_object_out, drogon::k400BadRequest);
     return std::nullopt;

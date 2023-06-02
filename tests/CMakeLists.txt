@@ -21,7 +21,6 @@ target_link_libraries(tests PRIVATE sqlite3_client)
 target_link_libraries(tests PRIVATE crypto)
 target_link_libraries(tests PRIVATE test_utilities)
 target_link_libraries(tests PRIVATE types)
-target_link_libraries(tests PRIVATE cli)
 target_link_libraries(tests PRIVATE utilities)
 target_link_libraries(tests PRIVATE Drogon::Drogon)
 target_link_libraries(tests PRIVATE coverage_options)
@@ -39,10 +38,29 @@ target_include_directories(tests PRIVATE test_utilities/include)
 target_sources(
   tests
   PRIVATE main_test.cc
-          cli_test.cc
           crypto_test.cc
           types_test.cc
           sqlite3_client_test.cc)
+
+###########################################
+### Minpass cli_tests
+###########################################
+add_executable(cli_tests)
+set_target_properties(
+  cli_tests
+  PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+             LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+             RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+target_link_libraries(cli_tests PRIVATE cli)
+target_link_libraries(cli_tests PRIVATE Drogon::Drogon)
+target_link_libraries(cli_tests PRIVATE coverage_options)
+target_include_directories(cli_tests PRIVATE ${MINPASS_PRIVATE_HEADER_DIR})
+target_include_directories(cli_tests PRIVATE test_utilities/include)
+
+###########################################
+### Minpass test sources from current dir
+###########################################
+target_sources(cli_tests PRIVATE cli_test.cc)
 
 ###########################################
 ### sources from subdirs
@@ -53,3 +71,4 @@ add_subdirectory(sqlite3_client)
 add_subdirectory(crypto)
 
 parseandadddrogontests(tests)
+parseandadddrogontests(cli_tests)

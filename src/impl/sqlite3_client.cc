@@ -38,7 +38,17 @@ auto SQLite3Client::SetPasswordData(
       http_request, http_response, response_object);
   if (request_data) {
     auto password_data = request_data.value();
+    std::cout << "Before Encrypt: " << password_data.email.get() << '\n';
+    std::cout << "Before Encrypt: " << password_data.username.get() << '\n';
+    std::cout << "Before Encrypt: " << password_data.password.get() << '\n';
+    std::cout << "Before Encrypt: " << password_data.master_password.get()
+              << '\n';
     sqlite3_client::JsonProcessor::EncryptData(password_data);
+    std::cout << "After Encrypt: " << password_data.email.get() << '\n';
+    std::cout << "After Encrypt: " << password_data.username.get() << '\n';
+    std::cout << "After Encrypt: " << password_data.password.get() << '\n';
+    std::cout << "After Encrypt: " << password_data.master_password.get()
+              << '\n';
     client_->execSqlAsync(
         "INSERT INTO " + table_name_.get() + " VALUES ($1, $2, $3, $4);",
         sqlite3_client::Helpers::EmptyCallback,
@@ -76,7 +86,22 @@ auto SQLite3Client::GetPasswordData(
             password_data.password =
                 Password(first_row["password"].as<std::string>());
 
+            std::cout << "Before Decrypt: " << password_data.email.get()
+                      << '\n';
+            std::cout << "Before Decrypt: " << password_data.username.get()
+                      << '\n';
+            std::cout << "Before Decrypt: " << password_data.password.get()
+                      << '\n';
+            std::cout << "Before Decrypt: "
+                      << password_data.master_password.get() << '\n';
             sqlite3_client::JsonProcessor::DecryptData(password_data);
+            std::cout << "After Decrypt: " << password_data.email.get() << '\n';
+            std::cout << "After Decrypt: " << password_data.username.get()
+                      << '\n';
+            std::cout << "After Decrypt: " << password_data.password.get()
+                      << '\n';
+            std::cout << "After Decrypt: "
+                      << password_data.master_password.get() << '\n';
 
             response_object["email"] = password_data.email.get();
             response_object["username"] = password_data.username.get();
