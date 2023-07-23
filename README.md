@@ -1,5 +1,9 @@
 # Minpass backend
 
+[![c++](https://img.shields.io/badge/C++-00599C?logo=c%2B%2B)](https://en.cppreference.com/w/)
+[![docker](https://img.shields.io/badge/docker-%230db7ed.svg?logo=docker&logoColor=white)](https://www.docker.com/)
+[![cmake](https://img.shields.io/badge/CMake-1b8b40.svg?logo=cmake&logoColor=white)](https://cmake.org/)
+
 A minimal password manager written in C++ as a REST API which can be used with any client.
 This project aims to create a server sitting on your machine or hosted on a device like raspberry pi.
 You should be able to send and receive requests from this device across your local network once a port is open.
